@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical">
+            <!--标题栏-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_border_bottom">
+                <com.gx.wda.widget.MyActionBar
+                    android:id="@+id/myActionBar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/ll_notice_content"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:padding="10dp"
+                android:orientation="vertical">
+                <!--图标-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:gravity="center"
+                    android:layout_height="150dp">
+
+                    <ImageView
+                        android:id="@+id/iv_file_type_cover"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+                <!--其他公告内容-->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingTop="20dp">
+                    <!--标题-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:background="@drawable/bg_border_bottom"
+                        android:gravity="center_vertical">
+                        <TextView
+                            android:id="@+id/tv_notice_theme"
+                            android:layout_weight="1"
+                            android:layout_width="0dp"
+                            android:layout_height="match_parent"
+                            android:padding="10dp"
+                            android:textColor="#E60F0F"
+                            android:textSize="20dp"/>
+                    </LinearLayout>
+                    <!--作者信息-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="10dp"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:paddingBottom="10dp"
+                        android:orientation="vertical">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+                            <ImageView
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:src="@drawable/ic_user_gray"/>
+
+                            <TextView
+                                android:id="@+id/tv_notice_author"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:text=""
+                                android:textColor="@color/colorBlack"
+                                android:padding="10dp"
+                                android:textSize="17dp"
+                                android:gravity="center_vertical"/>
+                            <TextView
+                                android:id="@+id/tv_notice_postdate"
+                                android:layout_weight="1"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:text=""
+                                android:padding="10dp"
+                                android:textSize="14dp"
+                                android:gravity="right"/>
+                        </LinearLayout>
+                    </LinearLayout>
+                    <!--描述-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_border_bottom">
+                        <TextView
+                            android:id="@+id/tv_notice_describe"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text=""
+                            android:paddingLeft="20dp"
+                            android:paddingRight="2dp"
+                            android:paddingTop="10dp"
+                            android:paddingBottom="10dp"
+                            android:textSize="14dp"/>
+                    </LinearLayout>
+
+                    <!--评论-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="20dp"
+                        android:orientation="vertical">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="10dp"
+                            android:text="@string/text_about_comment"
+                            android:textSize="16dp"
+                            android:textColor="@color/colorBlack"
+                            android:background="@drawable/bg_border_bottom"/>
+                        <!--评论列表-->
+                        <LinearLayout
+                            android:id="@+id/ll_comment_con"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:paddingBottom="10dp"
+                            android:orientation="vertical">
+                            <!--<LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:paddingBottom="10dp"
+                                android:background="@drawable/bg_border_bottom"
+                                android:orientation="vertical">
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+                                    <TextView
+                                        android:layout_weight="1"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:text="刘胜"
+                                        android:padding="10dp"
+                                        android:textSize="15dp"
+                                        android:gravity="center_vertical"/>
+                                    <TextView
+                                        android:layout_weight="1"
+                                        android:layout_width="0dp"
+                                        android:layout_height="match_parent"
+                                        android:text="2020-7-27 14:45:05"
+                                        android:padding="10dp"
+                                        android:textSize="14dp"
+                                        android:gravity="right"/>
+                                </LinearLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/colorBlack"
+                                    android:padding="10dp"
+                                    android:textSize="16dp"
+                                    android:text="很好很好很不错 "/>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:background="@color/colorGrayTints"
+                                    android:padding="10dp"
+                                    android:text="共5条回复  >"
+                                    android:textColor="@color/colorPrimary"/>
+                            </LinearLayout>-->
+
+
+
+
+                        </LinearLayout>
+                        <!--无评论-->
+                        <TextView
+                            android:visibility="gone"
+                            android:id="@+id/tv_no_comment_data"
+                            android:layout_width="match_parent"
+                            android:layout_height="100dp"
+                            android:text="@string/text_no_comment_data"
+                            android:gravity="center"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+            <!--无数据显示-->
+
+            <LinearLayout
+                android:visibility="gone"
+                android:id="@+id/ll_empty"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:padding="20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/ic_empty"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:textSize="14dp"
+                    android:textColor="@color/colorBlack"
+                    android:text="@string/text_no_data"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</ScrollView>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <!--按钮边框-->
+    <!--solid用以指定内部填充色-->
+    <solid android:color="#FF9800" />
+    <!--渐变色-->
+    <gradient
+        android:angle="0"
+        android:startColor="#FF9800"
+        android:endColor="#FF9800"/>
+    <corners
+        android:radius="5dp"/>
+</shape>

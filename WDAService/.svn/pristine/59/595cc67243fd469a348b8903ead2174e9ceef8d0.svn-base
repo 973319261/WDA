@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.FileDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.File">
+    <id column="file_id" jdbcType="INTEGER" property="fileId" />
+    <result column="file_type_id" jdbcType="INTEGER" property="fileTypeId" />
+    <result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+  </resultMap>
+  <!-- 自定义Vo -->
+  <resultMap type="com.gx.vo.FilesVo" id="FilesVoResultMap" extends="BaseResultMap">
+  	<result column="file_type_name" jdbcType="VARCHAR" property="fileTypeName" />
+  	<result column="notice_name" jdbcType="VARCHAR" property="noticeName" />
+  	<result column="file_type_name" jdbcType="VARCHAR" property="fileTypeName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    file_id, file_type_id, notice_id, file_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from file
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from file
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.File">
+    insert into file (file_id, file_type_id, notice_id, 
+      file_name)
+    values (#{fileId,jdbcType=INTEGER}, #{fileTypeId,jdbcType=INTEGER}, #{noticeId,jdbcType=INTEGER}, 
+      #{fileName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.File" keyProperty="fileId" useGeneratedKeys="true">
+    insert into file
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        file_id,
+      </if>
+      <if test="fileTypeId != null">
+        file_type_id,
+      </if>
+      <if test="noticeId != null">
+        notice_id,
+      </if>
+      <if test="fileName != null">
+        file_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="fileId != null">
+        #{fileId,jdbcType=INTEGER},
+      </if>
+      <if test="fileTypeId != null">
+        #{fileTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeId != null">
+        #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null">
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.File">
+    update file
+    <set>
+      <if test="fileTypeId != null">
+        file_type_id = #{fileTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeId != null">
+        notice_id = #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null">
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.File">
+    update file
+    set file_type_id = #{fileTypeId,jdbcType=INTEGER},
+      notice_id = #{noticeId,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR}
+    where file_id = #{fileId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 通过公告ID查询文件 -->
+  <select id="selectFileByNoticeId" resultMap="FilesVoResultMap">
+  	select file.file_id, file.notice_id, file.file_type_id, file.file_name,
+  		   notice.notice_name, file_type.file_type_name
+  	from file inner join notice on file.notice_id=notice.notice_id
+  		 inner join file_type on file.file_type_id =file_type.file_type_id
+  	where file.notice_id = #{noticeId,jdbcType=INTEGER}
+  </select>
+</mapper>

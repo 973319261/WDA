@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.InformDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Inform">
+    <id column="inform_id" jdbcType="INTEGER" property="informId" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="inform_title" jdbcType="VARCHAR" property="informTitle" />
+    <result column="inform_content" jdbcType="VARCHAR" property="informContent" />
+    <result column="creation_time" jdbcType="TIMESTAMP" property="creationTime" />
+  </resultMap>
+  
+  <!-- 自定义VO -->
+  <resultMap type="com.gx.vo.InformVo" id="InformVoResultMap" extends="BaseResultMap">
+  	<result column="admin_name" jdbcType="VARCHAR" property="userName" />
+  	<result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    inform_id, admin_id, inform_title, inform_content, creation_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from inform
+    where inform_id = #{informId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from inform
+    where inform_id = #{informId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Inform">
+    insert into inform (inform_id, admin_id, inform_title, 
+      inform_content, creation_time)
+    values (#{informId,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{informTitle,jdbcType=VARCHAR}, 
+      #{informContent,jdbcType=VARCHAR}, #{creationTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Inform">
+    insert into inform
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="informId != null">
+        inform_id,
+      </if>
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="informTitle != null">
+        inform_title,
+      </if>
+      <if test="informContent != null">
+        inform_content,
+      </if>
+      <if test="creationTime != null">
+        creation_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="informId != null">
+        #{informId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="informTitle != null">
+        #{informTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="informContent != null">
+        #{informContent,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Inform">
+    update inform
+    <set>
+      <if test="adminId != null">
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="informTitle != null">
+        inform_title = #{informTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="informContent != null">
+        inform_content = #{informContent,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where inform_id = #{informId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Inform">
+    update inform
+    set admin_id = #{adminId,jdbcType=INTEGER},
+      inform_title = #{informTitle,jdbcType=VARCHAR},
+      inform_content = #{informContent,jdbcType=VARCHAR},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP}
+    where inform_id = #{informId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询通知管理信息 -->
+  <select id="selectInform" resultMap="InformVoResultMap">
+  	select inform.inform_title,inform.inform_content,inform.creation_time,inform.inform_id,
+  		   inform.admin_id,admin.admin_name
+    from inform
+    inner join admin on inform.admin_id= admin.admin_id
+    <if test="informTitle !=null and informTitle !=''">
+  		where inform.inform_title like CONCAT('%',#{informTitle,jdbcType=VARCHAR},'%')  		
+  	</if>
+   order by inform.inform_id DESC
+   limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询通知管理信息(数据总条数) -->
+  <select id="selectInformRows" resultType="java.lang.Integer">
+  	select count(inform.inform_id) from inform  
+  	inner join admin on inform.admin_id= admin.admin_id
+    <if test="informTitle !=null and informTitle !=''">
+  		where inform.inform_title like CONCAT('%',#{informTitle,jdbcType=VARCHAR},'%')  		
+  	</if>
+  </select>
+  
+  <!-- 通过通知管理ID删除通知管理信息 -->
+  <delete id="deleteInformById" parameterType="java.lang.Integer">
+  	delete inform, inform_detail from inform, inform_detail
+  	where inform.inform_id=inform_detail.inform_id
+  	and inform.inform_id=#{informId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 查询所有的通知信息 -->
+  <select id="selectAllInform" resultMap="InformVoResultMap">
+  	select inform.inform_id
+    from inform
+  </select>
+</mapper>

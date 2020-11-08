@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.FlowDetailDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.FlowDetail">
+    <id column="flow_detail_id" jdbcType="INTEGER" property="flowDetailId" />
+    <result column="flow_id" jdbcType="INTEGER" property="flowId" />
+    <result column="operation_name" jdbcType="VARCHAR" property="operationName" />
+    <result column="send_order" jdbcType="VARCHAR" property="sendOrder" />
+    <result column="response_order" jdbcType="VARCHAR" property="responseOrder" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    flow_detail_id, flow_id, operation_name, send_order, response_order
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_detail
+    where flow_detail_id = #{flowDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from flow_detail
+    where flow_detail_id = #{flowDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.FlowDetail">
+    insert into flow_detail (flow_detail_id, flow_id, operation_name, 
+      send_order, response_order)
+    values (#{flowDetailId,jdbcType=INTEGER}, #{flowId,jdbcType=INTEGER}, #{operationName,jdbcType=VARCHAR}, 
+      #{sendOrder,jdbcType=VARCHAR}, #{responseOrder,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.FlowDetail">
+    insert into flow_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flowDetailId != null">
+        flow_detail_id,
+      </if>
+      <if test="flowId != null">
+        flow_id,
+      </if>
+      <if test="operationName != null">
+        operation_name,
+      </if>
+      <if test="sendOrder != null">
+        send_order,
+      </if>
+      <if test="responseOrder != null">
+        response_order,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flowDetailId != null">
+        #{flowDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="flowId != null">
+        #{flowId,jdbcType=INTEGER},
+      </if>
+      <if test="operationName != null">
+        #{operationName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOrder != null">
+        #{sendOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="responseOrder != null">
+        #{responseOrder,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.FlowDetail">
+    update flow_detail
+    <set>
+      <if test="flowId != null">
+        flow_id = #{flowId,jdbcType=INTEGER},
+      </if>
+      <if test="operationName != null">
+        operation_name = #{operationName,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOrder != null">
+        send_order = #{sendOrder,jdbcType=VARCHAR},
+      </if>
+      <if test="responseOrder != null">
+        response_order = #{responseOrder,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where flow_detail_id = #{flowDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.FlowDetail">
+    update flow_detail
+    set flow_id = #{flowId,jdbcType=INTEGER},
+      operation_name = #{operationName,jdbcType=VARCHAR},
+      send_order = #{sendOrder,jdbcType=VARCHAR},
+      response_order = #{responseOrder,jdbcType=VARCHAR}
+    where flow_detail_id = #{flowDetailId,jdbcType=INTEGER}
+  </update>
+</mapper>

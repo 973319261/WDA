@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.JurisdictionDetailDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.JurisdictionDetail">
+    <id column="jurisdiction_detail_id" jdbcType="INTEGER" property="jurisdictionDetailId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="jurisdiction_id" jdbcType="INTEGER" property="jurisdictionId" />
+    <result column="is_enable" jdbcType="BIT" property="isEnable" />
+  </resultMap>
+  <!-- 自定义VO -->
+  <resultMap type="com.gx.vo.JurisDictionVo" id="JurisDictionVoResultMap" extends="BaseResultMap">
+  	<result column="jurisdiction_name" jdbcType="VARCHAR" property="jurisdictionName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    jurisdiction_detail_id, role_id, jurisdiction_id, is_enable
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jurisdiction_detail
+    where jurisdiction_detail_id = #{jurisdictionDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jurisdiction_detail
+    where jurisdiction_detail_id = #{jurisdictionDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.JurisdictionDetail">
+    insert into jurisdiction_detail (jurisdiction_detail_id, role_id, jurisdiction_id, 
+      is_enable)
+    values (#{jurisdictionDetailId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, #{jurisdictionId,jdbcType=INTEGER}, 
+      #{isEnable,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.JurisdictionDetail">
+    insert into jurisdiction_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jurisdictionDetailId != null">
+        jurisdiction_detail_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="jurisdictionId != null">
+        jurisdiction_id,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jurisdictionDetailId != null">
+        #{jurisdictionDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="jurisdictionId != null">
+        #{jurisdictionId,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.JurisdictionDetail">
+    update jurisdiction_detail
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="jurisdictionId != null">
+        jurisdiction_id = #{jurisdictionId,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=BIT},
+      </if>
+    </set>
+    where jurisdiction_detail_id = #{jurisdictionDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.JurisdictionDetail">
+    update jurisdiction_detail
+    set role_id = #{roleId,jdbcType=INTEGER},
+      jurisdiction_id = #{jurisdictionId,jdbcType=INTEGER},
+      is_enable = #{isEnable,jdbcType=BIT}
+    where jurisdiction_detail_id = #{jurisdictionDetailId,jdbcType=INTEGER}
+  </update>
+   
+  <!-- 通过userId查询用户权限模块 -->
+  <select id="selectJurisdictionByUserId" resultMap="BaseResultMap">
+	  SELECT j.* FROM user u,jurisdiction_detail j WHERE u.role_id=j.role_id AND u.user_id=#{userId}
+  </select>
+  
+  <!-- 批量新增权限 -->
+  <insert id="insertJurisDictionByBatch" >
+    insert into jurisdiction_detail (role_id, jurisdiction_id, is_enable) values 
+    <foreach collection="jurisList" separator=","  item="item">
+      (#{roleId,jdbcType=INTEGER}, #{item.jurisdictionId,jdbcType=INTEGER}, 
+      #{item.isEnable,jdbcType=BIT})
+    </foreach>
+  </insert>
+  
+  <!-- 通过用户类型查找权限 -->
+  <select id="selectJurisDictionById" resultMap="JurisDictionVoResultMap">
+  	select jurisdiction_detail.role_id, jurisdiction_detail.jurisdiction_id , jurisdiction_detail.is_enable,
+  		   jurisdiction_detail.jurisdiction_detail_id, jurisdiction.jurisdiction_name
+  	from jurisdiction_detail INNER JOIN jurisdiction ON jurisdiction_detail.jurisdiction_id=jurisdiction.jurisdiction_id
+  	where jurisdiction_detail.role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  
+  
+  <!-- 批量修改权限 -->
+  <update id="updateJurisDictionByBatch" parameterType="java.util.List">
+   update jurisdiction_detail set is_enable=
+    <foreach collection="jurisList" item="item" separator=" " open='case jurisdiction_detail_id' close="end">
+     when #{item.jurisdictionDetailId} then #{item.isEnable} 
+    </foreach>
+    where jurisdiction_detail_id in(
+    <foreach collection="jurisList" item="item" separator=",">
+     #{item.jurisdictionDetailId} 
+    </foreach>
+    )
+  </update>
+</mapper>

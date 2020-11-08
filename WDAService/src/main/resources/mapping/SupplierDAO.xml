@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.SupplierDAO">
+	<resultMap id="BaseResultMap" type="com.gx.po.Supplier">
+		<id column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+		<result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+		<result column="supplier_code" jdbcType="VARCHAR" property="supplierCode" />
+		<result column="contacts" jdbcType="VARCHAR" property="contacts" />
+	</resultMap>
+	<!-- 自定义Map -->
+	<resultMap type="com.gx.vo.AppendOptionVo" id="AppendResultMap">
+		<id column="supplier_id" jdbcType="INTEGER" property="id" />
+		<result column="supplier_name" jdbcType="VARCHAR" property="name" />
+		<result column="contacts" jdbcType="VARCHAR" property="fullName" />
+		<result column="supplier_code" jdbcType="VARCHAR" property="value" />
+	</resultMap>
+	<!-- 选项返回 -->
+	<resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+		<id column="supplier_id" jdbcType="INTEGER" property="id" />
+		<result column="supplier_name" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		supplier_id, supplier_name, supplier_code, contacts
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from supplier
+		where supplier_id = #{supplierId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		supplier
+		where supplier_id = #{supplierId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.gx.po.Supplier">
+		insert into supplier
+		(supplier_id, supplier_name, supplier_code,
+		contacts)
+		values
+		(#{supplierId,jdbcType=INTEGER}, #{supplierName,jdbcType=VARCHAR},
+		#{supplierCode,jdbcType=VARCHAR},
+		#{contacts,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gx.po.Supplier">
+		insert into supplier
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="supplierId != null">
+				supplier_id,
+			</if>
+			<if test="supplierName != null">
+				supplier_name,
+			</if>
+			<if test="supplierCode != null">
+				supplier_code,
+			</if>
+			<if test="contacts != null">
+				contacts,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="supplierId != null">
+				#{supplierId,jdbcType=INTEGER},
+			</if>
+			<if test="supplierName != null">
+				#{supplierName,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierCode != null">
+				#{supplierCode,jdbcType=VARCHAR},
+			</if>
+			<if test="contacts != null">
+				#{contacts,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Supplier">
+		update supplier
+		<set>
+			<if test="supplierName != null">
+				supplier_name = #{supplierName,jdbcType=VARCHAR},
+			</if>
+			<if test="supplierCode != null">
+				supplier_code = #{supplierCode,jdbcType=VARCHAR},
+			</if>
+			<if test="contacts != null">
+				contacts = #{contacts,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where supplier_id = #{supplierId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gx.po.Supplier">
+		update supplier
+		set supplier_name = #{supplierName,jdbcType=VARCHAR},
+		supplier_code =
+		#{supplierCode,jdbcType=VARCHAR},
+		contacts =
+		#{contacts,jdbcType=VARCHAR}
+		where supplier_id =
+		#{supplierId,jdbcType=INTEGER}
+	</update>
+	<!-- 通过车型ID、配置等级ID、模块ID查询算法与SeedToKey（1）或者SeedPinToKey（4）关联的供应商 -->
+	<select id="selectSupplierRelateArithmetic" resultMap="OptionResultMap">
+		SELECT
+		DISTINCT s.* FROM arithmetic a,re_vehicle_supplier
+		re,re_arithmetic_supplier rea,supplier s WHERE
+		a.arithmetic_id=rea.arithmetic_id AND re.relevance_id=rea.relevance_id
+		AND re.supplier_id=s.supplier_id AND re.vehicle_id=#{vehicleId} AND
+		<if test="configurationLevelId > 0 and configurationLevelId != null">
+			re.configuration_level_id=#{configurationLevelId} AND
+		</if>
+		re.module_id=#{moudleId} AND a.algorithm_type=#{algorithmType}
+	</select>
+	<!-- 查询供应商信息 by 名称、编号 -->
+	<select id="selectSupInfo" resultMap="AppendResultMap">
+		SELECT * FROM supplier
+		<where>
+			<if test="supplierName !=null">
+				supplier_name LIKE CONCAT('%',#{supplierName},'%')
+			</if>
+			<if test="supplierCode !=null">
+				supplier_code like concat('%',#{supplierCode},'%')
+			</if>
+			<if test="contacts !=null">
+				contacts LIKE CONCAT('%',#{contacts},'%')
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询供应商信息 -->
+	<select id="selectSupplierInfo" resultMap="BaseResultMap">
+		select supplier.supplier_id, supplier.supplier_name,
+		supplier.supplier_code,
+		supplier.contacts
+		from supplier
+		<if test="supplierName !=null and supplierName !=''">
+			where supplier.supplier_name like
+			CONCAT('%',#{supplierName,jdbcType=VARCHAR},'%')
+		</if>
+		order by supplier.supplier_id DESC
+		limit
+		#{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询供应商信息(数据总条数) -->
+	<select id="selectSupplierInfoRows" resultType="java.lang.Integer">
+		select count(supplier.supplier_id)
+		from supplier
+		<if test="supplierName !=null and supplierName !=''">
+			where supplier.supplier_name like
+			CONCAT('%',#{supplierName,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+	
+	<!-- 查询供应商信息是否已存在 -->
+	<select id="selectSupplierWhetherExist" resultMap="BaseResultMap">
+		select supplier.supplier_id from supplier
+		where supplier.supplier_name =
+		#{supplierName,jdbcType=VARCHAR}
+		<if test="supplierId !=null and supplierId >0">
+			and supplier_id != #{supplierId,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<!-- 查询供应商代码是否存在 -->
+	<select id="selectSupplierCodeWhetherExist" resultType="java.lang.Integer">
+		select count(supplier.supplier_id) from supplier
+		where supplier_code = #{supplierCode,jdbcType=VARCHAR}
+		<if test="supplierId !=null and supplierId >0">
+			and supplier_id != #{supplierId,jdbcType=INTEGER}
+		</if>
+	</select>
+	
+	
+	
+	
+	
+	<!-- 根据模块ID查询供应商信息 -->
+	<select id="selectSupplierByModuleId" resultMap="AppendResultMap" parameterType="Integer">
+		SELECT DISTINCT su.* FROM supplier su INNER JOIN re_vehicle_supplier re ON re.supplier_id = su.supplier_id
+		INNER JOIN re_did_relevance redid ON redid.relevance_id = re.relevance_id
+		WHERE re.module_id = #{moduleId}
+	</select>
+</mapper>

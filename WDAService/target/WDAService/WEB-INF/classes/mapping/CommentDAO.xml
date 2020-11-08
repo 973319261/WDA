@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.CommentDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Comment">
+    <id column="comment_id" jdbcType="INTEGER" property="commentId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="creation_time" jdbcType="TIMESTAMP" property="creationTime" />
+    <result column="reply_id" jdbcType="INTEGER" property="replyId" />
+    <result column="critic_id" jdbcType="INTEGER" property="criticId" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="comment_type" jdbcType="INTEGER" property="commentType" />
+    <result column="tier_type" jdbcType="INTEGER" property="tierType" />
+  </resultMap>
+  
+  <!-- 自定义vo -->
+  <resultMap type="com.gx.vo.CommentsVo" id="CommentsVo" extends="BaseResultMap">
+  	<result column="notice_name" jdbcType="VARCHAR" property="noticeName" />
+    <result column="notice_describe" jdbcType="VARCHAR" property="noticeDescribe" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+    <result column="cirtic_name" jdbcType="VARCHAR" property="cirticName"/>
+    <result column="cirtic_name_two" jdbcType="VARCHAR" property="cirticNameTwo"/>
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    comment_id, user_id, notice_id, content, creation_time, reply_id, critic_id, admin_id, 
+    comment_type, tier_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from comment
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from comment
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Comment">
+    insert into comment (comment_id, user_id, notice_id, 
+      content, creation_time, reply_id, 
+      critic_id, admin_id, comment_type, 
+      tier_type)
+    values (#{commentId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{noticeId,jdbcType=INTEGER}, 
+      #{content,jdbcType=VARCHAR}, #{creationTime,jdbcType=TIMESTAMP}, #{replyId,jdbcType=INTEGER}, 
+      #{criticId,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{commentType,jdbcType=INTEGER}, 
+      #{tierType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Comment">
+    insert into comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="noticeId != null">
+        notice_id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="creationTime != null">
+        creation_time,
+      </if>
+      <if test="replyId != null">
+        reply_id,
+      </if>
+      <if test="criticId != null">
+        critic_id,
+      </if>
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="commentType != null">
+        comment_type,
+      </if>
+      <if test="tierType != null">
+        tier_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        #{commentId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeId != null">
+        #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyId != null">
+        #{replyId,jdbcType=INTEGER},
+      </if>
+      <if test="criticId != null">
+        #{criticId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="commentType != null">
+        #{commentType,jdbcType=INTEGER},
+      </if>
+      <if test="tierType != null">
+        #{tierType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Comment">
+    update comment
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeId != null">
+        notice_id = #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyId != null">
+        reply_id = #{replyId,jdbcType=INTEGER},
+      </if>
+      <if test="criticId != null">
+        critic_id = #{criticId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="commentType != null">
+        comment_type = #{commentType,jdbcType=INTEGER},
+      </if>
+      <if test="tierType != null">
+        tier_type = #{tierType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Comment">
+    update comment
+    set user_id = #{userId,jdbcType=INTEGER},
+      notice_id = #{noticeId,jdbcType=INTEGER},
+      content = #{content,jdbcType=VARCHAR},
+      creation_time = #{creationTime,jdbcType=TIMESTAMP},
+      reply_id = #{replyId,jdbcType=INTEGER},
+      critic_id = #{criticId,jdbcType=INTEGER},
+      admin_id = #{adminId,jdbcType=INTEGER},
+      comment_type = #{commentType,jdbcType=INTEGER},
+      tier_type = #{tierType,jdbcType=INTEGER}
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询评论列表 -->
+  <select id="selectComments" resultMap="CommentsVo">  	
+  	<!-- SELECT ur.user_name user_name,uc.user_name cirtic_name,c.*
+  	FROM comment c 
+  	INNER JOIN user ur ON c.user_id = ur.user_id 
+  	INNER JOIN user uc ON c.user_id = uc.user_id 
+  	WHERE notice_id = #{noticeId} AND reply_id = #{replyId} 
+  	group by c.comment_id desc 
+  	<if test="pageSize != null">
+  		limit #{startIndex},#{pageSize}
+  	</if> -->
+  	SELECT ur.user_name user_name,uc.user_name cirtic_name,ad.admin_name,
+  		ac.admin_name cirtic_name_two,c.*
+  	FROM comment c 
+  	LEFT JOIN user ur ON c.user_id = ur.user_id 
+  	LEFT JOIN admin ad ON c.admin_id = ad.admin_id 
+  	LEFT JOIN user uc ON c.user_id = uc.user_id 
+  	LEFT JOIN admin ac ON c.admin_id = ac.admin_id 
+  	WHERE notice_id = #{noticeId} AND reply_id = #{replyId} 
+  	group by c.comment_id desc 
+  	<if test="pageSize != null">
+  		limit #{startIndex},#{pageSize}
+  	</if>
+  </select>
+  <!-- 通过ID查询评论信息 -->
+  <select id="selectdbCom" parameterType="Integer" resultMap="CommentsVo">  	
+  	<!-- SELECT ur.user_name user_name,uc.user_name cirtic_name,c.*
+  	FROM comment c 
+  	INNER JOIN user ur ON c.user_id = ur.user_id 
+  	INNER JOIN user uc ON c.user_id = uc.user_id 
+  	WHERE comment_id = #{commentId}  -->
+  	
+  	SELECT ur.user_name user_name,uc.user_name cirtic_name,ad.admin_name,
+  		ac.admin_name cirtic_name_two,c.*,c.comment_type,c.tier_type
+  	FROM comment c 
+  	LEFT JOIN user ur ON c.user_id = ur.user_id 
+  	LEFT JOIN admin ad ON c.admin_id = ad.admin_id 
+  	LEFT JOIN user uc ON c.user_id = uc.user_id 
+  	LEFT JOIN admin ac ON c.admin_id = ac.admin_id 
+  	WHERE comment_id = #{commentId} 
+  </select>
+
+  
+  <!-- 新增评论 -->
+  <insert id="addComment">
+  	INSERT INTO comment(user_id,notice_id,content,creation_time,reply_id,critic_id,tier_type)
+	VALUES(#{userId},#{noticeId},#{content},#{creationTime},#{replyId},#{criticId},#{tierType})
+  </insert>
+  
+  
+  <delete id="delCommentByReplyID">
+  	DELETE FROM COMMENT WHERE reply_id = #{commentId}
+  </delete>
+  
+  <!-- 通过公告ID查询评论信息 -->
+  <select id="selectCommentInfo" resultMap="CommentsVo">
+  	select comment.comment_id, comment.user_id, comment.notice_id, comment.content, comment.creation_time, comment.reply_id, 
+  		   comment.critic_id, user.user_name, notice.notice_name, notice.notice_describe
+  	from comment
+  	inner join user on comment.user_id = user.user_id
+  	inner join notice on comment.notice_id = notice.notice_id
+  	where comment.reply_id=0 and comment.notice_id=#{noticeId,jdbcType=INTEGER}
+  	<if test="userName !=null and userName !=''">
+  		and user.user_name like CONCAT('%',#{userName,jdbcType=VARCHAR},'%')
+  	</if>
+  	order by comment.comment_id DESC
+  	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 通过公告ID查询评论信息(数据总条数) -->
+  <select id="selectCommentInfoRows" resultType="java.lang.Integer">
+  	select count(comment.comment_id)
+  	from comment
+  	inner join user on comment.user_id = user.user_id
+  	inner join notice on comment.notice_id = notice.notice_id
+  	where comment.reply_id=0 and comment.notice_id=#{noticeId,jdbcType=INTEGER}
+  	<if test="userName !=null and userName !=''">
+  		and user.user_name like CONCAT('%',#{userName,jdbcType=VARCHAR},'%')
+  	</if>
+  </select>
+  
+  <!-- 通过评论ID查询回复信息 -->
+  <select id="selectCommentReplyInfo" resultMap="CommentsVo">
+  	select c.comment_id, c.user_id, c.notice_id, c.content, c.creation_time, c.reply_id, 
+  		   c.critic_id, ur.user_name, nt.notice_name, nt.notice_describe,uc.user_name cirtic_name,
+  		   ad.admin_name, ac.admin_name cirtic_name_two, c.admin_id, c.comment_type 
+  	from comment c
+  	left join user ur on c.user_id = ur.user_id
+  	left join admin ad on c.admin_id = ad.admin_id
+  	left join user uc on c.critic_id = uc.user_id
+  	left join admin ac on c.critic_id = ac.admin_id
+  	inner join notice nt on c.notice_id = nt.notice_id 
+  	where c.notice_id= #{noticeId,jdbcType=INTEGER} and c.tier_type=#{replyId,jdbcType=INTEGER} 
+  	order by c.comment_id DESC
+  	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 通过评论ID查询回复信息(数据总条数) -->
+  <select id="selectCommentReplyInfoRows" resultType="java.lang.Integer">
+  	select count(c.comment_id)
+  	from comment c
+  	left join user ur on c.user_id = ur.user_id
+  	left join admin ad on c.admin_id = ad.admin_id
+  	left join user uc on c.critic_id = uc.user_id
+  	left join admin ac on c.critic_id = ac.admin_id
+  	inner join notice on c.notice_id = notice.notice_id
+  	where c.notice_id= #{noticeId,jdbcType=INTEGER} and c.tier_type=#{replyId,jdbcType=INTEGER} 
+  </select>
+  
+  <!-- 通过评论ID查询下级评论信息 -->
+  <select id="selectLevelInfoById" resultType="java.lang.Integer">
+  	select count(comment.comment_id)
+  	from comment
+  	where comment.reply_id=#{replyId,jdbcType=INTEGER}
+  </select>
+</mapper>

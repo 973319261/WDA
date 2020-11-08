@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.FlowStepDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.FlowStep">
+    <id column="flow_step_id" jdbcType="INTEGER" property="flowStepId" />
+    <result column="operation_names" jdbcType="VARCHAR" property="operationNames" />
+    <result column="send_orders" jdbcType="VARCHAR" property="sendOrders" />
+    <result column="response_orders" jdbcType="VARCHAR" property="responseOrders" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    flow_step_id, operation_names, send_orders, response_orders
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow_step
+    where flow_step_id = #{flowStepId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from flow_step
+    where flow_step_id = #{flowStepId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.FlowStep">
+    insert into flow_step (flow_step_id, operation_names, send_orders, 
+      response_orders)
+    values (#{flowStepId,jdbcType=INTEGER}, #{operationNames,jdbcType=VARCHAR}, #{sendOrders,jdbcType=VARCHAR}, 
+      #{responseOrders,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.FlowStep">
+    insert into flow_step
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flowStepId != null">
+        flow_step_id,
+      </if>
+      <if test="operationNames != null">
+        operation_names,
+      </if>
+      <if test="sendOrders != null">
+        send_orders,
+      </if>
+      <if test="responseOrders != null">
+        response_orders,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flowStepId != null">
+        #{flowStepId,jdbcType=INTEGER},
+      </if>
+      <if test="operationNames != null">
+        #{operationNames,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOrders != null">
+        #{sendOrders,jdbcType=VARCHAR},
+      </if>
+      <if test="responseOrders != null">
+        #{responseOrders,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.FlowStep">
+    update flow_step
+    <set>
+      <if test="operationNames != null">
+        operation_names = #{operationNames,jdbcType=VARCHAR},
+      </if>
+      <if test="sendOrders != null">
+        send_orders = #{sendOrders,jdbcType=VARCHAR},
+      </if>
+      <if test="responseOrders != null">
+        response_orders = #{responseOrders,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where flow_step_id = #{flowStepId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.FlowStep">
+    update flow_step
+    set operation_names = #{operationNames,jdbcType=VARCHAR},
+      send_orders = #{sendOrders,jdbcType=VARCHAR},
+      response_orders = #{responseOrders,jdbcType=VARCHAR}
+    where flow_step_id = #{flowStepId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询小流程步骤信息 -->
+  <select id="selectSmallFlowStepInfo" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from flow_step
+    order by flow_step_id DESC
+    limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询小流程步骤信息(数据总条数) -->
+  <select id="selectSmallFlowStepInfoRows" resultType="java.lang.Integer">
+  	select count(flow_step_id)
+    from flow_step
+  </select>
+  
+  <!-- 查询数据是否存在 -->
+  <select id="selectDataWhetherExist" parameterType="com.gx.po.FlowStep" resultType="java.lang.Integer">
+  	select count(flow_step_id)
+  	from flow_step
+  	where operation_names = #{operationNames,jdbcType=VARCHAR}
+  	and send_orders = #{sendOrders,jdbcType=VARCHAR}
+  	and response_orders = #{responseOrders,jdbcType=VARCHAR}
+  	<if test="flowStepId !=null and flowStepId>0">
+  		and flow_step_id != #{flowStepId,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 批量删除小流程信息 -->
+  <delete id="deleteSmallFlowStepInfo" parameterType="java.lang.Integer">
+  	DELETE FROM flow_step WHERE flow_step_id IN 
+	<foreach collection="list" open="(" separator="," close=")" item="flowStepids">
+    		#{flowStepids}
+   	</foreach>
+  </delete>
+</mapper>

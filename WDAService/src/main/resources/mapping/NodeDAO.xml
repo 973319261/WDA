@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.NodeDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Node">
+    <id column="node_id" jdbcType="INTEGER" property="nodeId" />
+    <result column="relevance_id" jdbcType="INTEGER" property="relevanceId" />
+    <result column="harness_configuration_id" jdbcType="INTEGER" property="harnessConfigurationId" />
+    <result column="tx_id" jdbcType="VARCHAR" property="txId" />
+    <result column="rx_id" jdbcType="VARCHAR" property="rxId" />
+  </resultMap>
+  
+  <!-- 自定义resultMap -->
+  <resultMap type="com.gx.vo.NodeVo" id="NodeVoResultMap" extends="BaseResultMap">
+  	<result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+  	<result column="vehicle_name" jdbcType="VARCHAR" property="vehicleName" />
+  	<result column="configuration_level_id" jdbcType="INTEGER" property="configurationLevelId" />
+  	<result column="configuration_level_name" jdbcType="VARCHAR" property="configurationLevelName" />
+  	<result column="module_id" jdbcType="INTEGER" property="moduleId" />
+  	<result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+  	<result column="can_configuration_id" jdbcType="INTEGER" property="canConfigurationId" />
+  	<result column="can_passage" jdbcType="VARCHAR" property="canPassage" />
+  	<result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+  	<result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+  	<result column="supplier_code" jdbcType="VARCHAR" property="supplierCode" />
+  </resultMap>
+  
+  
+  <sql id="Base_Column_List">
+    node_id, relevance_id, harness_configuration_id, tx_id, rx_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from node
+    where node_id = #{nodeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from node
+    where node_id = #{nodeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Node">
+    insert into node (node_id, relevance_id, harness_configuration_id, 
+      tx_id, rx_id)
+    values (#{nodeId,jdbcType=INTEGER}, #{relevanceId,jdbcType=INTEGER}, #{harnessConfigurationId,jdbcType=INTEGER}, 
+      #{txId,jdbcType=VARCHAR}, #{rxId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Node">
+    insert into node
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        node_id,
+      </if>
+      <if test="relevanceId != null">
+        relevance_id,
+      </if>
+      <if test="harnessConfigurationId != null">
+        harness_configuration_id,
+      </if>
+      <if test="txId != null">
+        tx_id,
+      </if>
+      <if test="rxId != null">
+        rx_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="nodeId != null">
+        #{nodeId,jdbcType=INTEGER},
+      </if>
+      <if test="relevanceId != null">
+        #{relevanceId,jdbcType=INTEGER},
+      </if>
+      <if test="harnessConfigurationId != null">
+        #{harnessConfigurationId,jdbcType=INTEGER},
+      </if>
+      <if test="txId != null">
+        #{txId,jdbcType=VARCHAR},
+      </if>
+      <if test="rxId != null">
+        #{rxId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Node">
+    update node
+    <set>
+      <if test="relevanceId != null">
+        relevance_id = #{relevanceId,jdbcType=INTEGER},
+      </if>
+      <if test="harnessConfigurationId != null">
+        harness_configuration_id = #{harnessConfigurationId,jdbcType=INTEGER},
+      </if>
+      <if test="txId != null">
+        tx_id = #{txId,jdbcType=VARCHAR},
+      </if>
+      <if test="rxId != null">
+        rx_id = #{rxId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where node_id = #{nodeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Node">
+    update node
+    set relevance_id = #{relevanceId,jdbcType=INTEGER},
+      harness_configuration_id = #{harnessConfigurationId,jdbcType=INTEGER},
+      tx_id = #{txId,jdbcType=VARCHAR},
+      rx_id = #{rxId,jdbcType=VARCHAR}
+    where node_id = #{nodeId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 查询节点信息 -->
+  <select id="selectNodeInfo" resultMap="NodeVoResultMap">
+  	select distinct	vehicle.vehicle_id,vehicle.vehicle_name,configuration_level.configuration_level_name,node.node_id
+	from node
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=node.relevance_id
+	inner join vehicle on vehicle.vehicle_id=re_vehicle_supplier.vehicle_id
+	inner join configuration_level on configuration_level.configuration_level_id=re_vehicle_supplier.configuration_level_id
+	where 1=1
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>	
+  	order by node.node_id DESC
+  	<if test="pageSize !=null and pageSize >0">
+  		limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 查询节点信息 (数据总条数) -->
+  <select id="selectNodeInfoRows" resultType="java.lang.Integer">
+  	select count(distinct vehicle.vehicle_id)
+	from node
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=node.relevance_id
+	inner join vehicle on vehicle.vehicle_id=re_vehicle_supplier.vehicle_id
+	inner join configuration_level on configuration_level.configuration_level_id=re_vehicle_supplier.configuration_level_id
+	where 1=1
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+  
+  <!-- 查询节点信息是否存在 -->
+  <select id="selectNodeWhetherExist" resultType="java.lang.Integer">
+	select count(node.node_id) from node
+	where relevance_id = #{relevanceId,jdbcType=INTEGER} 
+	and harness_configuration_id = #{harnessConfigurationId,jdbcType=INTEGER}
+	and tx_id = #{txId,jdbcType=VARCHAR}
+	and rx_id = #{rxId,jdbcType=VARCHAR}
+	<if test="nodeId !=null and nodeId >0">
+		and node_id != #{nodeId,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+  
+  <!-- 通过id查询节点信息 -->
+  <select id="selectNodeInfoById" resultMap="NodeVoResultMap">
+  	select configuration_level.configuration_level_name, module.module_name, can_configuration.can_passage
+	from node
+	inner join can_configuration on can_configuration.can_configuration_id=#{canConfigurationId,jdbcType=INTEGER}
+	inner join module on module.module_id=#{moduleId,jdbcType=INTEGER}
+	inner join configuration_level on configuration_level.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询节点详情信息 -->
+  <select id="selectNodeDetailInfo" resultMap="NodeVoResultMap">
+  	select node.node_id, node.relevance_id, node.harness_configuration_id, node.tx_id, node.rx_id,
+  		vehicle.vehicle_id, vehicle.vehicle_name, configuration_level.configuration_level_id, 
+  		configuration_level.configuration_level_name, module.module_id, 
+  		module.module_name, can_configuration.can_configuration_id, 
+  		can_configuration.can_passage, harness_configuration.harness,
+  		supplier.supplier_id, supplier.supplier_name, supplier.supplier_code
+	from node
+	inner join harness_configuration on harness_configuration.harness_configuration_id=node.harness_configuration_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=node.relevance_id
+	inner join can_configuration on can_configuration.can_configuration_id=harness_configuration.can_configuration_id
+	inner join vehicle on vehicle.vehicle_id=re_vehicle_supplier.vehicle_id
+	inner join configuration_level on configuration_level.configuration_level_id=re_vehicle_supplier.configuration_level_id
+	inner join module on module.module_id=re_vehicle_supplier.module_id
+	inner join supplier on supplier.supplier_id=re_vehicle_supplier.supplier_id
+	where re_vehicle_supplier.vehicle_id = #{vehicleId,jdbcType=INTEGER}
+  	order by node.node_id DESC
+  	<if test="pageSize !=null and pageSize >0">
+  		limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 查询节点详情信息 (数据总条数) -->
+  <select id="selectNodeDetailInfoRows" resultType="java.lang.Integer">
+  	select count(node.node_id)
+	from node
+	inner join harness_configuration on harness_configuration.harness_configuration_id=node.harness_configuration_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=node.relevance_id
+	inner join can_configuration on can_configuration.can_configuration_id=harness_configuration.can_configuration_id
+	inner join vehicle on vehicle.vehicle_id=re_vehicle_supplier.vehicle_id
+	inner join configuration_level on configuration_level.configuration_level_id=re_vehicle_supplier.configuration_level_id
+	inner join module on module.module_id=re_vehicle_supplier.module_id
+	inner join supplier on supplier.supplier_id=re_vehicle_supplier.supplier_id
+	where re_vehicle_supplier.vehicle_id = #{vehicleId,jdbcType=INTEGER}	
+  </select>
+  
+  <!-- 通过id批量删除节点明细信息 -->
+  <delete id="deleteNodeDetailInfo" parameterType="String">
+  	 delete from node where node_id in 
+	<foreach collection="list" open="(" separator="," close=")" item="listId">
+    		#{listId}
+   	</foreach>
+  </delete>
+  
+  
+</mapper>

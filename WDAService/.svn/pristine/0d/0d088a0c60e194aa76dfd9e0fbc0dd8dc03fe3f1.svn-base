@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.DidTypeDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.DidType">
+    <id column="did_type_id" jdbcType="INTEGER" property="didTypeId" />
+    <result column="signal_type_id" jdbcType="INTEGER" property="signalTypeId" />
+    <result column="did_id" jdbcType="INTEGER" property="didId" />
+    <result column="raw_value_type" jdbcType="INTEGER" property="rawValueType" />
+    <result column="start_bit_position" jdbcType="INTEGER" property="startBitPosition" />
+    <result column="start_byte" jdbcType="INTEGER" property="startByte" />
+    <result column="start_bit" jdbcType="INTEGER" property="startBit" />
+    <result column="length_bit" jdbcType="INTEGER" property="lengthBit" />
+    <result column="length_byte" jdbcType="INTEGER" property="lengthByte" />
+    <result column="format" jdbcType="VARCHAR" property="format" />
+    <result column="min" jdbcType="VARCHAR" property="min" />
+    <result column="max" jdbcType="VARCHAR" property="max" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="scaling_type_id" jdbcType="INTEGER" property="scalingTypeId" />
+    <result column="engineering_value" jdbcType="DECIMAL" property="engineeringValue" />
+    <result column="raw_value" jdbcType="DECIMAL" property="rawValue" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    did_type_id, signal_type_id, did_id, raw_value_type, start_bit_position, start_byte, 
+    start_bit, length_bit, length_byte, format, `min`, `max`, unit, scaling_type_id, 
+    engineering_value, raw_value
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from did_type
+    where did_type_id = #{didTypeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from did_type
+    where did_type_id = #{didTypeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.DidType">
+    insert into did_type (did_type_id, signal_type_id, did_id, 
+      raw_value_type, start_bit_position, start_byte, 
+      start_bit, length_bit, length_byte, 
+      format, `min`, `max`, unit, 
+      scaling_type_id, engineering_value, raw_value
+      )
+    values (#{didTypeId,jdbcType=INTEGER}, #{signalTypeId,jdbcType=INTEGER}, #{didId,jdbcType=INTEGER}, 
+      #{rawValueType,jdbcType=INTEGER}, #{startBitPosition,jdbcType=INTEGER}, #{startByte,jdbcType=INTEGER}, 
+      #{startBit,jdbcType=INTEGER}, #{lengthBit,jdbcType=INTEGER}, #{lengthByte,jdbcType=INTEGER}, 
+      #{format,jdbcType=VARCHAR}, #{min,jdbcType=VARCHAR}, #{max,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{scalingTypeId,jdbcType=INTEGER}, #{engineeringValue,jdbcType=DECIMAL}, #{rawValue,jdbcType=DECIMAL}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.DidType" keyProperty="didTypeId" useGeneratedKeys="true">
+    insert into did_type
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="didTypeId != null">
+        did_type_id,
+      </if>
+      <if test="signalTypeId != null">
+        signal_type_id,
+      </if>
+      <if test="didId != null">
+        did_id,
+      </if>
+      <if test="rawValueType != null">
+        raw_value_type,
+      </if>
+      <if test="startBitPosition != null">
+        start_bit_position,
+      </if>
+      <if test="startByte != null">
+        start_byte,
+      </if>
+      <if test="startBit != null">
+        start_bit,
+      </if>
+      <if test="lengthBit != null">
+        length_bit,
+      </if>
+      <if test="lengthByte != null">
+        length_byte,
+      </if>
+      <if test="format != null">
+        format,
+      </if>
+      <if test="min != null">
+        `min`,
+      </if>
+      <if test="max != null">
+        `max`,
+      </if>
+      <if test="unit != null">
+        unit,
+      </if>
+      <if test="scalingTypeId != null">
+        scaling_type_id,
+      </if>
+      <if test="engineeringValue != null">
+        engineering_value,
+      </if>
+      <if test="rawValue != null">
+        raw_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="didTypeId != null">
+        #{didTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="signalTypeId != null">
+        #{signalTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="didId != null">
+        #{didId,jdbcType=INTEGER},
+      </if>
+      <if test="rawValueType != null">
+        #{rawValueType,jdbcType=INTEGER},
+      </if>
+      <if test="startBitPosition != null">
+        #{startBitPosition,jdbcType=INTEGER},
+      </if>
+      <if test="startByte != null">
+        #{startByte,jdbcType=INTEGER},
+      </if>
+      <if test="startBit != null">
+        #{startBit,jdbcType=INTEGER},
+      </if>
+      <if test="lengthBit != null">
+        #{lengthBit,jdbcType=INTEGER},
+      </if>
+      <if test="lengthByte != null">
+        #{lengthByte,jdbcType=INTEGER},
+      </if>
+      <if test="format != null">
+        #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="min != null">
+        #{min,jdbcType=VARCHAR},
+      </if>
+      <if test="max != null">
+        #{max,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="scalingTypeId != null">
+        #{scalingTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="engineeringValue != null">
+        #{engineeringValue,jdbcType=DECIMAL},
+      </if>
+      <if test="rawValue != null">
+        #{rawValue,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.DidType">
+    update did_type
+    <set>
+      <if test="signalTypeId != null">
+        signal_type_id = #{signalTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="didId != null">
+        did_id = #{didId,jdbcType=INTEGER},
+      </if>
+      <if test="rawValueType != null">
+        raw_value_type = #{rawValueType,jdbcType=INTEGER},
+      </if>
+      <if test="startBitPosition != null">
+        start_bit_position = #{startBitPosition,jdbcType=INTEGER},
+      </if>
+      <if test="startByte != null">
+        start_byte = #{startByte,jdbcType=INTEGER},
+      </if>
+      <if test="startBit != null">
+        start_bit = #{startBit,jdbcType=INTEGER},
+      </if>
+      <if test="lengthBit != null">
+        length_bit = #{lengthBit,jdbcType=INTEGER},
+      </if>
+      <if test="lengthByte != null">
+        length_byte = #{lengthByte,jdbcType=INTEGER},
+      </if>
+      <if test="format != null">
+        format = #{format,jdbcType=VARCHAR},
+      </if>
+      <if test="min != null">
+        `min` = #{min,jdbcType=VARCHAR},
+      </if>
+      <if test="max != null">
+        `max` = #{max,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="scalingTypeId != null">
+        scaling_type_id = #{scalingTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="engineeringValue != null">
+        engineering_value = #{engineeringValue,jdbcType=DECIMAL},
+      </if>
+      <if test="rawValue != null">
+        raw_value = #{rawValue,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where did_type_id = #{didTypeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.DidType">
+    update did_type
+    set signal_type_id = #{signalTypeId,jdbcType=INTEGER},
+      did_id = #{didId,jdbcType=INTEGER},
+      raw_value_type = #{rawValueType,jdbcType=INTEGER},
+      start_bit_position = #{startBitPosition,jdbcType=INTEGER},
+      start_byte = #{startByte,jdbcType=INTEGER},
+      start_bit = #{startBit,jdbcType=INTEGER},
+      length_bit = #{lengthBit,jdbcType=INTEGER},
+      length_byte = #{lengthByte,jdbcType=INTEGER},
+      format = #{format,jdbcType=VARCHAR},
+      `min` = #{min,jdbcType=VARCHAR},
+      `max` = #{max,jdbcType=VARCHAR},
+      unit = #{unit,jdbcType=VARCHAR},
+      scaling_type_id = #{scalingTypeId,jdbcType=INTEGER},
+      engineering_value = #{engineeringValue,jdbcType=DECIMAL},
+      raw_value = #{rawValue,jdbcType=DECIMAL}
+    where did_type_id = #{didTypeId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 通过didTypeId删除DID、DID配置和状态描述信息(快照) -->
+  <delete id="deleteSnapshotInfo" parameterType="java.lang.Integer">
+  	delete did_type,did,state_description from did_type
+  	inner join did on did.did_id=did_type.did_id
+  	left join state_description on state_description.did_type_id=did_type.did_type_id
+    where did_type.did_type_id = #{didTypeId,jdbcType=INTEGER}
+  </delete>
+</mapper>

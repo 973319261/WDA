@@ -1,0 +1,305 @@
+<resources>
+    <string name="app_name">WDA</string>
+    <!--开屏-->
+    <string name="text_open_statement" translatable="false">Welcome to use WDA</string>
+    <!--登录-->
+    <string name="text_login_account" translatable="false">Account</string>
+    <string name="text_login_password" translatable="false">Password</string>
+    <string name="text_login_remember" translatable="false">Remember Password</string>
+    <string name="text_login" translatable="false">Log In</string>
+    <string name="text_login_account_hint" translatable="false">Please enter your account</string>
+    <string name="text_login_password_hint" translatable="false">Please enter your password</string>
+    <!--主页面-->
+    <string name="text_main_security">Algorithm</string>
+    <string name="text_main_dtc">DTC</string>
+    <string name="text_main_data">Message</string>
+    <string name="text_main_detection">Date</string>
+    <string name="text_main_share">Advanced</string>
+    <string name="text_main_account" translatable="false">Account：</string>
+    <string name="text_main_user_name" translatable="false">User Name：</string>
+    <string name="text_main_role_type" translatable="false">Role Type：</string>
+    <string name="text_main_expiration_date" translatable="false">Expiration Date：</string>
+    <string name="text_main_tf_configuration" translatable="false">TF card application</string>
+    <string name="text_link_vci" translatable="false">VCI Setting</string>
+    <string name="text_main_update_password" translatable="false">Update Password</string>
+    <string name="text_main_language_settings" translatable="false">Language Settings</string>
+    <string name="text_main_about" translatable="false">About</string>
+    <string name="text_main_exit" translatable="false">Log Out</string>
+    <string name="text_ununited" translatable="false">ununited</string>
+    <string name="text_connected" translatable="false">connected</string>
+    <!--退出-->
+    <string name="text_logout_exit" translatable="false">Log Out</string>
+    <string name="text_logout_close" translatable="false">Close the application</string>
+    <string name="text_logout_cancel" translatable="false">Cancel</string>
+    <!--TF卡录制与配置-->
+    <string name="text_tf_card_title" translatable="false">TF card configuration</string>
+    <string name="text_tf_card_export" translatable="false">Export</string>
+    <string name="text_tf_card_clean" translatable="false">Clean</string>
+    <string name="text_tf_card_query" translatable="false">Query</string>
+    <string name="text_tf_card_transcribe" translatable="false">Permanent record：</string>
+    <string name="text_tf_card_continuous_record" translatable="false">Permanent record</string>
+    <string name="text_tf_card_continuous_over" translatable="false">Over</string>
+    <string name="text_tf_card_can_channel" translatable="false">CAN Channel</string>
+    <string name="text_tf_card_setting_title" translatable="false">Permanent recording configuration</string>
+    <string name="text_tf_card_setting_time" translatable="false">Storage time：</string>
+    <string name="text_tf_card_setting_time_unit" translatable="false">min</string>
+    <string name="text_tf_card_setting_channel" translatable="false">The recording channel</string>
+    <string name="text_tf_card_setting_total" translatable="false">Message number：</string>
+    <string name="text_tf_card_setting_total_unit" translatable="false">bar</string>
+    <string name="text_tf_card_setting_bit" translatable="false">Bit</string>
+    <string name="text_tf_card_info_delete" translatable="false">Sure you want to empty the TF card all data?</string>
+    <string name="text_tf_card_delete_sure" translatable="false">Have to empty all TF card data</string>
+    <string name="text_export_tf_card_info" translatable="false">Sure you want to export the file?</string>
+    <!--VCI连接-->
+    <string name="text_link_vci_title" translatable="false">VCI Link</string>
+    <string name="text_permissions_location_open" translatable="false">Please open the positioning</string>
+    <string name="text_permissions_wifi" translatable="false">Not open WIFI,Please open the WiFi and Connect the VCI WiFi</string>
+    <string name="text_permissions_not_vciwifi" translatable="false">The connection is not a valid VCI WiFi</string>
+    <string name="text_link_check_ssid" translatable="false">Please set the SSID</string>
+    <string name="text_link_check_pass" translatable="false">The password may not be less than 8</string>
+    <string name="text_link_check_using" translatable="false">This VCI is being used by other devices. Are you sure you want to configure it?</string>
+    <!--修改密码-->
+    <string name="text_update_password_title" translatable="false">Update Password</string>
+    <string name="text_update_password_old" translatable="false">Old Password</string>
+    <string name="text_update_password_new" translatable="false">New Password</string>
+    <string name="text_update_password_confirm" translatable="false">Confirm Password</string>
+    <string name="text_update_password_old_hint" translatable="false">Enter the old password</string>
+    <string name="text_update_password_new_hint" translatable="false">Enter a new password</string>
+    <string name="text_update_password_confirm_hint" translatable="false">Enter confirmation password</string>
+    <!--语言设置-->
+    <string name="text_language_title" translatable="false">Language Settings</string>
+    <!--关于-->
+    <string name="text_about_title" translatable="false">About</string>
+    <string name="text_about_app_name" translatable="false">WDA</string>
+    <string name="text_about_introduction" translatable="false">Function Introduction</string>
+    <string name="text_about_checkver" translatable="false">Check for Updates</string>
+    <!--功能介绍-->
+    <string name="text_about_function_title" translatable="false">Function Introduction</string>
+    <string name="text_function_detail_title" translatable="false">Function Detail</string>
+    <!--通知-->
+    <string name="text_inform_title">Message</string>
+    <string name="text_inform_detail_title" translatable="false">Notice the detail</string>
+    <string name="text_inform_inform" translatable="false">Inform</string>
+    <string name="text_inform_notice" translatable="false">Notice</string>
+    <!--安全算法-->
+    <string name="text_security_history_vehicle" translatable="false">Vehicle：</string>
+    <string name="text_security_history_type" translatable="false">Type：</string>
+    <string name="text_history_configuration" translatable="false">Configuration：</string>
+    <string name="text_security_history_ecu" translatable="false">Modules：</string>
+    <string name="text_security_history_supplier" translatable="false">Supplier：</string>
+    <string name="text_security_history_level" translatable="false">Level：</string>
+    <string name="text_security_seed_key" translatable="false">Seed→Key</string>
+    <string name="text_security_vin_pin" translatable="false">Vin→Pin</string>
+    <string name="text_security_vin_esk" translatable="false">Vin→Esk</string>
+    <string name="text_security_seed_pin_key" translatable="false">S＆P→Key</string>
+    <string name="text_security_seed_key_title" translatable="false">Seed→Key</string>
+    <string name="text_security_vin_pin_title" translatable="false">Vin→Pin</string>
+    <string name="text_security_vin_esk_title" translatable="false">Vin→Esk</string>
+    <string name="text_security_seed_pin_key_title" translatable="false">Seed＆Pin→Key</string>
+    <string name="text_security_vehicle" translatable="false">Vehicle</string>
+    <string name="text_security_configuration" translatable="false">Configuration</string>
+    <string name="text_security_ecu" translatable="false">ECU</string>
+    <string name="text_security_supplier" translatable="false">Supplier</string>
+    <string name="text_security_level" translatable="false">Level</string>
+    <string name="text_security_calculate" translatable="false">Calculate</string>
+    <string name="text_security_calculate_success" translatable="false">Calculate success</string>
+    <!--DTC-->
+    <string name="text_dtc_query" translatable="false">Interrogate memory</string>
+    <string name="text_dtc_read" translatable="false">Read/Clear trouble codes</string>
+    <string name="text_dtc_vehicle" translatable="false">Vehicle</string>
+    <string name="text_dtc_configure" translatable="false">Configuration</string>
+    <string name="text_dtc_module" translatable="false">Modules</string>
+    <string name="text_dtc_supplier" translatable="false">Supplier：</string>
+    <string name="text_dtc_dtc" translatable="false">DTC(SAE)：</string>
+    <string name="text_dtc_hex_dtc" translatable="false">DTC(HEX)：</string>
+    <string name="text_dtc_chinese_description" translatable="false">Chinese description：</string>
+    <string name="text_dtc_english_description" translatable="false">English description：</string>
+    <string name="text_dtc_operating_conditions" translatable="false">Operational condition：</string>
+    <string name="text_dtc_setting_conditions" translatable="false">Setting conditions：</string>
+    <string name="text_dtc_setting_after_conditions" translatable="false">The action that occurs when setting：</string>
+    <string name="text_dtc_restore_conditions" translatable="false">Restore conditions：</string>
+    <string name="text_dtc_activate_mil_regulations" translatable="false">Principle of near failure light：</string>
+    <string name="text_dtc_mil_off_regulations" translatable="false">Principle of extinguishing failure lights：</string>
+    <string name="text_dtc_clear_conditions" translatable="false">Clear fault code conditions：</string>
+    <string name="text_dtc_content" translatable="false">Please enter DTC content</string>
+    <string name="text_dtc_query_details" translatable="false">Fault code details</string>
+    <string name="text_dtc_read_export" translatable="false">Export</string>
+    <string name="text_dtc_read_clear" translatable="false">Clear</string>
+    <string name="text_dtc_read_read" translatable="false">Read</string>
+    <!--总线通讯-->
+    <string name="text_datastream_title_message" translatable="false">Message Monitor</string>
+    <string name="text_datastream_title_diagnostician" translatable="false">Diagnostician</string>
+    <string name="text_datastream_title_did_analysis" translatable="false">DID Analysis</string>
+    <string name="text_datastream_did_configure" translatable="false">Configure：</string>
+    <string name="text_datastream_did_module" translatable="false">Module：</string>
+    <string name="text_datastream_did_screen" translatable="false">DID Screen：</string>
+    <string name="text_datastream_message_export" translatable="false">Export</string>
+    <string name="text_datastream_message_map" translatable="false">Map</string>
+    <string name="text_datastream_message_record" translatable="false">Trigger</string>
+    <string name="text_datastream_diagnostician_count" translatable="false">Count</string>
+    <string name="text_datastream_diagnostician_copy" translatable="false">Copy</string>
+    <string name="text_select_map_way" translatable="false">Select mapping mode</string>
+    <string name="text_message_missing" translatable="false">The Message Incomplete</string>
+    <string name="text_message_sent" translatable="false">Sent</string>
+    <string name="text_file_overtime" translatable="false">Loading Timeout, Please Check The Network</string>
+    <string name="text_message_num" translatable="false">Num</string>
+    <string name="text_message_time" translatable="false">Time Cut</string>
+    <string name="text_vci_lose" translatable="false">Not connected to the VCI equipment</string>
+    <string name="text_jurisdiction_store_none" translatable="false">Mobile phone store need to access</string>
+    <string name="text_connect_vci" translatable="false">VCI devices are connected...</string>
+    <string name="text_listen_close" translatable="false">Listen close</string>
+    <string name="text_connect_load" translatable="false">The first loading time may be longer, please wait patiently</string>
+    <string name="text_map_config" translatable="false">Map Config</string>
+    <string name="text_select_map_aisle" translatable="false">Select Aisle</string>
+    <string name="text_map_map" translatable="false">Map</string>
+    <string name="text_map_select_cartype" translatable="false">Select Cartype</string>
+    <string name="text_map_select_supplier" translatable="false">Select Supplier</string>
+    <string name="text_map_temporary" translatable="false">Temporary</string>
+    <string name="text_map_temporary_cancel" translatable="false">Temporary Cancel</string>
+    <string name="text_map_perpetual" translatable="false">Perpetual</string>
+    <string name="text_map_perpetual_cancel" translatable="false">Perpetual Cancel</string>
+    <string name="text_instruct_send" translatable="false">Send</string>
+    <string name="text_instruct_time" translatable="false">Time(s)</string>
+    <string name="text_record_setting" translatable="false">Setting</string>
+    <string name="text_message_stop" translatable="false">Stop</string>
+    <string name="text_message_start" translatable="false">Start</string>
+    <string name="text_record_setting_maximum" translatable="false">The maximum value for </string>
+    <string name="text_record_time_nozero" translatable="false">Not recording time 0</string>
+    <string name="text_record_setting_full" translatable="false">Please fill in the complete set the parameter</string>
+    <string name="text_instruct_data" translatable="false">Data</string>
+    <string name="text_address_mode" translatable="false">Mode</string>
+    <string name="text_physical_addressing" translatable="false">Physical Addressing</string>
+    <string name="text_functional_addressing" translatable="false">Functional Addressing</string>
+    <string name="text_flow_control_frame" translatable="false">Flow Control Frame:</string>
+    <string name="text_setting" translatable="false">Setting</string>
+    <string name="text_message_clean" translatable="false">Clean</string>
+    <string name="text_trigger_record" translatable="false">Record</string>
+    <string name="text_trigger_over" translatable="false">Over</string>
+    <string name="text_map_successful" translatable="false">Map Successfully</string>
+    <string name="text_map_fail" translatable="false">Map Fail</string>
+    <!--检测 -->
+    <string name="text_detection_ecu_version" translatable="false">ECU Version</string>
+    <string name="text_detection_node_online" translatable="false">Node Online</string>
+    <string name="text_detection_module" translatable="false">Modules</string>
+    <string name="text_detection_configure" translatable="false">Configuration</string>
+    <string name="text_detection_vehicle" translatable="false">Vehicle</string>
+    <string name="text_detection_ecu_did" translatable="false">DID List</string>
+    <string name="text_detection_ecu_export" translatable="false">Export</string>
+    <string name="text_detection_ecu_search" translatable="false">Query</string>
+    <string name="text_detection_node_detection" translatable="false">Detection</string>
+    <!--查询&分享-->
+    <string name="text_sharemain_share" translatable="false">Share</string>
+    <string name="text_sharemain_query" translatable="false">Query</string>
+    <string name="text_sharemain_flow" translatable="false">Small Process</string>
+    <string name="text_sharemain_assist" translatable="false">Remote Assistance</string>
+    <string name="text_sharemain_title_softwar" translatable="false">Software version transform</string>
+    <string name="text_sharemain_title_ecu" translatable="false">Full Name ECU</string>
+    <string name="text_sharemain_title_diagnosis" translatable="false">ECU Diagnosis CAN ID</string>
+    <string name="text_sharemain_title_supplier" translatable="false">Supplir Code</string>
+    <string name="text_sharemain_title_production" translatable="false">EOL Content for ECU Production Line</string>
+    <string name="text_sharemain_hint_ecuname" translatable="false">ECU Name</string>
+    <string name="text_sharemain_hint_fullname" translatable="false">Full Name</string>
+    <string name="text_sharemain_hint_canid" translatable="false">CANID</string>
+    <string name="text_sharemain_hint_code" translatable="false">Code</string>
+    <string name="text_sharemain_hint_supplier" translatable="false">Supplier Name</string>
+    <string name="text_sharemain_hint_eolcontent" translatable="false">EOL Content</string>
+    <string name="text_sharemain_share_theme" translatable="false">Theme：</string>
+    <string name="text_sharemain_share_publishers" translatable="false">Publishers：</string>
+    <string name="text_sharemain_share_time" translatable="false">Time：</string>
+    <string name="text_sharemain_flow_model" translatable="false">Select Type：</string>
+    <string name="text_sharemain_select_flow" translatable="false">Select Flow：</string>
+    <string name="text_sharemain_btn_start" translatable="false">Strat</string>
+    <string name="text_sharemain_btn_stop" translatable="false">Stop</string>
+    <string name="text_sharemain_assist_hint_number" translatable="false">Enter Connect Account</string>
+    <string name="text_sharemain_assist_hint_password" translatable="false">Set Connect PassWord</string>
+    <string name="text_sharemain_assist_connect" translatable="false">Connect</string>
+    <!--远程协助-->
+    <string name="text_live_hands" translatable="false">Hands free</string>
+    <string name="text_live_cancel" translatable="false">Cancel</string>
+    <string name="text_live_mute" translatable="false">Mute</string>
+    <string name="text_live_dropped" translatable="false">Reject</string>
+    <string name="text_live_receive" translatable="false">Receive</string>
+    <string name="text_live_await" translatable="false">Waiting for the invitation to be accepted...</string>
+    <string name="text_live_invite" translatable="false">Invite you for remote assistance...</string>
+    <string name="text_live_instability" translatable="false">Network instability</string>
+    <string name="text_live_successfu" translatable="false">Connection successful</string>
+    <string name="text_live_in_call" translatable="false">In a call</string>
+    <string name="text_live_vreceng" translatable="false">End of the call</string>
+    <string name="text_live_reject_call" translatable="false">The other party refused to call</string>
+    <string name="text_live_connecting" translatable="false">Connecting...</string>
+    <string name="text_live_connection_fail" translatable="false">The connection failed,the call is over</string>
+    <string name="text_live_nonentity" translatable="false">The account does not exist</string>
+    <string name="text_live_yourself" translatable="false">You can\'t talk to yourself</string>
+    <string name="text_live_offline" translatable="false">Awaiting User</string>
+    <string name="text_live_opposite_call" translatable="false">The other party is on the line</string>
+    <string name="text_live_you_call" translatable="false">You\'re on the phone</string>
+    <string name="text_employee_list" translatable="false">Employee List</string>
+    <!--其他-->
+    <string name="text_save" translatable="false">Save</string>
+    <string name="text_exit" translatable="false">Press again to exit</string>
+    <string name="text_valuecopy" translatable="false">Text copied</string>
+    <string name="text_unchosen" translatable="false">Not Selected</string>
+    <string name="text_update_success" translatable="false">update successfully</string>
+    <string name="text_net_state" translatable="false">Network connection is not available</string>
+    <string name="text_force_update" translatable="false">Forced Updating</string>
+    <string name="text_promptly_update" translatable="false">Update Now</string>
+    <string name="text_update_failure" translatable="false">Download the new version failed</string>
+    <string name="text_download_complete" translatable="false">Download Complete</string>
+    <string name="text_newest_version" translatable="false">Is the latest version</string>
+    <!--Toast-->
+    <string name="text_server_error" translatable="false">Cannot connect to the server</string>
+    <string name="text_no_data" translatable="false">no data</string>
+    <string name="text_loading" translatable="false">loading...</string>
+    <string name="text_input_error" translatable="false">Input error</string>
+    <string name="text_parameter_error" translatable="false">Parameter error</string>
+    <string name="text_account_not_exist" translatable="false">The account does not exist</string>
+    <string name="text_password_error" translatable="false">Password Error</string>
+    <string name="text_devices_bind" translatable="false">The user binds to other devices</string>
+    <string name="text_account_expired" translatable="false">The account has expired</string>
+    <string name="text_account_device" translatable="false">The device is bound to another user</string>
+    <string name="text_password_success" translatable="false">Modify successfully</string>
+    <string name="text_password_confirm" translatable="false">Confirm password error</string>>
+    <string name="text_password_coincide" translatable="false">The new password matches the old one</string>
+    <string name="text_oldPassword_error" translatable="false">OldPassword error</string>
+    <string name="text_close_dialog" translatable="false">Close</string>
+    <string name="text_detail_info" translatable="false">Details</string>
+    <string name="text_network_anomaly" translatable="false">The Network Anomaly</string>
+    <string name="text_is_null" translatable="false"> Is Null</string>
+    <string name="text_please_select" translatable="false">Please Select </string>
+    <string name="text_only_choose_four" translatable="false">Can Only Choose Four</string>
+    <string name="text_transformation" translatable="false">Transformation</string>
+    <string name="text_no_algorithm" translatable="false">No algorithm</string>
+    <string name="text_calculate_failure" translatable="false">To calculate failure</string>
+    <!--新增分享-->
+    <string name="text_notice_theme" translatable="false">Theme：</string>
+    <string name="text_notice_author" translatable="false">Author：</string>
+    <string name="text_notice_postdate" translatable="false">Time：</string>
+    <string name="text_about_comment" translatable="false">About the comments：</string>
+    <string name="text_notice_detail" translatable="false">Notice details</string>
+    <string name="text_no_comment_data" translatable="false">No comments ╮(╯▽╰)╭</string>
+    <string name="text_reply_in_all" translatable="false">together </string>
+    <string name="text_reply_count" translatable="false"> reply </string>
+    <string name="text_notice_comment" translatable="false">Release</string>
+    <string name="text_notice_looking_comment" translatable="false">Looking forward to your comments</string>
+    <string name="text_comment_success" translatable="false">Comment on success</string>
+    <string name="text_comments_detail" translatable="false">Comment on the details</string>
+    <string name="text_deletion_record" translatable="false">Delete Record</string>
+    <string name="text_sure_delect" translatable="false">Are you sure you want to delete this record?</string>
+    <string name="text_cancel" translatable="false">Cancel</string>
+    <string name="text_confirm" translatable="false">Confirm</string>
+    <string name="text_comment_delete" translatable="false">Sure you want to delete this comment?</string>
+    <string name="text_delete_msg" translatable="false">Warning</string>
+    <string name="text_delete_success" translatable="false">Succeessfully</string>
+    <string name="text_file_lose" translatable="false">The file may have been lost</string>
+    <string name="text_keyboard" translatable="false">WDA Remote Assist keyboard</string>
+    <!--应用权限-->
+    <string name="text_warning" translatable="false">Warning</string>
+    <string name="text_warm_prompt" translatable="false">Warm Prompt</string>
+    <string name="text_permissions_application" translatable="false">Application permissions</string>
+    <string name="text_open" translatable="false">Open</string>
+    <string name="text_permission_device" translatable="false">Enable read device id status permission\n</string>
+    <string name="text_permissions_storage" translatable="false">Enable cell phone storage permissions\n</string>
+    <string name="text_permissions_microphone" translatable="false">Turn on microphone permissions\n</string>
+    <string name="text_permissions_location" translatable="false">Please open location permissions</string>
+    <string name="text_permissions_following" translatable="false">To give you a better experience, it is recommended that you turn on the following permissions</string>
+</resources>

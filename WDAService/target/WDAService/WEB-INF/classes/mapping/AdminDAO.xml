@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.AdminDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Admin">
+    <id column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="admin_account" jdbcType="VARCHAR" property="adminAccount" />
+    <result column="admin_password" jdbcType="VARCHAR" property="adminPassword" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="company" jdbcType="VARCHAR" property="company" />
+    <result column="admin_type" jdbcType="INTEGER" property="adminType" />
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    admin_id, admin_account, admin_password, role_id, company, admin_type, admin_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Admin">
+    insert into admin (admin_id, admin_account, admin_password, 
+      role_id, company, admin_type, 
+      admin_name)
+    values (#{adminId,jdbcType=INTEGER}, #{adminAccount,jdbcType=VARCHAR}, #{adminPassword,jdbcType=VARCHAR}, 
+      #{roleId,jdbcType=INTEGER}, #{company,jdbcType=VARCHAR}, #{adminType,jdbcType=INTEGER}, 
+      #{adminName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Admin">
+    insert into admin
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="adminAccount != null">
+        admin_account,
+      </if>
+      <if test="adminPassword != null">
+        admin_password,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="company != null">
+        company,
+      </if>
+      <if test="adminType != null">
+        admin_type,
+      </if>
+      <if test="adminName != null">
+        admin_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="adminId != null">
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="adminAccount != null">
+        #{adminAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPassword != null">
+        #{adminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="adminType != null">
+        #{adminType,jdbcType=INTEGER},
+      </if>
+      <if test="adminName != null">
+        #{adminName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Admin">
+    update admin
+    <set>
+      <if test="adminAccount != null">
+        admin_account = #{adminAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="adminPassword != null">
+        admin_password = #{adminPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="company != null">
+        company = #{company,jdbcType=VARCHAR},
+      </if>
+      <if test="adminType != null">
+        admin_type = #{adminType,jdbcType=INTEGER},
+      </if>
+      <if test="adminName != null">
+        admin_name = #{adminName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Admin">
+    update admin
+    set admin_account = #{adminAccount,jdbcType=VARCHAR},
+      admin_password = #{adminPassword,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=INTEGER},
+      company = #{company,jdbcType=VARCHAR},
+      admin_type = #{adminType,jdbcType=INTEGER},
+      admin_name = #{adminName,jdbcType=VARCHAR}
+    where admin_id = #{adminId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 通过账号查询管理员信息 -->
+  <select id="selectAdminByAccount" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	FROM admin where admin_account = #{adminAccount,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 查询管理员信息 -->
+  <select id="selectAccountInfo" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+  	from admin
+  	<where>
+  		admin_type=1
+  		<if test="adminAccount !=null and adminAccount !=''">
+  			and admin.admin_account like CONCAT('%',#{adminAccount,jdbcType=VARCHAR},'%')
+  		</if>
+  	</where>
+  	order by admin.admin_id DESC
+  	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询管理员信息(数据总条数) -->
+  <select id="selectAccountInfoRows" resultType="java.lang.Integer">
+  	select count(admin.admin_id) from admin
+  	<where>
+  		admin_type=1
+  		<if test="adminAccount !=null and adminAccount !=''">
+  			and admin.admin_account like CONCAT('%',#{adminAccount,jdbcType=VARCHAR},'%')
+  		</if>
+  	</where>
+  </select>
+  
+  <!-- 查询管理员账号是否存在 -->
+  <select id="selectAccountWhetherExist" resultType="java.lang.Integer">
+  	select count(admin_id) from admin
+  	where 1=1
+  	<if test="adminAccount !=null and adminAccount !=''">
+		and admin_account = #{adminAccount,jdbcType=VARCHAR}
+	</if>
+  	<if test="adminId !=null and adminId >0">
+  		and admin_id != #{adminId,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 查询管理员用户名是否存在 -->
+  <select id="selectNameWhetherExist" resultType="java.lang.Integer">
+  	select count(admin_id) from admin
+  	where 1=1
+  	<if test="adminName !=null and adminName !=''">
+		and admin_name = #{adminName,jdbcType=VARCHAR}
+	</if>
+  	<if test="adminId !=null and adminId >0">
+  		and admin_id != #{adminId,jdbcType=INTEGER}
+  	</if>
+  </select>
+</mapper>

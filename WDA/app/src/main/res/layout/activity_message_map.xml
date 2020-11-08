@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    android:fitsSystemWindows="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <!--标题栏-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_border_bottom">
+            <com.gx.wda.widget.MyActionBar
+                android:id="@+id/myActionBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+
+
+        <!--选择映射方式-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/bg_border_bottom"
+            android:orientation="vertical">
+            <!-- 模块 -->
+            <LinearLayout
+                android:id="@+id/ll_map_way"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    android:text="@string/text_select_map_way"/>
+                <TextView
+                    android:id="@+id/tv_map_way"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_unchosen"
+                    android:textSize="14dp"
+                    android:background="@null"/>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_go"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--选择通道-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/bg_border_bottom"
+            android:orientation="vertical">
+            <!-- 模块 -->
+            <LinearLayout
+                android:id="@+id/ll_map_aisle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_select_aisle_hint"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    android:text="@string/text_select_map_aisle"/>
+                <TextView
+                    android:id="@+id/tv_map_aisle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_unchosen"
+                    android:textSize="14dp"
+                    android:background="@null"/>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_go"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--选择车型-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/bg_border_bottom"
+            android:orientation="vertical">
+            <!-- 模块 -->
+            <LinearLayout
+                android:id="@+id/ll_map_select_cartype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    android:text="@string/text_map_select_cartype"/>
+                <TextView
+                    android:id="@+id/tv_map_select_cartype"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_unchosen"
+                    android:textSize="14dp"
+                    android:background="@null"/>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_go"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!--选择供应商-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:background="@drawable/bg_border_bottom"
+            android:orientation="vertical">
+            <!-- 模块 -->
+            <LinearLayout
+                android:id="@+id/ll_map_select_supplier"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="14dp"
+                    android:text="@string/text_map_select_supplier"/>
+                <TextView
+                    android:id="@+id/tv_map_select_supplier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_unchosen"
+                    android:textSize="14dp"
+                    android:background="@null"/>
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_go"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <!--保存按钮-->
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:background="@drawable/selector_btn_enabled"
+            android:textColor="@color/colorWhite"
+            android:textAllCaps="false"
+            android:textSize="18dp"
+            android:enabled="false"
+            android:text="@string/text_save"/>
+    </LinearLayout>
+
+
+
+
+
+    <!--日志输出-->
+</LinearLayout>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.ConfigurationLevelDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.ConfigurationLevel">
+    <id column="configuration_level_id" jdbcType="INTEGER" property="configurationLevelId" />
+    <result column="configuration_level_name" jdbcType="VARCHAR" property="configurationLevelName" />
+  </resultMap>
+   <!-- 选项返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+    <id column="configuration_level_id" jdbcType="INTEGER" property="id" />
+    <result column="configuration_level_name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    configuration_level_id, configuration_level_name
+  </sql>
+   <sql id="Configuration_Level_List">
+	SELECT DISTINCT cl.configuration_level_id,cl.configuration_level_name FROM 
+	fault_code fc,re_supplier_faultcode res,re_vehicle_supplier rev,supplier s,module m,configuration_level cl,vehicle v 
+	WHERE fc.fault_code_id=res.fault_code_id AND res.relevance_id=rev.relevance_id AND rev.supplier_id=s.supplier_id AND rev.module_id=m.module_id 
+	AND rev.configuration_level_id=cl.configuration_level_id AND rev.vehicle_id=v.vehicle_id AND
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from configuration_level
+    where configuration_level_id = #{configurationLevelId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from configuration_level
+    where configuration_level_id = #{configurationLevelId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.ConfigurationLevel">
+    insert into configuration_level (configuration_level_id, configuration_level_name
+      )
+    values (#{configurationLevelId,jdbcType=INTEGER}, #{configurationLevelName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.ConfigurationLevel">
+    insert into configuration_level
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="configurationLevelId != null">
+        configuration_level_id,
+      </if>
+      <if test="configurationLevelName != null">
+        configuration_level_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="configurationLevelId != null">
+        #{configurationLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="configurationLevelName != null">
+        #{configurationLevelName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.ConfigurationLevel">
+    update configuration_level
+    <set>
+      <if test="configurationLevelName != null">
+        configuration_level_name = #{configurationLevelName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where configuration_level_id = #{configurationLevelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.ConfigurationLevel">
+    update configuration_level
+    set configuration_level_name = #{configurationLevelName,jdbcType=VARCHAR}
+    where configuration_level_id = #{configurationLevelId,jdbcType=INTEGER}
+  </update>
+  <!-- 通过车型ID查询算法与SeedToKey（1）或者SeedPinToKey（4）关联的配置-->
+  <select id="selectConfigurationRelateArithmetic" resultMap="OptionResultMap">
+    SELECT DISTINCT cl.* FROM arithmetic a,re_vehicle_supplier re,re_arithmetic_supplier rea,configuration_level cl WHERE 
+    a.arithmetic_id=rea.arithmetic_id AND re.relevance_id=rea.relevance_id
+    AND re.configuration_level_id=cl.configuration_level_id AND re.vehicle_id=#{vehicleId} AND a.algorithm_type=#{algorithmType}
+   </select>
+    <!-- 通过dtc和车型ID查询配置 -->
+   <select id="selectConfigureByDtc" resultMap="OptionResultMap">
+	  <include refid="Configuration_Level_List" /> 
+	  fc.dtc LIKE CONCAT('%',#{dtc},'%') AND v.vehicle_id=#{vehicleId}
+   </select>
+    <!-- 通过hexdtc和车型ID查询配置 -->
+   <select id="selectConfigureByHexDtc" resultMap="OptionResultMap">
+    <include refid="Configuration_Level_List" /> 
+    fc.hex_dtc LIKE CONCAT('%',#{hexHtc},'%') AND v.vehicle_id=#{vehicleId}
+   </select>
+   <!-- 查询配置信息 -->
+	<select id="selectConfigurationInfo" resultMap="BaseResultMap">
+		select configuration_level.configuration_level_id, configuration_level.configuration_level_name
+		from configuration_level
+		<if test="configurationLevelName !=null and configurationLevelName !=''">
+			where configuration_level.configuration_level_name like
+			CONCAT('%',#{configurationLevelName,jdbcType=VARCHAR},'%')
+		</if>
+		order by configuration_level.configuration_level_id DESC
+		limit
+		#{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询配置信息(数据总条数) -->
+	<select id="selectConfigurationInfoRows" resultType="java.lang.Integer">
+		select count(configuration_level.configuration_level_id)
+		from configuration_level
+		<if test="configurationLevelName !=null and configurationLevelName !=''">
+			where configuration_level.configuration_level_name like
+			CONCAT('%',#{configurationLevelName,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+   
+    <!-- 查询配置信息是否已存在 -->
+	<select id="selectConfigurationWhetherExist" resultMap="BaseResultMap">
+		select configuration_level.configuration_level_id from configuration_level
+		where configuration_level.configuration_level_name =
+		#{configurationLevelName,jdbcType=VARCHAR}
+		<if test="configurationLevelId !=null and configurationLevelId >0">
+			and configuration_level_id != #{configurationLevelId,jdbcType=INTEGER}
+		</if>
+	</select>
+   
+</mapper>

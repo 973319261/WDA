@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.UserDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.User">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="user_password" jdbcType="VARCHAR" property="userPassword" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="expiration_date" jdbcType="DATE" property="expirationDate" />
+    <result column="purpose" jdbcType="VARCHAR" property="purpose" />
+    <result column="user_number" jdbcType="VARCHAR" property="userNumber" />
+    <result column="area" jdbcType="VARCHAR" property="area" />
+    <result column="faultcode_visit" jdbcType="INTEGER" property="faultcodeVisit" />
+    <result column="share_visit" jdbcType="INTEGER" property="shareVisit" />
+    <result column="arithmetic_visit" jdbcType="INTEGER" property="arithmeticVisit" />
+    <result column="android_id" jdbcType="VARCHAR" property="androidId" />
+    <result column="is_expires" jdbcType="BIT" property="isExpires" />
+  </resultMap>
+   <!-- 自定义resultMap -->
+  <resultMap type="com.gx.vo.UserVo" id="UserVoResultMap" extends="BaseResultMap">
+  	<result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_describe" jdbcType="VARCHAR" property="roleDescribe" />
+    <result column="is_enable" jdbcType="BIT" property="isEnable" />
+  </resultMap>
+   <sql id="Base_Column_List">
+    user_id, user_account, user_name, user_password, role_id, expiration_date, purpose, 
+    user_number, area, faultcode_visit, share_visit, arithmetic_visit, android_id, is_expires
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from user
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.User">
+    insert into user (user_id, user_account, user_name, 
+      user_password, role_id, expiration_date, 
+      purpose, user_number, area, 
+      faultcode_visit, share_visit, arithmetic_visit, 
+      android_id, is_expires)
+    values (#{userId,jdbcType=INTEGER}, #{userAccount,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userPassword,jdbcType=VARCHAR}, #{roleId,jdbcType=INTEGER}, #{expirationDate,jdbcType=DATE}, 
+      #{purpose,jdbcType=VARCHAR}, #{userNumber,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR}, 
+      #{faultcodeVisit,jdbcType=INTEGER}, #{shareVisit,jdbcType=INTEGER}, #{arithmeticVisit,jdbcType=INTEGER}, 
+      #{androidId,jdbcType=VARCHAR}, #{isExpires,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.User" keyProperty="userId" useGeneratedKeys="true">
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userAccount != null">
+        user_account,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="userPassword != null">
+        user_password,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="expirationDate != null">
+        expiration_date,
+      </if>
+      <if test="purpose != null">
+        purpose,
+      </if>
+      <if test="userNumber != null">
+        user_number,
+      </if>
+      <if test="area != null">
+        area,
+      </if>
+      <if test="faultcodeVisit != null">
+        faultcode_visit,
+      </if>
+      <if test="shareVisit != null">
+        share_visit,
+      </if>
+      <if test="arithmeticVisit != null">
+        arithmetic_visit,
+      </if>
+      <if test="androidId != null">
+        android_id,
+      </if>
+      <if test="isExpires != null">
+        is_expires,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userAccount != null">
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="expirationDate != null">
+        #{expirationDate,jdbcType=DATE},
+      </if>
+      <if test="purpose != null">
+        #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="userNumber != null">
+        #{userNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="faultcodeVisit != null">
+        #{faultcodeVisit,jdbcType=INTEGER},
+      </if>
+      <if test="shareVisit != null">
+        #{shareVisit,jdbcType=INTEGER},
+      </if>
+      <if test="arithmeticVisit != null">
+        #{arithmeticVisit,jdbcType=INTEGER},
+      </if>
+      <if test="androidId != null">
+        #{androidId,jdbcType=VARCHAR},
+      </if>
+      <if test="isExpires != null">
+        #{isExpires,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.User">
+    update user
+    <set>
+      <if test="userAccount != null">
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPassword != null">
+        user_password = #{userPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="expirationDate != null">
+        expiration_date = #{expirationDate,jdbcType=DATE},
+      </if>
+      <if test="purpose != null">
+        purpose = #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="userNumber != null">
+        user_number = #{userNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null">
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="faultcodeVisit != null">
+        faultcode_visit = #{faultcodeVisit,jdbcType=INTEGER},
+      </if>
+      <if test="shareVisit != null">
+        share_visit = #{shareVisit,jdbcType=INTEGER},
+      </if>
+      <if test="arithmeticVisit != null">
+        arithmetic_visit = #{arithmeticVisit,jdbcType=INTEGER},
+      </if>
+      <if test="androidId != null">
+        android_id = #{androidId,jdbcType=VARCHAR},
+      </if>
+      <if test="isExpires != null">
+        is_expires = #{isExpires,jdbcType=BIT},
+      </if>
+    </set>
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.User">
+    update user
+    set user_account = #{userAccount,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_password = #{userPassword,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=INTEGER},
+      expiration_date = #{expirationDate,jdbcType=DATE},
+      purpose = #{purpose,jdbcType=VARCHAR},
+      user_number = #{userNumber,jdbcType=VARCHAR},
+      area = #{area,jdbcType=VARCHAR},
+      faultcode_visit = #{faultcodeVisit,jdbcType=INTEGER},
+      share_visit = #{shareVisit,jdbcType=INTEGER},
+      arithmetic_visit = #{arithmeticVisit,jdbcType=INTEGER},
+      android_id = #{androidId,jdbcType=VARCHAR},
+      is_expires = #{isExpires,jdbcType=BIT}
+    where user_id = #{userId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询软件使用已到期的用户信息 -->
+  <select id="selectAllUserInfo" resultMap="BaseResultMap">
+  	select user.user_id,user.is_expires,user.expiration_date from user
+  	where user.expiration_date &lt; DATE_FORMAT(NOW(),'%Y-%m-%d') and user.is_expires=false
+  	<!-- DATE_SUB(NOW(),INTERVAL 1 DAY) --> 
+  </select>
+  
+  <!-- 通过用户账号查询用户信息 -->
+  <select id="selectUserInfoByAccount" resultMap="UserVoResultMap">
+  	SELECT user.user_id, user.user_account, user.user_name, user.user_password, user.role_id, user.expiration_date, 
+            user.purpose, user.user_number, user.area, user.faultcode_visit, user.share_visit,
+           user.arithmetic_visit, user.android_id, user.is_expires, role.role_name,role.role_describe,role.is_enable
+    FROM user INNER JOIN role ON user.role_id=role.role_id where BINARY  user_account = #{userAccount,jdbcType=VARCHAR}
+  </select>
+  <!-- 通过设备ID查询用户信息 -->
+  <select id="selectUserInfoByImei" resultMap="UserVoResultMap">
+  	SELECT * from user where android_id = #{imei,jdbcType=VARCHAR}
+  </select>
+  <!-- 查询用户详情信息 -->
+  <select id="selectUserDetail" resultMap="UserVoResultMap">
+  	select user.user_id, user.user_account, user.user_name, user.user_password, user.role_id, user.expiration_date, 
+            user.purpose, user.user_number, user.area, user.faultcode_visit, user.share_visit,
+           user.arithmetic_visit, user.android_id, user.is_expires, role.role_name,role.role_describe,role.is_enable
+    from user inner join role on user.role_id=role.role_id
+    <if test="name !=null and name !=''">
+  		where user.area like CONCAT('%',#{name,jdbcType=VARCHAR},'%')
+  		or user.user_account like CONCAT('%',#{name,jdbcType=VARCHAR},'%') 
+  	</if>  	  	
+  	<choose>
+  		<when test="strName == 'arithmeticVisit' and sortType == 'asc' ">
+  			order by arithmetic_visit ASC	
+  		</when>  		
+  		<when test="strName == 'arithmeticVisit' and sortType == 'desc'">
+  			order by arithmetic_visit DESC	
+  		</when>
+  		<when test="strName == 'faultcodeVisit' and sortType == 'asc' ">
+  			order by faultcode_visit ASC	
+  		</when>  		
+  		<when test="strName == 'faultcodeVisit' and sortType == 'desc'">
+  			order by faultcode_visit DESC	
+  		</when>
+  		<when test="strName == 'shareVisit' and sortType == 'asc' ">
+  			order by share_visit ASC	
+  		</when>  		
+  		<when test="strName == 'shareVisit' and sortType == 'desc'">
+  			order by share_visit DESC	
+  		</when>
+  		<otherwise>
+  			order by user.user_id DESC
+  		</otherwise>
+  	</choose>  
+    limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询用户详情信息(数据总条数) -->
+  <select id="selectUserDetailRows" resultType="java.lang.Integer">
+  	select count(a1.user_id) from user a1,role a2
+    where a1.role_id=a2.role_id 
+    <if test="name !=null and name !=''">
+    	 and (a1.area like CONCAT('%',#{name,jdbcType=VARCHAR},'%') or a1.user_account like CONCAT('%',#{name,jdbcType=VARCHAR},'%'))
+    </if>
+  </select>
+  
+  <!-- 查询员工编号是否重复 -->
+  <select id="selectUserNumberReuse" resultType="java.lang.Integer">
+  	select count(user_id) from user
+  	where user_number = #{userNumber,jdbcType=VARCHAR}
+  	<if test="userId !=null and userId > 0">
+  		and user_id != #{userId,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 查询员工编号是否重复 -->
+  <select id="selectUserNumberReuseTwo" resultType="java.lang.Integer">
+  	select count(user_id) from user
+  	where user_number = #{userNumber,jdbcType=VARCHAR} and user_id != #{userId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询员工编号是否重复 -->
+  <select id="selectAccountResuse" resultType="java.lang.Integer">
+  	select count(user_id) from user
+  	where user_account = #{userAccount,jdbcType=VARCHAR} 
+  	<if test="userId !=null and userId > 0">
+  		and user_id != #{userId,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 通过账号查询管理员信息 -->
+  <select id="selectAdminByAccount" resultMap="BaseResultMap">
+  	select user.user_id, user.user_account, user.user_name, user.user_password
+  	FROM user where role_id = 0
+  	and user_account = #{userAccount,jdbcType=VARCHAR}
+  </select>
+   <!-- 修改查询故障码的访问量 -->
+  <update id="updateFaultCodeVisit">
+   UPDATE user u SET u.faultcode_visit = u.faultcode_visit+1 WHERE u.user_id = #{userId}
+  </update>
+   <!--修改查询分享的访问量 -->
+  <update id="updateShareVisit">
+     UPDATE user u SET u.share_visit = u.share_visit+1 WHERE u.user_id = #{userId}
+  </update>
+   <!--修改查询安全算法的访问量 -->
+  <update id="updateArithmeticVisit">
+    UPDATE user u SET u.arithmetic_visit = u.arithmetic_visit+1 WHERE u.user_id = #{userId}
+  </update>
+  <!-- 通过role_id查询用户是否使用该权限——用于启用、作废权限 -->
+  <select id="selectUserRowByRoleId" resultType="java.lang.Integer">
+  	select count(user_id) from user where role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询普通用户信息 -->
+  <select id="selectCommonUserInfo" resultMap="BaseResultMap">
+  	select user.user_id from user where user.role_id != 0
+  </select>
+  <!-- 查询所有用户信息 -->
+   <select id="selectUserInfoAll" resultMap="UserVoResultMap">
+     SELECT * FROM USER u,role r WHERE u.role_id=r.role_id
+  </select>
+</mapper>

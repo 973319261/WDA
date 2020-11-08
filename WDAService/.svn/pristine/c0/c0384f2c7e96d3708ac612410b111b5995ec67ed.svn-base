@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.NoticeDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Notice">
+    <id column="notice_id" jdbcType="INTEGER" property="noticeId" />
+    <result column="admin_id" jdbcType="INTEGER" property="adminId" />
+    <result column="notice_name" jdbcType="VARCHAR" property="noticeName" />
+    <result column="notice_describe" jdbcType="VARCHAR" property="noticeDescribe" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="releaseTime" />
+    <result column="visitor_volume" jdbcType="INTEGER" property="visitorVolume" />
+  </resultMap>
+  
+  <!-- 自定义Vo -->
+  <resultMap type="com.gx.vo.NoticeVo" id="NoticeVoResultMap" extends="BaseResultMap">
+  	<result column="file_type_id" jdbcType="INTEGER" property="fileTypeId" />
+    <result column="file_id" jdbcType="INTEGER" property="fileId" />
+    <result column="file_type_name" jdbcType="VARCHAR" property="fileTypeName" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+  	<result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+  	<result column="admin_name" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    notice_id, admin_id, notice_name, notice_describe, release_time, visitor_volume
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from notice
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from notice
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Notice">
+    insert into notice (notice_id, admin_id, notice_name, 
+      notice_describe, release_time, visitor_volume
+      )
+    values (#{noticeId,jdbcType=INTEGER}, #{adminId,jdbcType=INTEGER}, #{noticeName,jdbcType=VARCHAR}, 
+      #{noticeDescribe,jdbcType=VARCHAR}, #{releaseTime,jdbcType=TIMESTAMP}, #{visitorVolume,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Notice">
+    insert into notice
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="noticeId != null">
+        notice_id,
+      </if>
+      <if test="adminId != null">
+        admin_id,
+      </if>
+      <if test="noticeName != null">
+        notice_name,
+      </if>
+      <if test="noticeDescribe != null">
+        notice_describe,
+      </if>
+      <if test="releaseTime != null">
+        release_time,
+      </if>
+      <if test="visitorVolume != null">
+        visitor_volume,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="noticeId != null">
+        #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="adminId != null">
+        #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeName != null">
+        #{noticeName,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeDescribe != null">
+        #{noticeDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseTime != null">
+        #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="visitorVolume != null">
+        #{visitorVolume,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Notice">
+    update notice
+    <set>
+      <if test="adminId != null">
+        admin_id = #{adminId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeName != null">
+        notice_name = #{noticeName,jdbcType=VARCHAR},
+      </if>
+      <if test="noticeDescribe != null">
+        notice_describe = #{noticeDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseTime != null">
+        release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="visitorVolume != null">
+        visitor_volume = #{visitorVolume,jdbcType=INTEGER},
+      </if>
+    </set>
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Notice">
+    update notice
+    set admin_id = #{adminId,jdbcType=INTEGER},
+      notice_name = #{noticeName,jdbcType=VARCHAR},
+      notice_describe = #{noticeDescribe,jdbcType=VARCHAR},
+      release_time = #{releaseTime,jdbcType=TIMESTAMP},
+      visitor_volume = #{visitorVolume,jdbcType=INTEGER}
+    where notice_id = #{noticeId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询公告信息 -->
+  <select id="selectNoticeInfo" resultMap="NoticeVoResultMap">
+  	select notice.notice_name, notice.notice_describe, notice.release_time, notice.visitor_volume,
+  		   notice.admin_id, notice.notice_id, admin.admin_name
+  	from notice inner join admin on notice.admin_id=admin.admin_id
+  	<if test="noticeTheme !=null and noticeTheme !='' ">
+  		and notice.notice_name like CONCAT('%',#{noticeTheme,jdbcType=VARCHAR},'%')
+  	</if>
+  	order by notice.notice_id DESC
+  	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询公告(数据总条数) -->
+  <select id="selectNoticeInfoRows" resultType="java.lang.Integer">
+  	select count(notice.notice_id)
+  	from notice join admin on notice.admin_id=admin.admin_id
+  	<if test="noticeTheme !=null and noticeTheme !='' ">
+  		and notice.notice_name like CONCAT('%',#{noticeTheme,jdbcType=VARCHAR},'%')
+  	</if>
+  </select>
+
+  
+  <!-- 根据公告标题模糊查询公告 -->
+  <select id="selectListNoticeByName" resultMap="NoticeVoResultMap">
+ 	SELECT * FROM notice  
+		INNER JOIN file  ON file.notice_id = notice.notice_id
+		INNER JOIN file_type filetype ON filetype.file_type_id = file.file_type_id
+		INNER JOIN admin ON notice.admin_id = admin.admin_id
+		<where>
+			<if test="name !=''">
+				notice.notice_name LIKE CONCAT("%",#{name},"%")
+			</if>
+		</where>
+		limit #{startIndex},#{limit}
+  </select>
+  
+  <!-- 查询公告数量 -->
+  <select id="selectNoticeCount" resultType="Integer">
+  	SELECT count(*) FROM notice   
+		INNER JOIN file  ON file.notice_id = notice.notice_id 
+		INNER JOIN file_type filetype ON filetype.file_type_id = file.file_type_id 
+		INNER JOIN admin ON notice.admin_id = admin.admin_id 
+		<where>
+			<if test="name !=''">
+				notice.notice_name LIKE CONCAT("%",#{name},"%")
+			</if>
+		</where>
+  </select>
+  <!-- 根据公告ID查询公告信息 -->
+  <select id="selectNoticeById" resultMap="NoticeVoResultMap">
+  	SELECT * FROM notice 
+		INNER JOIN file  ON file.notice_id = notice.notice_id
+		INNER JOIN file_type filetype ON filetype.file_type_id = file.file_type_id
+		INNER JOIN admin u ON notice.admin_id = u.admin_id
+		WHERE notice.notice_id = #{id}
+  </select>
+  
+  <!-- 通过公告ID删除公告、附件和评论信息 -->
+  <delete id="deleteNoticeInfoById" parameterType="java.lang.Integer">
+  	delete notice,file,comment from notice 
+  		left join file on notice.notice_id=file.notice_id 
+  		left join comment on comment.notice_id=notice.notice_id
+  	where notice.notice_id=#{noticeId,jdbcType=INTEGER}
+  </delete>
+</mapper>

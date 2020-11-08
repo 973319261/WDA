@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.ModuleJurisdictionDetailDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.ModuleJurisdictionDetail">
+    <id column="module_jurisdiction_detail_id" jdbcType="INTEGER" property="moduleJurisdictionDetailId" />
+    <result column="module_id" jdbcType="INTEGER" property="moduleId" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="is_enable" jdbcType="BIT" property="isEnable" />
+  </resultMap>
+  
+  <!-- 自定义VO -->
+  <resultMap type="com.gx.vo.ModuleJurisdictionDetailVo" id="ModuleJurisdictionDetailVoResultMap" extends="BaseResultMap">
+  	<result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+	<result column="module_full_name" jdbcType="VARCHAR" property="moduleFullName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    module_jurisdiction_detail_id, module_id, role_id, is_enable
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from module_jurisdiction_detail
+    where module_jurisdiction_detail_id = #{moduleJurisdictionDetailId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from module_jurisdiction_detail
+    where module_jurisdiction_detail_id = #{moduleJurisdictionDetailId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.ModuleJurisdictionDetail">
+    insert into module_jurisdiction_detail (module_jurisdiction_detail_id, module_id, 
+      role_id, is_enable)
+    values (#{moduleJurisdictionDetailId,jdbcType=INTEGER}, #{moduleId,jdbcType=INTEGER}, 
+      #{roleId,jdbcType=INTEGER}, #{isEnable,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.ModuleJurisdictionDetail">
+    insert into module_jurisdiction_detail
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="moduleJurisdictionDetailId != null">
+        module_jurisdiction_detail_id,
+      </if>
+      <if test="moduleId != null">
+        module_id,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="moduleJurisdictionDetailId != null">
+        #{moduleJurisdictionDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="moduleId != null">
+        #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.ModuleJurisdictionDetail">
+    update module_jurisdiction_detail
+    <set>
+      <if test="moduleId != null">
+        module_id = #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=BIT},
+      </if>
+    </set>
+    where module_jurisdiction_detail_id = #{moduleJurisdictionDetailId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.ModuleJurisdictionDetail">
+    update module_jurisdiction_detail
+    set module_id = #{moduleId,jdbcType=INTEGER},
+      role_id = #{roleId,jdbcType=INTEGER},
+      is_enable = #{isEnable,jdbcType=BIT}
+    where module_jurisdiction_detail_id = #{moduleJurisdictionDetailId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 通过角色id查询权限模块明细 -->
+  <select id="selectModuleDetailById" resultMap="ModuleJurisdictionDetailVoResultMap">
+  	select module_jurisdiction_detail.module_jurisdiction_detail_id, module_jurisdiction_detail.module_id, module_jurisdiction_detail.role_id, module_jurisdiction_detail.is_enable,
+  		   module.module_name
+  	from module_jurisdiction_detail INNER JOIN module ON module_jurisdiction_detail.module_id=module.module_id
+  	where module_jurisdiction_detail.role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询所有模块权限明细的模块 -->
+  <select id="selectAllModule" resultMap="BaseResultMap">
+  	select module.module_id	from module
+  </select>
+  
+  <!-- 批量新增模块权限明细，角色新增时新增 -->
+  <insert id="insertModuleDetailByBatch" >
+    insert into module_jurisdiction_detail (module_id, role_id, is_enable) values 
+    <foreach collection="detailList" separator=","  item="item">
+      (#{item.moduleId,jdbcType=INTEGER}, #{roleId,jdbcType=INTEGER}, true)
+    </foreach>
+  </insert>
+  
+  <!-- 批量修改模块权限明细 -->
+  <update id="updateModuleDetailByBatch" parameterType="java.util.List">
+   update module_jurisdiction_detail set is_enable=
+    <foreach collection="detailList" item="item" separator=" " open='case module_jurisdiction_detail_id' close="end">
+     when #{item.moduleJurisdictionDetailId} then #{item.isEnable} 
+    </foreach>
+    where module_jurisdiction_detail_id in(
+    <foreach collection="detailList" item="item" separator=",">
+     #{item.moduleJurisdictionDetailId} 
+    </foreach>
+    )
+  </update>
+  
+   <!-- 查询所有模块权限明细的角色 -->
+  <select id="selectAllRole" resultMap="BaseResultMap">
+  	select module_jurisdiction_detail.role_id from module_jurisdiction_detail group by role_id
+  </select>
+  
+   <!-- 批量新增模块权限明细，模块新增时新增 -->
+  <insert id="addModuleDetailByBatch" >
+    insert into module_jurisdiction_detail (module_id, role_id, is_enable) values 
+    <foreach collection="detailList" separator=","  item="item">
+      (#{moduleId,jdbcType=INTEGER}, #{item.roleId,jdbcType=INTEGER}, true)
+    </foreach>
+  </insert>
+  
+  <!-- 通过模块id删除模块权限明细信息，删除模块id时删除 -->
+  <delete id="deleteModuleDetailByModuleId" parameterType="java.lang.Integer">
+    delete from module_jurisdiction_detail
+    where module_id = #{moduleId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 通过角色id删除模块权限明细信息，删除角色id时删除 -->
+  <delete id="deleteModuleDetailByRoleId" parameterType="java.lang.Integer">
+    delete from module_jurisdiction_detail
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  
+  
+  
+</mapper>

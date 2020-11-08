@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.EolDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Eol">
+    <id column="eou_id" jdbcType="INTEGER" property="eouId" />
+    <result column="input_value" jdbcType="VARCHAR" property="inputValue" />
+    <result column="output_value" jdbcType="VARCHAR" property="outputValue" />
+  </resultMap>
+  
+      <!-- 自定义Map -->
+  <resultMap type="com.gx.vo.AppendOptionVo" id="AppendResultMap">
+  	<id column="eou_id" jdbcType="INTEGER" property="id" />
+    <result column="input_value" jdbcType="VARCHAR" property="name" />
+    <result column="output_value" jdbcType="VARCHAR" property="fullName" />
+  </resultMap>
+  
+  
+  
+  <sql id="Base_Column_List">
+    eou_id, input_value, output_value
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from eol
+    where eou_id = #{eouId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from eol
+    where eou_id = #{eouId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Eol">
+    insert into eol (eou_id, input_value, output_value
+      )
+    values (#{eouId,jdbcType=INTEGER}, #{inputValue,jdbcType=VARCHAR}, #{outputValue,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Eol">
+    insert into eol
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="eouId != null">
+        eou_id,
+      </if>
+      <if test="inputValue != null">
+        input_value,
+      </if>
+      <if test="outputValue != null">
+        output_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="eouId != null">
+        #{eouId,jdbcType=INTEGER},
+      </if>
+      <if test="inputValue != null">
+        #{inputValue,jdbcType=VARCHAR},
+      </if>
+      <if test="outputValue != null">
+        #{outputValue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Eol">
+    update eol
+    <set>
+      <if test="inputValue != null">
+        input_value = #{inputValue,jdbcType=VARCHAR},
+      </if>
+      <if test="outputValue != null">
+        output_value = #{outputValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where eou_id = #{eouId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Eol">
+    update eol
+    set input_value = #{inputValue,jdbcType=VARCHAR},
+      output_value = #{outputValue,jdbcType=VARCHAR}
+    where eou_id = #{eouId,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  
+  <!-- EOL生产线查询 -->
+  <select id="selectEOL" resultMap="AppendResultMap">
+  	select * from eol where input_value like concat ("%",#{input},"%")
+  </select>
+  
+  <!-- 查询ECU产线EOL操作 -->
+  <select id="selectEolOperationInfo" resultMap="BaseResultMap">
+  	select eol.input_value,eol.output_value,eol.eou_id from eol 
+  	<if test="inputValue !=null and inputValue !=''">
+    	where input_value like CONCAT('%',#{inputValue,jdbcType=VARCHAR},'%')
+    </if>
+    order by eol.eou_id DESC
+  </select>
+  
+  <!-- 查询ECU产线EOL操作(数据总条数) -->
+  <select id="selectEolOperationInfoRows" resultType="java.lang.Integer">
+  	select count(eol.eou_id) from eol 
+  	<if test="inputValue !=null and inputValue !=''">
+    	where input_value like CONCAT('%',#{inputValue,jdbcType=VARCHAR},'%')
+    </if>
+  </select>
+  
+  <!-- 查询输入值是否重复 -->
+  <select id="selectEolNameUseRows" resultType="java.lang.Integer">
+  	select count(eol.eou_id) from eol
+  	where eol.input_value = #{inputValue,jdbcType=VARCHAR}
+  	<if test="eolId !=null and eolId >0 ">
+  		and eou_id != #{eolId,jdbcType=INTEGER}
+  	</if>
+  </select>
+</mapper>

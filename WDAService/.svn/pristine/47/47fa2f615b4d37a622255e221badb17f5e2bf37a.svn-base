@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.DidConversionDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.DidConversion">
+    <id column="did_conversion_id" jdbcType="INTEGER" property="didConversionId" />
+    <result column="did_name" jdbcType="VARCHAR" property="didName" />
+    <result column="did_description" jdbcType="VARCHAR" property="didDescription" />
+    <result column="did_type" jdbcType="VARCHAR" property="didType" />
+  </resultMap>
+  
+  	<!-- 自定义Map -->
+	<resultMap type="com.gx.vo.AppendOptionVo" id="AppendResultMap">
+		<id column="did_conversion_id" jdbcType="INTEGER" property="id" />
+		<result column="did_name" jdbcType="VARCHAR" property="name" />
+		<result column="did_description" jdbcType="VARCHAR" property="fullName" />
+		<result column="did_type" jdbcType="VARCHAR" property="value" />
+	</resultMap>
+	
+	
+  <sql id="Base_Column_List">
+    did_conversion_id, did_name, did_description, did_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from did_conversion
+    where did_conversion_id = #{didConversionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from did_conversion
+    where did_conversion_id = #{didConversionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.DidConversion">
+    insert into did_conversion (did_conversion_id, did_name, did_description, 
+      did_type)
+    values (#{didConversionId,jdbcType=INTEGER}, #{didName,jdbcType=VARCHAR}, #{didDescription,jdbcType=VARCHAR}, 
+      #{didType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.DidConversion">
+    insert into did_conversion
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="didConversionId != null">
+        did_conversion_id,
+      </if>
+      <if test="didName != null">
+        did_name,
+      </if>
+      <if test="didDescription != null">
+        did_description,
+      </if>
+      <if test="didType != null">
+        did_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="didConversionId != null">
+        #{didConversionId,jdbcType=INTEGER},
+      </if>
+      <if test="didName != null">
+        #{didName,jdbcType=VARCHAR},
+      </if>
+      <if test="didDescription != null">
+        #{didDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="didType != null">
+        #{didType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.DidConversion">
+    update did_conversion
+    <set>
+      <if test="didName != null">
+        did_name = #{didName,jdbcType=VARCHAR},
+      </if>
+      <if test="didDescription != null">
+        did_description = #{didDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="didType != null">
+        did_type = #{didType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where did_conversion_id = #{didConversionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.DidConversion">
+    update did_conversion
+    set did_name = #{didName,jdbcType=VARCHAR},
+      did_description = #{didDescription,jdbcType=VARCHAR},
+      did_type = #{didType,jdbcType=VARCHAR}
+    where did_conversion_id = #{didConversionId,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  <!-- 查询DID库 -->
+  <select id="findDIDContent" resultMap="BaseResultMap">
+  	SELECT * FROM did_conversion
+  	<where>
+  		<if test="didName!=''">
+  			did_name like concat('%',#{didName},'%')
+  		</if>
+  	</where>
+  	ORDER BY did_name	
+  	<if test="pageSize >0">
+  		LIMIT #{startIndex},#{pageSize}
+  	</if>
+  </select>
+  <!-- 查询DID库 总数-->
+  <select id="findDIDContentCount" resultType="Integer">
+  	SELECT count(*) FROM did_conversion
+  	<where>
+  		<if test="didName!=''">
+  			did_name like concat('%',#{didName},'%')
+  		</if>
+  	</where>
+  </select>
+  
+  <!-- 查询DID库数据是否存在 -->
+  <select id="findDidByNameType" resultMap="BaseResultMap">
+  	SELECT * FROM did_conversion WHERE did_name = #{didName} AND did_type = #{didType}
+  </select>
+  
+  
+  
+  <!-- 单条新增到DID仓库 -->
+  <insert id="insertDIDContent" parameterType="com.gx.po.DidConversion">
+  	INSERT INTO did_conversion(did_name,did_description,did_type) 
+  	VALUES(#{didName},#{didDescription},#{didType})
+  </insert>
+  
+  <!-- 单条修改DID -->
+  <update id="updateDIDContent" parameterType="com.gx.po.DidConversion">
+  	UPDATE did_conversion SET  did_name=#{didName},did_description=#{didDescription},did_type=#{didType} 
+  	WHERE did_conversion_id = #{didConversionId}
+  </update>
+  
+  <!-- 批量删除DID -->
+  <delete id="delDIDContent" parameterType="String">
+  	DELETE FROM did_conversion WHERE did_conversion.did_conversion_id IN 
+	<foreach collection="list" open="(" separator="," close=")" item="ids">
+    		#{ids}
+   	</foreach>
+  </delete>
+  
+  
+  
+  <!-- 根据模块ID供应商ID查询DID列表 -->
+  <select id="findDidByModSup" resultMap="AppendResultMap">
+  	SELECT DISTINCT did.* FROM did_conversion did INNER JOIN re_did_relevance redid ON redid.did_conversion_id = did.did_conversion_id
+	INNER JOIN re_vehicle_supplier re ON redid.relevance_id = re.relevance_id
+	WHERE re.module_id = #{moudleId} AND re.supplier_id = #{supplierId}
+  </select>
+  
+</mapper>

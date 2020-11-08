@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.ModuleDAO">
+	<resultMap id="BaseResultMap" type="com.gx.po.Module">
+		<id column="module_id" jdbcType="INTEGER" property="moduleId" />
+		<result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+		<result column="module_full_name" jdbcType="VARCHAR" property="moduleFullName" />
+		<result column="canid_value" jdbcType="VARCHAR" property="canidValue" />
+	</resultMap>
+
+
+	<!-- 自定义Map -->
+	<resultMap type="com.gx.vo.AppendOptionVo" id="AppendResultMap">
+		<id column="module_id" jdbcType="INTEGER" property="id" />
+		<result column="module_name" jdbcType="VARCHAR" property="name" />
+		<result column="module_full_name" jdbcType="VARCHAR" property="fullName" />
+		<result column="canid_value" jdbcType="VARCHAR" property="value" />
+	</resultMap>
+
+
+	<!-- 选项返回 -->
+	<resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+		<id column="module_id" jdbcType="INTEGER" property="id" />
+		<result column="module_name" jdbcType="VARCHAR" property="name" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		module_id, module_name, module_full_name, canid_value
+	</sql>
+	<sql id="Module_List">
+	  SELECT DISTINCT m.module_id,m.module_name FROM fault_code fc,re_supplier_faultcode 
+	  res,re_vehicle_supplier rev,supplier s,module m,configuration_level cl,vehicle v
+	  WHERE fc.fault_code_id=res.fault_code_id AND res.relevance_id=rev.relevance_id AND rev.supplier_id=s.supplier_id AND
+	  rev.module_id=m.module_id AND rev.configuration_level_id=cl.configuration_level_id AND rev.vehicle_id=v.vehicle_id AND BINARY
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from module
+		where module_id = #{moduleId,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from module
+		where module_id = #{moduleId,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.gx.po.Module">
+		insert into module (module_id,
+		module_name, module_full_name,
+		canid_value)
+		values
+		(#{moduleId,jdbcType=INTEGER}, #{moduleName,jdbcType=VARCHAR},
+		#{moduleFullName,jdbcType=VARCHAR},
+		#{canidValue,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.gx.po.Module" keyProperty="moduleId" useGeneratedKeys="true">
+		insert into module
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				module_id,
+			</if>
+			<if test="moduleName != null">
+				module_name,
+			</if>
+			<if test="moduleFullName != null">
+				module_full_name,
+			</if>
+			<if test="canidValue != null">
+				canid_value,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="moduleId != null">
+				#{moduleId,jdbcType=INTEGER},
+			</if>
+			<if test="moduleName != null">
+				#{moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleFullName != null">
+				#{moduleFullName,jdbcType=VARCHAR},
+			</if>
+			<if test="canidValue != null">
+				#{canidValue,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Module">
+		update module
+		<set>
+			<if test="moduleName != null">
+				module_name = #{moduleName,jdbcType=VARCHAR},
+			</if>
+			<if test="moduleFullName != null">
+				module_full_name = #{moduleFullName,jdbcType=VARCHAR},
+			</if>
+			<if test="canidValue != null">
+				canid_value = #{canidValue,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where module_id = #{moduleId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.gx.po.Module">
+		update module
+		set
+		module_name = #{moduleName,jdbcType=VARCHAR},
+		module_full_name =
+		#{moduleFullName,jdbcType=VARCHAR},
+		canid_value =
+		#{canidValue,jdbcType=VARCHAR}
+		where module_id =
+		#{moduleId,jdbcType=INTEGER}
+	</update>
+	<!-- 通过车型ID和配置等级ID查询算法与SeedToKey（1）或者SeedPinToKey（4）关联的模块 -->
+	<select id="selectModuleRelateArithmetic" resultMap="OptionResultMap">
+	  <if test="algorithmType == 1">
+	    SELECT DISTINCT m.* FROM arithmetic a,re_vehicle_supplier
+		re,re_arithmetic_supplier rea,module m,module_jurisdiction_detail mj WHERE
+		a.arithmetic_id=rea.arithmetic_id AND re.relevance_id=rea.relevance_id
+		AND re.module_id=m.module_id AND m.module_id=mj.module_id AND mj.role_id = #{roleId} AND mj.is_enable=TRUE AND 
+	  </if>
+	   <if test="algorithmType == 4">
+	    SELECT DISTINCT m.* FROM arithmetic a,re_vehicle_supplier
+		re,re_arithmetic_supplier rea,module m WHERE
+		a.arithmetic_id=rea.arithmetic_id AND re.relevance_id=rea.relevance_id
+		AND re.module_id=m.module_id AND 
+	  </if>
+	    re.vehicle_id=#{vehicleId} AND
+	  <if test="configurationLevelId > 0 and configurationLevelId != null">
+		re.configuration_level_id=#{configurationLevelId} AND
+	  </if>
+		a.algorithm_type=#{algorithmType}
+	</select>
+	<!-- 查询模块 by 模块名称、全称、canID -->
+	<select id="selectModuleInfo" resultMap="AppendResultMap">
+		SELECT * FROM module
+		<where>
+			<if test="moduleName !=null">
+				module_name LIKE CONCAT('%',#{moduleName},'%')
+			</if>
+			<if test="moduleFullName !=null">
+				module_full_name like concat('%',#{moduleFullName},'%')
+			</if>
+			<if test="canidValue !=null">
+				canid_value LIKE CONCAT('%',#{canidValue},'%')
+			</if>
+		</where>
+	</select>
+	<!--通过dtc和车型ID、配置ID查询模块 -->
+	<select id="selectMoudleByDtc" resultMap="OptionResultMap">
+		<include refid="Module_List" /> 
+		fc.dtc LIKE CONCAT('%',#{dtc},'%') AND v.vehicle_id=#{vehicleId}
+		<if test="configureId > 0 and configureId!=null">
+	      AND cl.configuration_level_id=#{configureId}
+		</if>
+	</select>
+	<!-- 通过hexdtc和车型ID、配置ID查询模块 -->
+	<select id="selectMoudleByHexDtc" resultMap="OptionResultMap">
+		<include refid="Module_List" /> 
+		fc.hex_dtc LIKE CONCAT('%',#{hexHtc},'%') AND v.vehicle_id=#{vehicleId} 
+		<if test="configureId > 0 and configureId!=null">
+	      AND cl.configuration_level_id=#{configureId}
+		</if>
+	</select>
+	<!-- 查询模块信息 -->
+	<select id="selectModuleMessage" resultMap="BaseResultMap">
+		select module.module_id, module.module_name, module.module_full_name,
+		module.canid_value
+		from module
+		<if test="moduleName !=null and moduleName !=''">
+			where module.module_name like
+			CONCAT('%',#{moduleName,jdbcType=VARCHAR},'%')
+		</if>
+		order by module.module_id DESC
+		limit
+		#{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询模块信息(数据总条数) -->
+	<select id="selectModuleMessageRows" resultType="java.lang.Integer">
+		select count(module.module_id)
+		from module
+		<if test="moduleName !=null and moduleName !=''">
+			where module.module_name like
+			CONCAT('%',#{moduleName,jdbcType=VARCHAR},'%')
+		</if>
+	</select>
+
+	<!-- 查询模块信息是否已存在 -->
+	<select id="selectModuleWhetherExist" resultMap="BaseResultMap">
+		select module.module_id from module
+		where module.module_name =
+		#{moduleName,jdbcType=VARCHAR}
+		<if test="moduleId !=null and moduleId >0">
+			and module_id != #{moduleId,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<!-- 根据模块名称查询模块信息 -->
+	<select id="selectModuleByName" resultMap="BaseResultMap" parameterType="String">
+		select * from module where module_name = #{moduleName}
+	</select>
+
+	<!-- 查询与DID转换有关的模块 -->
+	<select id="selectModuleAsDid" resultMap="AppendResultMap">
+		SELECT DISTINCT mo.* FROM module mo INNER JOIN re_vehicle_supplier re ON re.module_id = mo.module_id
+		INNER JOIN re_did_relevance redid ON redid.relevance_id = re.relevance_id 
+	</select>
+	
+	<!-- 查询与DID关联的模块信息 -->
+	<select id="selectModuleDataList" resultMap="BaseResultMap">
+		select module.module_id, module.module_name
+		from did
+		inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=did.relevance_id
+		inner join module on module.module_id=re_vehicle_supplier.module_id
+		where did.type_id=1
+		group by module.module_id
+		limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+	</select>
+	
+	<!-- 查询与DID关联的模块信息(数据总条数) -->
+	<select id="selectModuleDataListRows" resultType="java.lang.Integer">
+		select count(*) from 
+		(select module.module_id
+		 from did
+		 inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=did.relevance_id
+		 inner join module on module.module_id=re_vehicle_supplier.module_id
+		 where did.type_id=1
+		 group by module.module_id) as tableTest
+	</select>
+	
+</mapper>

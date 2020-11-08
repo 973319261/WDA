@@ -1,0 +1,376 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<c:set var="ctx" value="${pageContext.request.contextPath}"></c:set>
+<c:set var="path" value="${pageContext.request.servletPath}"></c:set>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://"
+			+ request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<base href="<%=basePath%>">
+
+<title>My JSP 'product-data.jsp' starting page</title>
+
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="expires" content="0">
+<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
+<meta http-equiv="description" content="This is my page">
+
+<link rel="stylesheet" href="${ctx}/Content/layui/css/layui.css" type="text/css"></link>
+<link rel="stylesheet" href="${ctx}/Content/css/view.css" type="text/css"></link>
+
+<style type="text/css">
+	.layui-table-view .layui-form-checkbox {
+		top: 5px !important;
+	}
+	
+	.modal {
+		display: none;
+		padding: 20px;
+	}
+	
+	/* 设置文本域样式 */
+	.textField{
+		width: 100%;
+		min-height: 76px;
+		max-height: 76px;
+		resize: none;
+		padding: 8px;
+		border-color: #e6e6e6;
+	}
+	
+	#intsertFlowData input{
+		width: 240px;
+	}
+</style>
+</head>
+
+<body class="layui-view-body">
+	<div class="layui-content" style="padding:14px;">
+		<div class="layui-page-header" style="margin-bottom: 15px;">
+			<div class="pagewrap">
+				<span class="layui-breadcrumb"> <a href="javascript:void(0)">首页</a>
+					<a href="javascript:void(0)">数据管理</a><a href="javascript:void(0)"><cite>小流程</cite></a>
+				</span>
+				<h2 class="title">小流程</h2>
+			</div>
+		</div>
+		<div class="layui-row">
+			<div class="layui-card">
+				<div class="layui-card-body">
+					<div class="form-box">
+						<div class="layui-form layui-form-item" style="margin: 5px 0 10px">
+								<div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+									<div class="layui-form-mid">车型:</div>
+									<div class="layui-input-inline" style="width: 190px;">
+										<select id="vehicleId" lay-filter="cartype"></select>
+									</div>
+									<label class="layui-form-label" style="width: 60px;">小流程:</label>
+									<div class="layui-input-inline" style="width: 190px;">
+										<select id="flowId" lay-filter="flow"></select>
+									</div>
+								</div>
+								<div class="btn-group">
+									<button class="layui-btn layui-btn-sm layui-btn-normal" type="button" onclick="SearchTab()">查询</button>
+									<button class="layui-btn layui-btn-sm" type="button" onclick="addModalSupplier()">新增</button>
+									<button class="layui-btn layui-btn-sm layui-btn-warm" type="button" onclick="addModalSupplier()">修改</button>
+									<button class="layui-btn layui-btn-sm layui-btn-danger" type="button" onclick="addVehicleImage()">删除</button>
+									<!-- <button class="layui-btn layui-btn-blue" type="button" onclick="addVehicleImages()">状态</button> -->
+								</div>
+						</div>
+						<table id="exampleinfo" lay-filter="exampleinfo"></table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- ******************************** 新增模态窗体  *********************** -->
+	<div id="modalSupplier" class="modal" style="padding: 15px 15px;">
+		<form class="layui-form" id="formInfo" action="">
+			<input type="hidden" id="userstate" name=userstate value="true"/>
+			<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+				<div class="layui-form-item">
+					<div class="layui-form-mid">选择车型：</div>
+					<div class="layui-input-inline" style="width: 210px;">
+						<select lay-filter="aihao" id=""></select>
+					</div>
+					<label class="layui-form-label" style="width: 100px;">小流程名称：</label>
+					<div class="layui-input-inline">
+						<input type="text" name="vehicleName" autocomplete="off" class="layui-input" required lay-verify="required" 
+							style="width: 210px;">
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+				<div class="layui-form-item">
+					<div class="layui-form-mid">备注信息：</div>
+					<div class="layui-col-xs5 layui-col-sm5 layui-col-md5">
+						<textarea class="textField" name="chineseDescription" required lay-verify="required" autocomplete="off" 
+							maxlength="500"></textarea>
+					</div>
+					<div class="layui-col-xs4 layui-col-sm4 layui-col-md4">
+						<button class="layui-btn layui-btn-sm layui-btn-blue" type="button" onclick="intsertFlowData()" style="margin-left: 10px;">添加</button>
+						<button class="layui-btn layui-btn-sm" type="button" onclick="addVehicleImage()" style="margin-left: 10px;">保存</button>
+						<button class="layui-btn layui-btn-sm layui-btn-danger" type="button" onclick="addVehicleImages()" style="margin-left: 10px;">删除</button>
+					</div>
+				</div>
+			</div>
+			<div class="layui-col-xs12 layui-col-sm12 layui-col-md12">
+				<table id="flowStepInfo" lay-filter="flowStepInfo"></table>
+			</div>
+		</form>
+	</div>
+	<!-- ******************************** 小流程具体数据新增模态窗体  *********************** -->
+	<div id="intsertFlowData" class="modal" style="padding: 15px 6px;">
+		<form class="layui-form" id="formInfo" action="">
+			<input type="hidden" id="userstate" name=userstate value="true"/>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width: 115px;">操作步骤：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="usernumber" name="didName"
+						lay-verify="usernumber" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width: 115px;">发送指令：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="usernames" name="moduleName"
+						lay-verify="required" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width: 115px;">肯定指令：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="usernames" name="username"
+						lay-verify="required" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width: 115px;">否定指令：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="usernames" name="username"
+						lay-verify="required" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width: 115px;">通道：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="usernames" name="username"
+						lay-verify="required" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width: 115px;">标识：</label>
+				<div class="layui-input-inline">
+					<input type="text" id="usernames" name="username"
+						lay-verify="required" autocomplete="off" class="layui-input" />
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="formDemo">提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary" id="resetAdd">重置</button>
+				</div>
+			</div>
+		</form>
+	</div>
+	<script type="text/javascript" src="${ctx}/Content/js/jquery-3.3.1.min.js"></script>
+	<script src="${ctx}/Content/layui/layui.all.js"></script>
+	<script type="text/javascript" src="${ctx}/Content/js/combobox.js"></script>
+	<!-- 文本编辑器 -->
+	<!----------------------- 工具条 -------------------------->
+	<script type="text/html" id="barDemo">
+		<a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detail">查看</a>
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	</script>
+
+	<script>
+		//layui.use(['element','table','form','layer','jquery','layedit','upload'],function(){
+		var element = layui.element;
+		var table = layui.table;
+		var form = layui.form;
+		var layer = layui.layer;
+		var $ = layui.$;
+	 	var layedit = layui.layedit;
+	 	var upload = layui.upload;
+	 	var flowDetailDeatil;
+		$.ajaxSettings.async = false;
+
+		$(function() {
+			SearchTab();
+			//flowStepInfo();
+			form.render('select');
+		});
+		
+		//监听工具条
+		table.on('tool(exampleinfo)', function(obj) {
+			var data = obj.data;
+			if (obj.event == 'detail') {
+				$.getJSON("${ctx}/example/toDetail",{exampleid:data.exampleid},function(e){
+					if(e!=false){
+						window.open("${ctx}/user/toUrl?page=reception/caseDetail");
+					}
+				});
+			} else if (obj.event === 'edit') {
+				$.getJSON("${ctx}/example/toDetail",{exampleid:data.exampleid},function(e){
+					if(e){
+						window.location.href="${ctx}/user/toUrl?page=backstage/editexample";
+					}
+				});
+			} else if (obj.event === 'del') {
+				layer.confirm("确定要删除该条数据吗？", {
+					icon : 0,
+					title : '提示',
+					offset : '150px'
+				}, function(index) {
+					layer.close(index);
+					$.getJSON("${ctx}/example/delExample", {
+						exampleid : data.exampleid
+					}, function(e) {
+						if (e) {
+							layer.msg("已删除！", {
+								offset : '150px'
+							});
+							SearchTab();
+						} else {
+							layer.alert("操作失败", {
+								icon : 2,
+								title : '提示',
+								offset : '150px'
+							});
+						}
+						;
+					});
+				});
+			};
+		});
+	 	
+	 	function SearchTab() {
+			var exampletitle = $("#exampletitle").val();
+			/* $.getJSON("${ctx}/example/findAllExample",{exampletitle:exampletitle,limit:5,page:0},function(e){
+				console.log(e);
+			}) */
+			table.render({
+				elem : '#exampleinfo',
+				url : '${ctx}/example/findAllExample',
+				where:{
+					exampletitle:exampletitle
+				},
+				page : true, //开启分页
+				limit : 6,
+				cols : [ [ //标题栏
+					{ type:'numbers',field : '',title : '序号',align:'center',width:100},
+					{ field : 'exampletitle',title : '车型',align:'center',}, 
+					{ field : 'tool',title : '小流程名称',width : 180,align : 'center'},
+					{ field : 'tool',title : '操作步骤',width : 180,align : 'center'}, 
+					{ field : 'tool',title : '备注',width : 180,align : 'center'}, 
+					{ field : 'tool',title : '操作',width : 180,align : 'center',toolbar : '#barDemo'} 
+				] ],
+				done:function(e){
+					
+				}
+			});
+		}
+	 	
+	 	//流程步骤信息
+	 	function flowStepInfo() {
+			table.render({
+				elem : '#flowStepInfo',
+				url : '${ctx}/dataManage/findSmallFlowInfoSession.do',
+				page : true, //开启分页
+				limit : 6,
+				cols : [ [ //标题栏
+					{field : '',title : '选择',type:'checkbox',align:'center',unresize : true},
+					{ field : 'didName',title : '操作步骤',edit:'text',align:'center',},
+					{ field : 'moduleName',title : '发送指令',width : 180,align : 'center'}, 
+					{ field : 'tool',title : '肯定指令',width : 180,align : 'center',},
+					{ field : 'tool',title : '否定指令',width : 180,align : 'center',},
+					{ field : 'tool',title : '通道',align : 'center',},
+					{ field : 'tool',title : '标识',align : 'center',},
+				] ],
+				done:function(e){
+					
+				}
+			});
+		}
+	 	
+	 	//新增模态框
+	 	function addModalSupplier(){
+			var index = layer.open({
+				type : 1,
+				title : '新增页面',
+				content : $('#modalSupplier'),
+				area : [ '75%', '75%' ]
+			});
+			//清空session中小流程步骤信息
+			//$.post("${ctx}/dataManage/clearFlowDetailInfoSession.do",function(e){});
+			flowStepInfo();
+			form.render();
+	 	}
+	 	
+	 	//小流程具体数据新增模态框
+	 	function intsertFlowData(){
+	 		/* var info="<tr><td align='center'>111111</td>"+
+	 			"<td align='center'>11111</td>"+
+	 			"<td align='center'>111</td>"+
+	 			"<td align='center'>1111</td></tr>";
+	 		$("#ttt").append(info); */
+	 		flowDetailDeatil = layer.open({
+				type : 1,
+				title : '小流程具体数据新增',
+				content : $('#intsertFlowData'),
+				area : [ '480px', '460px' ]
+			});
+			form.render();
+	 	}
+	 	
+	 	//小流程具体数据提交按钮
+	  	form.on('submit(formDemo)', function(data){
+			$.post("${ctx}/dataManage/insertFlowDetailInfoToSession.do",data.field,function(e){
+				if(e==200){
+					layer.close(flowDetailDeatil);
+					layer.msg("提交成功！");
+					flowStepInfo();
+				}else if(e==500){
+					layer.msg("快照名称已存在，请重新填写");
+				}else{
+					layer.alert("数据异常！",{icon:2,title:'提示'});
+				}
+			});
+			//document.all("resetAdd").click();//重置表单
+			return false; //阻止表单跳转
+		});
+	 	
+	    //监听单元格编辑
+	    table.on('edit(flowStepInfo)', function(obj){
+	      var value = obj.value //得到修改后的值
+	      ,data = obj.data //得到所在行所有键值
+	      ,field = obj.field //得到字段
+	      ,flag=false;//是否变更标识
+	      if(value!=undefined && value !=''){
+	    	  flag=true;
+	      }
+	      //如果变更就提交数据
+	      if(flag){
+	      	$.getJSON("${ctx}/dataManage/updateFlowDetailInfoToSession.do",data,function(e){
+	      		if(e==200){
+	      			layer.msg("变更已生效！",{icon:1,offset:'150px'});
+	      		}else{
+	      			layer.alert("未知异常！变更未生效！",{icon:5,offset:'150px',title:'提示',anim:6});
+	      		}
+	      		table.reload('flowStepInfo');//重新渲染表格数据
+	      	});
+	      }
+	    });
+	</script>
+</body>
+
+</html>

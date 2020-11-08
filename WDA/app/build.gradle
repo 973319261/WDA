@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.3"
+
+    defaultConfig {
+        applicationId "com.gx.wda"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 42
+        versionName "4.7.4"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a","x86","mips"
+        }
+
+    }
+    android.applicationVariants.all {
+        variant ->
+            variant.outputs.all {
+                // 此处指定生成的apk文件名
+                outputFileName = "wda.apk"
+            }
+    }
+    android {
+        lintOptions {
+            checkReleaseBuilds false
+            // Or, if you prefer, you can continue to checkforerrorsinrelease builds,
+            // but continue the build even whenerrorsarefound:
+            abortOnError false
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //网络请求
+    implementation 'com.squareup.okhttp3:okhttp:4.4.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.4.0'
+    implementation 'com.zhy:okhttputils:2.0.0'
+    //gson
+    implementation 'com.google.code.gson:gson:2.8.6'
+    //状态栏沉浸式
+    implementation 'com.jaeger.statusbarutil:library:1.5.1'
+    //switch 按钮
+    implementation  'com.github.zcweng:switch-button:0.0.3@aar'
+    //提示框
+    implementation 'com.github.limxing:Android-PromptDialog:1.1.3'
+    //下拉刷新，上拉加载
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.1.1'  //1.0.5及以前版本的老用户升级需谨慎，API改动过大
+    implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.1.1'  //没有使用特殊Header，可以不加这行
+    /*状态切换页*/
+    implementation "com.google.android.material:material:1.1.0"
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    //recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+    //glide图片加载框架
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    implementation 'com.alibaba:fastjson:1.2.55'
+    //TBS  x5 服务
+    implementation files('libs/tbs_sdk_thirdapp_v4.3.0.39_43939_sharewithdownloadwithfile_withoutGame_obfs_20200713_223411.jar')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.lzy.net:okgo:2.1.4'
+    implementation 'com.lzy.net:okserver:1.1.3'
+    implementation 'pub.devrel:easypermissions:0.4.3'
+    /*消息推送*/
+    implementation "org.java-websocket:Java-WebSocket:1.5.1"
+    //推流拉流SDK
+    implementation(name:'LiteAVSDK_Smart_4.6.4218', ext:'aar')
+    implementation 'cn.jzvd:jiaozivideoplayer:6.2.4'
+
+
+
+    //TFTP
+    implementation 'commons-net:commons-net:3.6'
+
+
+
+    implementation 'com.tonystark.android:socket:4.1.0'
+    implementation 'com.tonystark.android:socket-server:4.1.0'
+}

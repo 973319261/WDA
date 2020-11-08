@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.HardwareManagementDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.HardwareManagement">
+    <id column="hardware_management_id" jdbcType="INTEGER" property="hardwareManagementId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="hardware_equipment_id" jdbcType="VARCHAR" property="hardwareEquipmentId" />
+    <result column="hardware_equipment_name" jdbcType="VARCHAR" property="hardwareEquipmentName" />
+    <result column="use_date" jdbcType="DATE" property="useDate" />
+    <result column="use_area" jdbcType="VARCHAR" property="useArea" />
+    <result column="preserver" jdbcType="VARCHAR" property="preserver" />
+    <result column="is_disabled" jdbcType="BIT" property="isDisabled" />
+  </resultMap>
+  <!-- 自定义Vo -->
+  <resultMap type="com.gx.vo.HardwareVo" id="HardwareVoResultMap" extends="BaseResultMap">
+  	<result column="user_account" jdbcType="VARCHAR" property="userAccount" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    hardware_management_id, user_id, hardware_equipment_id, hardware_equipment_name, 
+    use_date, use_area, preserver, is_disabled
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from hardware_management
+    where hardware_management_id = #{hardwareManagementId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from hardware_management
+    where hardware_management_id = #{hardwareManagementId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.HardwareManagement">
+    insert into hardware_management (hardware_management_id, user_id, hardware_equipment_id, 
+      hardware_equipment_name, use_date, use_area, 
+      preserver, is_disabled)
+    values (#{hardwareManagementId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{hardwareEquipmentId,jdbcType=VARCHAR}, 
+      #{hardwareEquipmentName,jdbcType=VARCHAR}, #{useDate,jdbcType=DATE}, #{useArea,jdbcType=VARCHAR}, 
+      #{preserver,jdbcType=VARCHAR}, #{isDisabled,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.HardwareManagement">
+    insert into hardware_management
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="hardwareManagementId != null">
+        hardware_management_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="hardwareEquipmentId != null">
+        hardware_equipment_id,
+      </if>
+      <if test="hardwareEquipmentName != null">
+        hardware_equipment_name,
+      </if>
+      <if test="useDate != null">
+        use_date,
+      </if>
+      <if test="useArea != null">
+        use_area,
+      </if>
+      <if test="preserver != null">
+        preserver,
+      </if>
+      <if test="isDisabled != null">
+        is_disabled,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="hardwareManagementId != null">
+        #{hardwareManagementId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="hardwareEquipmentId != null">
+        #{hardwareEquipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareEquipmentName != null">
+        #{hardwareEquipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="useDate != null">
+        #{useDate,jdbcType=DATE},
+      </if>
+      <if test="useArea != null">
+        #{useArea,jdbcType=VARCHAR},
+      </if>
+      <if test="preserver != null">
+        #{preserver,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisabled != null">
+        #{isDisabled,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.HardwareManagement">
+    update hardware_management
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="hardwareEquipmentId != null">
+        hardware_equipment_id = #{hardwareEquipmentId,jdbcType=VARCHAR},
+      </if>
+      <if test="hardwareEquipmentName != null">
+        hardware_equipment_name = #{hardwareEquipmentName,jdbcType=VARCHAR},
+      </if>
+      <if test="useDate != null">
+        use_date = #{useDate,jdbcType=DATE},
+      </if>
+      <if test="useArea != null">
+        use_area = #{useArea,jdbcType=VARCHAR},
+      </if>
+      <if test="preserver != null">
+        preserver = #{preserver,jdbcType=VARCHAR},
+      </if>
+      <if test="isDisabled != null">
+        is_disabled = #{isDisabled,jdbcType=BIT},
+      </if>
+    </set>
+    where hardware_management_id = #{hardwareManagementId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.HardwareManagement">
+    update hardware_management
+    set user_id = #{userId,jdbcType=INTEGER},
+      hardware_equipment_id = #{hardwareEquipmentId,jdbcType=VARCHAR},
+      hardware_equipment_name = #{hardwareEquipmentName,jdbcType=VARCHAR},
+      use_date = #{useDate,jdbcType=DATE},
+      use_area = #{useArea,jdbcType=VARCHAR},
+      preserver = #{preserver,jdbcType=VARCHAR},
+      is_disabled = #{isDisabled,jdbcType=BIT}
+    where hardware_management_id = #{hardwareManagementId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询硬件管理信息 -->
+  <select id="selectHardwareManageInfo" resultMap="HardwareVoResultMap">
+  	select hardware_management.*,user.user_account from hardware_management  
+	left join user on user.user_Id=hardware_management.user_Id 
+	<where>
+		<if test="hardware !=null and hardware !=''">
+			hardware_management.hardware_equipment_id like CONCAT('%',#{hardware,jdbcType=VARCHAR},'%')
+			or hardware_management.hardware_equipment_name like CONCAT('%',#{hardware,jdbcType=VARCHAR},'%') 
+		</if>
+	</where>
+	order by hardware_management.hardware_management_id DESC
+	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询硬件管理信息(数据总条数) -->
+  <select id="selectHardwareManageInfoRows" resultType="java.lang.Integer">
+  	select count(hardware_management.hardware_management_id) from hardware_management 
+	left join user on user.user_Id=hardware_management.user_Id 
+	<where>
+		<if test="hardware !=null and hardware !=''">
+			hardware_management.hardware_equipment_id like CONCAT('%',#{hardware,jdbcType=VARCHAR},'%')
+			or hardware_management.hardware_equipment_name like CONCAT('%',#{hardware,jdbcType=VARCHAR},'%') 
+		</if>
+	</where>
+  </select>
+  
+  <!-- 查询硬件管理信息是否存在 -->
+  <select id="selectHardwareWhetherExist" resultType="java.lang.Integer">
+  	select count(hardware_management.hardware_management_id) from hardware_management
+  	where 1=1
+	<if test="typeId !=null and typeId ==0">
+		and hardware_equipment_id = #{hardware,jdbcType=VARCHAR}
+	</if>
+	<if test="typeId !=null and typeId >0">
+		and hardware_equipment_name = #{hardware,jdbcType=VARCHAR}
+	</if>
+	<if test="hardwareManagementId !=null and hardwareManagementId >0">
+		and hardware_management_id != #{hardwareManagementId,jdbcType=INTEGER}
+	</if>
+  </select>
+</mapper>

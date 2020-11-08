@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.RoleDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Role">
+    <id column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="role_name" jdbcType="VARCHAR" property="roleName" />
+    <result column="role_describe" jdbcType="VARCHAR" property="roleDescribe" />
+    <result column="is_enable" jdbcType="BIT" property="isEnable" />
+  </resultMap>
+    <!-- 选项返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+    <id column="role_id" jdbcType="INTEGER" property="id" />
+    <result column="role_name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    role_id, role_name, role_describe, is_enable
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from role
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Role">
+    insert into role (role_id, role_name, role_describe, 
+      is_enable)
+    values (#{roleId,jdbcType=INTEGER}, #{roleName,jdbcType=VARCHAR}, #{roleDescribe,jdbcType=VARCHAR}, 
+      #{isEnable,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Role" keyProperty="roleId" useGeneratedKeys="true">
+    insert into role
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleName != null">
+        role_name,
+      </if>
+      <if test="roleDescribe != null">
+        role_describe,
+      </if>
+      <if test="isEnable != null">
+        is_enable,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="roleName != null">
+        #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDescribe != null">
+        #{roleDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null">
+        #{isEnable,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Role">
+    update role
+    <set>
+      <if test="roleName != null">
+        role_name = #{roleName,jdbcType=VARCHAR},
+      </if>
+      <if test="roleDescribe != null">
+        role_describe = #{roleDescribe,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnable != null">
+        is_enable = #{isEnable,jdbcType=BIT},
+      </if>
+    </set>
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Role">
+    update role
+    set role_name = #{roleName,jdbcType=VARCHAR},
+      role_describe = #{roleDescribe,jdbcType=VARCHAR},
+      is_enable = #{isEnable,jdbcType=BIT}
+    where role_id = #{roleId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询角色信息(绑定下拉框) -->
+  <select id="selectRoleInfo" resultMap="OptionResultMap">
+  	select role.role_id,role.role_name from role
+  	where is_enable=true
+  </select>
+  
+  <!-- 查询角色信息 -->
+  <select id="findRoleInfo" resultMap="BaseResultMap">
+  	select role.role_id,role.role_name,role.role_describe,role.is_enable
+  	from role 
+  	<if test="roleName !=null and roleName !=''">
+  	where role.role_name like CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
+  	</if>
+  	order by role.role_id DESC
+  	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询角色信息(查询数据总条数) -->
+  <select id="findRoleInfoRows" resultType="java.lang.Integer">
+  	select count(role.role_id) from role 
+  	<if test="roleName !=null and roleName !=''">
+  	where role.role_name like CONCAT('%',#{roleName,jdbcType=VARCHAR},'%')
+  	</if>
+  </select>
+  
+  <!-- 通过roleId删除权限和权限明细信息 -->
+  <delete id="deleteRoleInfoByRoleId" parameterType="java.lang.Integer">
+  	delete jurisdiction_detail,role from jurisdiction_detail ,role 
+  	where jurisdiction_detail.role_id=role.role_id and role.role_id = #{roleId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 查询角色类型名称是否存在 -->
+  <select id="findRoleNameInfoRows" resultType="java.lang.Integer">
+  	select count(role.role_id) from role 
+  	where role.role_name= #{roleName,jdbcType=VARCHAR}
+  	<if test="roleId !=null and roleId >0 ">
+  		and role_id != #{roleId,jdbcType=INTEGER}
+  	</if>
+  </select>
+</mapper>

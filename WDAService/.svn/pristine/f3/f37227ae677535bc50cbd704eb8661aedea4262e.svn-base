@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.VersionDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Version">
+    <id column="version_id" jdbcType="INTEGER" property="versionId" />
+    <result column="version_number" jdbcType="INTEGER" property="versionNumber" />
+    <result column="version_title" jdbcType="VARCHAR" property="versionTitle" />
+    <result column="apk_url" jdbcType="VARCHAR" property="apkUrl" />
+    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="is_force" jdbcType="BIT" property="isForce" />
+     <result column="version_content" jdbcType="LONGVARCHAR" property="versionContent" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    version_id, version_number, version_title, apk_url, creation_date, is_force, version_content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from version
+    where version_id = #{versionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from version
+    where version_id = #{versionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Version">
+    insert into version (version_id, version_number, version_title, 
+      apk_url, creation_date, is_force, 
+      version_content)
+    values (#{versionId,jdbcType=INTEGER}, #{versionNumber,jdbcType=INTEGER}, #{versionTitle,jdbcType=VARCHAR}, 
+      #{apkUrl,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, #{isForce,jdbcType=BIT}, 
+      #{versionContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Version">
+    insert into version
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="versionId != null">
+        version_id,
+      </if>
+      <if test="versionNumber != null">
+        version_number,
+      </if>
+      <if test="versionTitle != null">
+        version_title,
+      </if>
+      <if test="apkUrl != null">
+        apk_url,
+      </if>
+      <if test="creationDate != null">
+        creation_date,
+      </if>
+      <if test="isForce != null">
+        is_force,
+      </if>
+      <if test="versionContent != null">
+        version_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="versionId != null">
+        #{versionId,jdbcType=INTEGER},
+      </if>
+      <if test="versionNumber != null">
+        #{versionNumber,jdbcType=INTEGER},
+      </if>
+      <if test="versionTitle != null">
+        #{versionTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="apkUrl != null">
+        #{apkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isForce != null">
+        #{isForce,jdbcType=BIT},
+      </if>
+      <if test="versionContent != null">
+        #{versionContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Version">
+    update version
+    <set>
+      <if test="versionNumber != null">
+        version_number = #{versionNumber,jdbcType=INTEGER},
+      </if>
+      <if test="versionTitle != null">
+        version_title = #{versionTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="apkUrl != null">
+        apk_url = #{apkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isForce != null">
+        is_force = #{isForce,jdbcType=BIT},
+      </if>
+      <if test="versionContent != null">
+        version_content = #{versionContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where version_id = #{versionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.gx.po.Version">
+    update version
+    set version_number = #{versionNumber,jdbcType=INTEGER},
+      version_title = #{versionTitle,jdbcType=VARCHAR},
+      apk_url = #{apkUrl,jdbcType=VARCHAR},
+      creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      is_force = #{isForce,jdbcType=BIT},
+      version_content = #{versionContent,jdbcType=LONGVARCHAR}
+    where version_id = #{versionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Version">
+    update version
+    set version_number = #{versionNumber,jdbcType=INTEGER},
+      version_title = #{versionTitle,jdbcType=VARCHAR},
+      apk_url = #{apkUrl,jdbcType=VARCHAR},
+      creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      is_force = #{isForce,jdbcType=BIT}
+    where version_id = #{versionId,jdbcType=INTEGER}
+  </update>
+  <!-- 获取最新apk版本信息 -->
+  <select id="getVersionInfo" resultMap="BaseResultMap">
+    SELECT * FROM VERSION v ORDER BY v.version_number DESC LIMIT 1
+  </select>
+   <!-- 获取所有版本信息 -->
+  <select id="getAllVersionInfo" resultMap="BaseResultMap">
+    SELECT * FROM VERSION v ORDER BY v.version_number DESC
+  </select>
+  
+  
+  <!-- 查询版本号信息 -->
+  <select id="selectVersionInfo" resultMap="BaseResultMap">
+  	select version.version_id,version.version_number,version.version_title,version.apk_url,
+  		version.creation_date,version.is_force,version.version_content
+    from version
+    <if test="versionNumber !=null and versionNumber !=''">
+  		where version.version_number like CONCAT('%',#{versionNumber,jdbcType=VARCHAR},'%')
+  	</if>
+  	<choose>
+  		<when test="strName == 'versionNumber' and sortType == 'asc' ">
+  			order by version_number ASC	
+  		</when>  		
+  		<when test="strName == 'versionNumber' and sortType == 'desc'">
+  			order by version_number DESC	
+  		</when>  
+  		<when test="strName == 'creationDate' and sortType == 'asc' ">
+  			order by creation_date ASC	
+  		</when>  		
+  		<when test="strName == 'creationDate' and sortType == 'desc'">
+  			order by creation_date DESC	
+  		</when>  		
+  		<otherwise>
+  			order by version.version_id DESC 
+  		</otherwise>
+  	</choose>    	 	    	
+    limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询版本号信息(数据总条数) -->
+  <select id="selectVersionInfoRows" resultType="java.lang.Integer">
+  	select count(version.version_id) from version
+    <if test="versionNumber !=null and versionNumber !=''">
+  		where version.version_number like CONCAT('%',#{versionNumber,jdbcType=VARCHAR},'%')
+  	</if> 
+  </select>
+  
+  <!-- 查询版本标题是否存在 -->
+  <select id="selectVersionByNum" resultMap="BaseResultMap">
+	select version.version_title from version where version_title = #{versionTitle,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

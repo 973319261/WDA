@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.ArithmeticDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Arithmetic">
+    <id column="arithmetic_id" jdbcType="INTEGER" property="arithmeticId" />
+    <result column="algorithm_level_id" jdbcType="INTEGER" property="algorithmLevelId" />
+    <result column="arithmetic_name" jdbcType="VARCHAR" property="arithmeticName" />
+    <result column="entry_point" jdbcType="VARCHAR" property="entryPoint" />
+    <result column="arithmetic_prefix" jdbcType="VARCHAR" property="arithmeticPrefix" />
+    <result column="arithmetic_delta" jdbcType="VARCHAR" property="arithmeticDelta" />
+    <result column="visitor_volume" jdbcType="INTEGER" property="visitorVolume" />
+    <result column="algorithm_type" jdbcType="INTEGER" property="algorithmType" />
+  </resultMap>
+   <!-- Dll返回 -->
+   <resultMap type="com.gx.vo.DllVo" id="DllResultMap">
+    <result column="arithmetic_name" jdbcType="VARCHAR" property="arithmeticName" />
+    <result column="arithmetic_prefix" jdbcType="VARCHAR" property="arithmeticPrefix" />
+    <result column="algorithm_level_id" jdbcType="INTEGER" property="algorithmLevelId" />
+    <result column="entry_point" jdbcType="VARCHAR" property="entryPoint" />
+    <result column="arithmetic_delta" jdbcType="VARCHAR" property="arithmeticDelta" />
+    <!--  一对一 嵌套vo -->
+    <association property="securityRecordVo" javaType="com.gx.vo.SecurityRecordVo" >
+     <result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+	 <result column="vehicle_name" jdbcType="VARCHAR" property="vehicleName" />
+	 <result column="vehicle_picture" jdbcType="VARCHAR" property="vehiclePicture" />
+	 <result column="configuration_level_id" jdbcType="INTEGER" property="configurationLevelId" />
+     <result column="configuration_level_name" jdbcType="VARCHAR" property="configurationLevelName" />
+     <result column="module_id" jdbcType="INTEGER" property="moduleId" />
+     <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+     <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+     <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+     <result column="arithmetic_level_id" jdbcType="INTEGER" property="arithmeticLevelId" />
+     <result column="arithmetic_level_name" jdbcType="VARCHAR" property="arithmeticLevelName" />
+	</association>
+  </resultMap>
+  <!-- 自定义Vo -->
+  <resultMap id="ArithmeticVoResultMap" type="com.gx.vo.ArithmeticVo" extends="BaseResultMap">
+  	 <result column="relevance_id" jdbcType="INTEGER" property="relevanceId" />
+  	 <result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+	 <result column="vehicle_name" jdbcType="VARCHAR" property="vehicleName" />
+	 <result column="configuration_level_id" jdbcType="INTEGER" property="configurationLevelId" />
+     <result column="configuration_level_name" jdbcType="VARCHAR" property="configurationLevelName" />
+     <result column="module_id" jdbcType="INTEGER" property="moduleId" />
+     <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+     <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+     <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+     <result column="arithmetic_level_id" jdbcType="INTEGER" property="arithmeticLevelId" />
+     <result column="arithmetic_level_name" jdbcType="VARCHAR" property="arithmeticLevelName" />
+  </resultMap>
+  <!-- 选项返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+    <id column="arithmetic_id" jdbcType="INTEGER" property="id" />
+    <result column="arithmetic_name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    arithmetic_id, algorithm_level_id, arithmetic_name, entry_point, arithmetic_prefix, 
+    arithmetic_delta, visitor_volume, algorithm_type
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from arithmetic
+    where arithmetic_id = #{arithmeticId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from arithmetic
+    where arithmetic_id = #{arithmeticId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Arithmetic">
+    insert into arithmetic (arithmetic_id, algorithm_level_id, arithmetic_name, 
+      entry_point, arithmetic_prefix, arithmetic_delta, 
+      visitor_volume, algorithm_type)
+    values (#{arithmeticId,jdbcType=INTEGER}, #{algorithmLevelId,jdbcType=INTEGER}, #{arithmeticName,jdbcType=VARCHAR}, 
+      #{entryPoint,jdbcType=VARCHAR}, #{arithmeticPrefix,jdbcType=VARCHAR}, #{arithmeticDelta,jdbcType=VARCHAR}, 
+      #{visitorVolume,jdbcType=INTEGER}, #{algorithmType,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Arithmetic" keyProperty="arithmeticId" useGeneratedKeys="true">
+    insert into arithmetic
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="arithmeticId != null">
+        arithmetic_id,
+      </if>
+      <if test="algorithmLevelId != null">
+        algorithm_level_id,
+      </if>
+      <if test="arithmeticName != null">
+        arithmetic_name,
+      </if>
+      <if test="entryPoint != null">
+        entry_point,
+      </if>
+      <if test="arithmeticPrefix != null">
+        arithmetic_prefix,
+      </if>
+      <if test="arithmeticDelta != null">
+        arithmetic_delta,
+      </if>
+      <if test="visitorVolume != null">
+        visitor_volume,
+      </if>
+      <if test="algorithmType != null">
+        algorithm_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="arithmeticId != null">
+        #{arithmeticId,jdbcType=INTEGER},
+      </if>
+      <if test="algorithmLevelId != null">
+        #{algorithmLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="arithmeticName != null">
+        #{arithmeticName,jdbcType=VARCHAR},
+      </if>
+      <if test="entryPoint != null">
+        #{entryPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="arithmeticPrefix != null">
+        #{arithmeticPrefix,jdbcType=VARCHAR},
+      </if>
+      <if test="arithmeticDelta != null">
+        #{arithmeticDelta,jdbcType=VARCHAR},
+      </if>
+      <if test="visitorVolume != null">
+        #{visitorVolume,jdbcType=INTEGER},
+      </if>
+      <if test="algorithmType != null">
+        #{algorithmType,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Arithmetic">
+    update arithmetic
+    <set>
+      <if test="algorithmLevelId != null">
+        algorithm_level_id = #{algorithmLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="arithmeticName != null">
+        arithmetic_name = #{arithmeticName,jdbcType=VARCHAR},
+      </if>
+      <if test="entryPoint != null">
+        entry_point = #{entryPoint,jdbcType=VARCHAR},
+      </if>
+      <if test="arithmeticPrefix != null">
+        arithmetic_prefix = #{arithmeticPrefix,jdbcType=VARCHAR},
+      </if>
+      <if test="arithmeticDelta != null">
+        arithmetic_delta = #{arithmeticDelta,jdbcType=VARCHAR},
+      </if>
+      <if test="visitorVolume != null">
+        visitor_volume = #{visitorVolume,jdbcType=INTEGER},
+      </if>
+      <if test="algorithmType != null">
+        algorithm_type = #{algorithmType,jdbcType=INTEGER},
+      </if>
+    </set>
+    where arithmetic_id = #{arithmeticId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Arithmetic">
+    update arithmetic
+    set algorithm_level_id = #{algorithmLevelId,jdbcType=INTEGER},
+      arithmetic_name = #{arithmeticName,jdbcType=VARCHAR},
+      entry_point = #{entryPoint,jdbcType=VARCHAR},
+      arithmetic_prefix = #{arithmeticPrefix,jdbcType=VARCHAR},
+      arithmetic_delta = #{arithmeticDelta,jdbcType=VARCHAR},
+      visitor_volume = #{visitorVolume,jdbcType=INTEGER},
+      algorithm_type = #{algorithmType,jdbcType=INTEGER}
+    where arithmetic_id = #{arithmeticId,jdbcType=INTEGER}
+  </update>
+   <!-- 修改SeedToKey访问量访问量 -->
+  <update id="updateSeedToKeyVisitNum">
+    UPDATE arithmetic a INNER JOIN  re_arithmetic_supplier rea ON a.arithmetic_id = rea.arithmetic_id INNER JOIN re_vehicle_supplier re ON rea.relevance_id=re.relevance_id 
+    SET visitor_volume=visitor_volume + 1 
+    WHERE  re.vehicle_id=#{vehicleId} 
+    <if test="configurationLevelId!=null and configurationLevelId > 0">
+      AND re.configuration_level_id=#{configurationLevelId}  
+   </if>
+    AND re.module_id=#{moduleId} AND re.supplier_id=#{supplierId} 
+    AND a.algorithm_level_id=#{arithmeticLevelId} AND a.algorithm_type=1
+  </update>
+  <!--修改VinToPin算法访问量 -->
+  <update id="updateVinToPinVisitNum">
+    UPDATE arithmetic a INNER JOIN re_arithmetic_vehicle re ON a.arithmetic_id=re.arithmetic_id SET visitor_volume=visitor_volume+1 
+    WHERE re.vehicle_id=#{vehicleId} AND a.algorithm_type=2
+  </update>
+  <!--修改VinToEsk算法访问量 -->
+   <update id="updateVinToEskVisitNum">
+    UPDATE arithmetic a INNER JOIN re_arithmetic_vehicle re ON a.arithmetic_id=re.arithmetic_id SET visitor_volume=visitor_volume+1 
+    WHERE re.vehicle_id=#{vehicleId} AND a.algorithm_type=3
+  </update>
+     <!--修改Seed&PinToKey访问量 -->
+  <update id="updateSeedAndPinToKeyVisitNum">
+     UPDATE arithmetic a INNER JOIN re_arithmetic_supplier rea ON a.arithmetic_id=rea.arithmetic_id INNER JOIN re_vehicle_supplier re ON rea.relevance_id=re.relevance_id 
+     SET a.visitor_volume=a.visitor_volume + 1 
+     WHERE re.vehicle_id=#{vehicleId} 
+     <if test="configurationLevelId!=null and configurationLevelId > 0">
+      AND re.configuration_level_id=#{configurationLevelId}  
+   </if>
+     AND re.module_id=#{moduleId} AND re.supplier_id=#{supplierId} AND a.algorithm_type=4
+  </update>
+    <!-- 查询SeedToKeyDll文件信息 -->
+  <select id="selectSeedToKeyDll" resultMap="DllResultMap">
+   SELECT * FROM arithmetic a,re_vehicle_supplier re,re_arithmetic_supplier rea,arithmetic_level l,
+   supplier s,module m,configuration_level cl,vehicle v 
+   WHERE a.arithmetic_id=rea.arithmetic_id AND rea.relevance_id=re.relevance_id AND a.algorithm_level_id=l.arithmetic_level_id  AND re.supplier_id=s.supplier_id 
+   AND re.module_id=m.module_id AND re.configuration_level_id=cl.configuration_level_id AND re.vehicle_id=v.vehicle_id 
+   AND re.vehicle_id=#{vehicleId} 
+   <if test="configurationLevelId!=null and configurationLevelId > 0">
+    AND re.configuration_level_id=#{configurationLevelId} 
+   </if>
+   AND re.module_id=#{moduleId} AND re.supplier_id=#{supplierId} 
+   AND l.arithmetic_level_id=#{arithmeticLevelId} AND a.algorithm_type=1 LIMIT 0,1
+  </select>
+  <!-- 查询VinToPinDll文件信息 -->
+  <select id="selectVinToPinDll" resultMap="DllResultMap">
+   SELECT a.*,v.* FROM arithmetic a,re_arithmetic_vehicle re,vehicle v 
+   WHERE a.arithmetic_id=re.arithmetic_id AND re.vehicle_id=v.vehicle_id AND v.vehicle_id=#{vehicleId} AND a.algorithm_type=2
+  </select>
+  <!-- 查询VinToEskDll文件信息 -->
+   <select id="selectVinToEskDll" resultMap="DllResultMap">
+   SELECT a.*,v.* FROM arithmetic a,re_arithmetic_vehicle re,vehicle v 
+   WHERE a.arithmetic_id=re.arithmetic_id AND re.vehicle_id=v.vehicle_id AND v.vehicle_id=#{vehicleId} AND a.algorithm_type=3
+  </select>
+    <!-- 查询SeedAndPinToKeyDll文件信息 -->
+   <select id="selectSeedAndPinToKeyDll" resultMap="DllResultMap">
+    SELECT distinct * FROM arithmetic a,re_vehicle_supplier re,re_arithmetic_supplier rea,supplier s,module m,configuration_level cl,vehicle v 
+    WHERE a.arithmetic_id=rea.arithmetic_id AND re.relevance_id=rea.relevance_id  AND re.supplier_id=s.supplier_id 
+    AND re.module_id=m.module_id AND re.configuration_level_id=cl.configuration_level_id AND re.vehicle_id=v.vehicle_id 
+    AND re.vehicle_id=#{vehicleId} 
+    <if test="configurationLevelId!=null and configurationLevelId > 0">
+      AND re.configuration_level_id=#{configurationLevelId}  
+   </if>
+    AND re.module_id=#{moduleId} AND re.supplier_id=#{supplierId} AND a.algorithm_type=4
+  </select>
+  
+  <!-- 查询Seed转Key管理信息 -->
+  <select id="selectSeedToKeyInfo" resultMap="ArithmeticVoResultMap">
+  	select arithmetic.arithmetic_id, arithmetic.arithmetic_name, arithmetic_level.arithmetic_level_name,
+	  	   vehicle.vehicle_name, configuration_level.configuration_level_name, module.module_name, supplier.supplier_name,
+		   arithmetic_level.arithmetic_level_id, re_vehicle_supplier.relevance_id, vehicle.vehicle_id, configuration_level.configuration_level_id,
+		   module.module_id, supplier.supplier_id, arithmetic.visitor_volume
+	from arithmetic 
+	inner join arithmetic_level on arithmetic_level.arithmetic_level_id=arithmetic.algorithm_level_id
+	inner join re_arithmetic_supplier on re_arithmetic_supplier.arithmetic_id=arithmetic.arithmetic_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=re_arithmetic_supplier.relevance_id
+	inner join vehicle on re_vehicle_supplier.vehicle_id=vehicle.vehicle_id
+	inner join configuration_level on re_vehicle_supplier.configuration_level_id=configuration_level.configuration_level_id
+	inner join module on re_vehicle_supplier.module_id=module.module_id
+	inner join supplier on re_vehicle_supplier.supplier_id=supplier.supplier_id
+	where arithmetic.algorithm_type=1
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>
+	<if test="moduleId !=null and moduleId >0">
+		and re_vehicle_supplier.module_id=#{moduleId,jdbcType=INTEGER}
+	</if>
+	<if test="supplierId !=null and supplierId >0">
+		and re_vehicle_supplier.supplier_id=#{supplierId,jdbcType=INTEGER}
+	</if>
+	<if test="arithmeticName !=null and arithmeticName !=''">
+		and arithmetic.arithmetic_name=#{arithmeticName,jdbcType=VARCHAR}
+	</if>
+	<choose>
+  		<when test="strName == 'visitorVolume' and sortType == 'asc' ">
+  			order by arithmetic.visitor_volume ASC	
+  		</when>  		
+  		<when test="strName == 'visitorVolume' and sortType == 'desc'">
+  			order by arithmetic.visitor_volume DESC	
+  		</when>
+  		<otherwise>
+  			order by arithmetic.arithmetic_id DESC
+  		</otherwise>
+  	</choose>
+	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询Seed转Key管理信息(数据总条数) -->
+  <select id="selectSeedToKeyInfoRows" resultType="java.lang.Integer">
+  	select count(arithmetic.arithmetic_id)
+	from arithmetic 
+	inner join arithmetic_level on arithmetic_level.arithmetic_level_id=arithmetic.algorithm_level_id
+	inner join re_arithmetic_supplier on re_arithmetic_supplier.arithmetic_id=arithmetic.arithmetic_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=re_arithmetic_supplier.relevance_id
+	inner join vehicle on re_vehicle_supplier.vehicle_id=vehicle.vehicle_id
+	inner join configuration_level on re_vehicle_supplier.configuration_level_id=configuration_level.configuration_level_id
+	inner join module on re_vehicle_supplier.module_id=module.module_id
+	inner join supplier on re_vehicle_supplier.supplier_id=supplier.supplier_id
+	where arithmetic.algorithm_type=1
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>
+	<if test="moduleId !=null and moduleId >0">
+		and re_vehicle_supplier.module_id=#{moduleId,jdbcType=INTEGER}
+	</if>
+	<if test="supplierId !=null and supplierId >0">
+		and re_vehicle_supplier.supplier_id=#{supplierId,jdbcType=INTEGER}
+	</if>
+	<if test="arithmeticName !=null and arithmeticName !=''">
+		and arithmetic.arithmetic_name=#{arithmeticName,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+  <!-- 选项返回 -->
+  <select id="selectArithmeticInfo" resultMap="OptionResultMap">
+  	select arithmetic.arithmetic_id, arithmetic.arithmetic_name
+  	from arithmetic
+  	<if test="algorithmType !=null and algorithmType >0">
+  		where arithmetic.algorithm_type=#{algorithmType,jdbcType=INTEGER}
+  	</if>
+  	group by arithmetic.arithmetic_name
+  </select>
+  
+  <!-- 查询Seed转Key管理信息是否存在 -->
+  <select id="selectSeedToKeyWhetherExist" resultType="java.lang.Integer">
+  	select count(arithmetic.arithmetic_id)
+	from arithmetic 
+	inner join arithmetic_level on arithmetic_level.arithmetic_level_id=arithmetic.algorithm_level_id
+	inner join re_arithmetic_supplier on re_arithmetic_supplier.arithmetic_id=arithmetic.arithmetic_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=re_arithmetic_supplier.relevance_id
+	inner join vehicle on re_vehicle_supplier.vehicle_id=vehicle.vehicle_id
+	inner join configuration_level on re_vehicle_supplier.configuration_level_id=configuration_level.configuration_level_id
+	inner join module on re_vehicle_supplier.module_id=module.module_id
+	inner join supplier on re_vehicle_supplier.supplier_id=supplier.supplier_id
+	where arithmetic.algorithm_type=1
+	and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	and re_vehicle_supplier.module_id=#{moduleId,jdbcType=INTEGER}
+	and re_vehicle_supplier.supplier_id=#{supplierId,jdbcType=INTEGER}
+	and arithmetic_level.arithmetic_level_id=#{arithmeticLevelid,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 通过算法ID删除供应商算法信息 -->
+  <delete id="deleteArithmeticSupplierInfo" parameterType="java.lang.Integer">
+  	delete arithmetic, re_arithmetic_supplier from arithmetic, re_arithmetic_supplier
+    where re_arithmetic_supplier.arithmetic_id=arithmetic.arithmetic_id
+    and arithmetic.arithmetic_id = #{arithmeticId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 查询Vin转Pin管理信息 -->
+  <select id="selectArithmeticVehicle" resultMap="ArithmeticVoResultMap">
+  	select arithmetic.arithmetic_id, arithmetic.arithmetic_name,vehicle.vehicle_name, vehicle.vehicle_id, arithmetic.visitor_volume
+	from arithmetic 
+	inner join re_arithmetic_vehicle on re_arithmetic_vehicle.arithmetic_id=arithmetic.arithmetic_id
+	inner join vehicle on vehicle.vehicle_id=re_arithmetic_vehicle.vehicle_id
+	where arithmetic.algorithm_type=#{algorithmType,jdbcType=INTEGER}
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_arithmetic_vehicle.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="arithmeticName !=null and arithmeticName !=''">
+		and arithmetic.arithmetic_name=#{arithmeticName,jdbcType=VARCHAR}
+	</if>
+	<choose>
+  		<when test="strName == 'visitorVolume' and sortType == 'asc' ">
+  			order by arithmetic.visitor_volume ASC	
+  		</when>  		
+  		<when test="strName == 'visitorVolume' and sortType == 'desc'">
+  			order by arithmetic.visitor_volume DESC	
+  		</when>
+  		<otherwise>
+  			order by arithmetic.arithmetic_id DESC
+  		</otherwise>
+  	</choose>
+	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询Vin转Pin管理信息(数据总条数) -->
+  <select id="selectArithmeticVehicleRows" resultType="java.lang.Integer">
+  	select count(arithmetic.arithmetic_id)
+	from arithmetic 
+	inner join re_arithmetic_vehicle on re_arithmetic_vehicle.arithmetic_id=arithmetic.arithmetic_id
+	inner join vehicle on vehicle.vehicle_id=re_arithmetic_vehicle.vehicle_id
+	where arithmetic.algorithm_type=#{algorithmType,jdbcType=INTEGER}
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_arithmetic_vehicle.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="arithmeticName !=null and arithmeticName !=''">
+		and arithmetic.arithmetic_name=#{arithmeticName,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+  <!-- 删除Vin转Pin管理信息 -->
+  <delete id="deleteVinTurnPinInfo" parameterType="java.lang.Integer">
+  	delete arithmetic, re_arithmetic_vehicle from arithmetic, re_arithmetic_vehicle
+    where re_arithmetic_vehicle.arithmetic_id=arithmetic.arithmetic_id
+    and arithmetic.arithmetic_id = #{arithmeticId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 查询SeedAndPinToKey信息 -->
+  <select id="selectSeedAndPinToKeyInfo" resultMap="ArithmeticVoResultMap">
+  	select arithmetic.arithmetic_id, arithmetic.arithmetic_name, vehicle.vehicle_name, 
+  		   configuration_level.configuration_level_name, module.module_name, supplier.supplier_name,
+		   re_vehicle_supplier.relevance_id, vehicle.vehicle_id, configuration_level.configuration_level_id,
+		   module.module_id, supplier.supplier_id, arithmetic.visitor_volume
+	from arithmetic 
+	inner join re_arithmetic_supplier on re_arithmetic_supplier.arithmetic_id=arithmetic.arithmetic_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=re_arithmetic_supplier.relevance_id
+	inner join vehicle on re_vehicle_supplier.vehicle_id=vehicle.vehicle_id
+	inner join configuration_level on re_vehicle_supplier.configuration_level_id=configuration_level.configuration_level_id
+	inner join module on re_vehicle_supplier.module_id=module.module_id
+	inner join supplier on re_vehicle_supplier.supplier_id=supplier.supplier_id
+	where arithmetic.algorithm_type=4
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>
+	<if test="moduleId !=null and moduleId >0">
+		and re_vehicle_supplier.module_id=#{moduleId,jdbcType=INTEGER}
+	</if>
+	<if test="supplierId !=null and supplierId >0">
+		and re_vehicle_supplier.supplier_id=#{supplierId,jdbcType=INTEGER}
+	</if>
+	<if test="arithmeticName !=null and arithmeticName !=''">
+		and arithmetic.arithmetic_name=#{arithmeticName,jdbcType=VARCHAR}
+	</if>
+	<choose>
+  		<when test="strName == 'visitorVolume' and sortType == 'asc' ">
+  			order by arithmetic.visitor_volume ASC	
+  		</when>  		
+  		<when test="strName == 'visitorVolume' and sortType == 'desc'">
+  			order by arithmetic.visitor_volume DESC	
+  		</when>
+  		<otherwise>
+  			order by arithmetic.arithmetic_id DESC
+  		</otherwise>
+  	</choose>
+	limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询SeedAndPinToKey信息(数据总条数) -->
+  <select id="selectSeedAndPinToKeyInfoRows" resultType="java.lang.Integer">
+  	select count(arithmetic.arithmetic_id)
+	from arithmetic 
+	inner join re_arithmetic_supplier on re_arithmetic_supplier.arithmetic_id=arithmetic.arithmetic_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=re_arithmetic_supplier.relevance_id
+	inner join vehicle on re_vehicle_supplier.vehicle_id=vehicle.vehicle_id
+	inner join configuration_level on re_vehicle_supplier.configuration_level_id=configuration_level.configuration_level_id
+	inner join module on re_vehicle_supplier.module_id=module.module_id
+	inner join supplier on re_vehicle_supplier.supplier_id=supplier.supplier_id
+	where arithmetic.algorithm_type=4
+	<if test="vehicleId !=null and vehicleId >0">
+		and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>
+	<if test="moduleId !=null and moduleId >0">
+		and re_vehicle_supplier.module_id=#{moduleId,jdbcType=INTEGER}
+	</if>
+	<if test="supplierId !=null and supplierId >0">
+		and re_vehicle_supplier.supplier_id=#{supplierId,jdbcType=INTEGER}
+	</if>
+	<if test="arithmeticName !=null and arithmeticName !=''">
+		and arithmetic.arithmetic_name=#{arithmeticName,jdbcType=VARCHAR}
+	</if>
+  </select>
+  
+  <!-- 查询SeedAndPinToKey算法信息是否存在 -->
+  <select id="selectSeedAndPinToKeyWhetherExist" resultType="java.lang.Integer">
+  	select count(arithmetic.arithmetic_id)
+	from arithmetic 
+	inner join re_arithmetic_supplier on re_arithmetic_supplier.arithmetic_id=arithmetic.arithmetic_id
+	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=re_arithmetic_supplier.relevance_id
+	where arithmetic.algorithm_type=4
+	and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	and re_vehicle_supplier.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	and re_vehicle_supplier.module_id=#{moduleId,jdbcType=INTEGER}
+	and re_vehicle_supplier.supplier_id=#{supplierId,jdbcType=INTEGER}
+	and arithmetic.arithmetic_delta=#{arithmeticDelta,jdbcType=VARCHAR}
+  </select>
+</mapper>

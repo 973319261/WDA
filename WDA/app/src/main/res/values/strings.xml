@@ -1,0 +1,317 @@
+<resources>
+    <string name="app_name">WDA</string>
+    <!--开屏-->
+    <string name="text_open_statement" translatable="false">欢迎使用诊断小助手</string>
+    <!--登录-->
+    <string name="text_login_account" translatable="false">账号</string>
+    <string name="text_login_password" translatable="false">密码</string>
+    <string name="text_login_remember" translatable="false">记住密码</string>
+    <string name="text_login" translatable="false">登 录</string>
+    <string name="text_login_account_hint" translatable="false">请输入您的账号</string>
+    <string name="text_login_password_hint" translatable="false">请输入您的密码</string>
+    <!--主页面-->
+    <string name="text_main_security" translatable="false">安全算法</string>
+    <string name="text_main_dtc" translatable="false">DTC</string>
+    <string name="text_main_data" translatable="false">总线通讯</string>
+    <string name="text_main_detection" translatable="false">数据读取</string>
+    <string name="text_main_share" translatable="false">高级应用</string>
+    <string name="text_main_account" translatable="false">账号：</string>
+    <string name="text_main_user_name" translatable="false">用户名称：</string>
+    <string name="text_main_role_type" translatable="false">角色类型：</string>
+    <string name="text_main_expiration_date" translatable="false">到期时间：</string>
+    <string name="text_main_tf_configuration" translatable="false">TF卡应用</string>
+    <string name="text_link_vci" translatable="false">连接VCI</string>
+    <string name="text_main_update_password" translatable="false">修改密码</string>
+    <string name="text_main_language_settings" translatable="false">语言设置</string>
+    <string name="text_main_about" translatable="false">关于</string>
+    <string name="text_main_exit" translatable="false">退 出</string>
+    <string name="text_ununited" translatable="false">未连接</string>
+    <string name="text_connected" translatable="false">已连接</string>
+    <!--退出-->
+    <string name="text_logout_exit" translatable="false">退出登录</string>
+    <string name="text_logout_close" translatable="false">关闭应用</string>
+    <string name="text_logout_cancel" translatable="false">取消</string>
+    <!--TF卡录制与配置-->
+    <string name="text_tf_card_title" translatable="false">TF卡应用</string>
+    <string name="text_tf_card_export" translatable="false">导 出</string>
+    <string name="text_asc_file_export" translatable="false">导出</string>
+    <string name="text_tf_card_clean" translatable="false">清 空</string>
+    <string name="text_tf_card_query" translatable="false">查询</string>
+    <string name="text_tf_card_transcribe" translatable="false">永久录制：</string>
+    <string name="text_tf_card_continuous_record" translatable="false">录制</string>
+    <string name="text_tf_card_continuous_over" translatable="false">结束</string>
+    <string name="text_tf_card_can_channel" translatable="false">CAN通道：</string>
+    <string name="text_tf_card_setting_title" translatable="false">永久录制配置</string>
+    <string name="text_tf_card_setting_time" translatable="false">存储时间：</string>
+    <string name="text_tf_card_setting_time_unit" translatable="false">分</string>
+    <string name="text_tf_card_setting_channel" translatable="false">录制通道</string>
+    <string name="text_tf_card_setting_total" translatable="false">保留触发点前报文条数：</string>
+    <string name="text_tf_card_setting_total_unit" translatable="false">条</string>
+    <string name="text_tf_card_setting_bit" translatable="false">字节</string>
+    <string name="text_tf_card_info_delete" translatable="false">确定要清空TF卡所有数据吗？</string>
+    <string name="text_tf_card_delete_sure" translatable="false">已清空TF卡所有数据</string>
+    <string name="text_export_tf_card_info" translatable="false">确定要导出文件吗？</string>
+    <!--VCI连接-->
+    <string name="text_link_vci_title" translatable="false">VCI连接</string>
+    <string name="text_permissions_location_open" translatable="false">请开启定位</string>
+    <string name="text_permissions_wifi" translatable="false">未开启WiFi，请手动打开WiFi并连接VCI热点</string>
+    <string name="text_permissions_not_vciwifi" translatable="false">当前连接的不是一个有效的VCI热点</string>
+    <string name="text_link_check_ssid" translatable="false">请设置热点名称</string>
+    <string name="text_link_check_pass" translatable="false">密码不能少于8位</string>
+    <string name="text_link_check_using" translatable="false">该VCI正在被其他设备使用中，确定要配置吗？</string>
+    <!--修改密码-->
+    <string name="text_update_password_title" translatable="false">修改密码</string>
+    <string name="text_update_password_old" translatable="false">旧密码</string>
+    <string name="text_update_password_new" translatable="false">新密码</string>
+    <string name="text_update_password_confirm" translatable="false">确认密码</string>
+    <string name="text_update_password_old_hint" translatable="false">请输入旧密码</string>
+    <string name="text_update_password_new_hint" translatable="false">请输入新密码</string>
+    <string name="text_update_password_confirm_hint" translatable="false">输入确认密码</string>
+    <!--语言设置-->
+    <string name="text_language_title" translatable="false">语言设置</string>
+    <!--关于-->
+    <string name="text_about_title" translatable="false">关于</string>
+    <string name="text_about_app_name" translatable="false">诊断小助手</string>
+    <string name="text_about_introduction" translatable="false">功能介绍</string>
+    <string name="text_about_checkver" translatable="false">检查新版本</string>
+    <!--功能介绍-->
+    <string name="text_about_function_title" translatable="false">功能介绍</string>
+    <string name="text_function_detail_title" translatable="false">功能明细</string>
+    <!--通知-->
+    <string name="text_inform_title">消息</string>
+    <string name="text_inform_detail_title" translatable="false">通知详情</string>
+    <string name="text_inform_inform" translatable="false">通知</string>
+    <string name="text_inform_notice" translatable="false">公告</string>
+    <!--安全算法-->
+    <string name="text_security_history_vehicle" translatable="false">车型：</string>
+    <string name="text_security_history_type" translatable="false">类型：</string>
+    <string name="text_history_configuration" translatable="false">配置：</string>
+    <string name="text_security_history_ecu" translatable="false">模块：</string>
+    <string name="text_security_history_supplier" translatable="false">供应商：</string>
+    <string name="text_security_history_level" translatable="false">等级：</string>
+    <string name="text_security_seed_key" translatable="false">Seed→Key</string>
+    <string name="text_security_vin_pin" translatable="false">Vin→Pin</string>
+    <string name="text_security_vin_esk" translatable="false">Vin→Esk</string>
+    <string name="text_security_seed_pin_key" translatable="false">S＆P→Key</string>
+    <string name="text_security_seed_key_title" translatable="false">Seed→Key</string>
+    <string name="text_security_vin_pin_title" translatable="false">Vin→Pin</string>
+    <string name="text_security_vin_esk_title" translatable="false">Vin→Esk</string>
+    <string name="text_security_seed_pin_key_title" translatable="false">Seed＆Pin→Key</string>
+    <string name="text_security_vehicle" translatable="false">车型</string>
+    <string name="text_security_configuration" translatable="false">配置</string>
+    <string name="text_security_ecu" translatable="false">模块</string>
+    <string name="text_security_supplier" translatable="false">供应商</string>
+    <string name="text_security_level" translatable="false">算法级别</string>
+    <string name="text_security_calculate" translatable="false">计 算</string>
+    <string name="text_security_calculate_success" translatable="false">计算成功</string>
+    <!--DTC-->
+    <string name="text_dtc_query" translatable="false">查询故障码</string>
+    <string name="text_dtc_read" translatable="false">读/清故障码</string>
+    <string name="text_dtc_vehicle" translatable="false">车型</string>
+    <string name="text_dtc_configure" translatable="false">配置</string>
+    <string name="text_dtc_module" translatable="false">模块</string>
+    <string name="text_dtc_supplier" translatable="false">供应商：</string>
+    <string name="text_dtc_dtc" translatable="false">DTC(SAE)：</string>
+    <string name="text_dtc_hex_dtc" translatable="false">DTC(HEX)：</string>
+    <string name="text_dtc_chinese_description" translatable="false">中文描述：</string>
+    <string name="text_dtc_english_description" translatable="false">英文描述：</string>
+    <string name="text_dtc_operating_conditions" translatable="false">运行条件：</string>
+    <string name="text_dtc_setting_conditions" translatable="false">设置条件：</string>
+    <string name="text_dtc_setting_after_conditions" translatable="false">设置时发生的操作：</string>
+    <string name="text_dtc_restore_conditions" translatable="false">恢复条件：</string>
+    <string name="text_dtc_activate_mil_regulations" translatable="false">激近故障灯原则：</string>
+    <string name="text_dtc_mil_off_regulations" translatable="false">熄灭故障灯原则：</string>
+    <string name="text_dtc_clear_conditions" translatable="false">清除故障码条件：</string>
+    <string name="text_dtc_content" translatable="false">请输入DTC内容</string>
+    <string name="text_dtc_query_details" translatable="false">故障码明细</string>
+    <string name="text_dtc_read_export" translatable="false">导出</string>
+    <string name="text_dtc_read_clear" translatable="false">清除</string>
+    <string name="text_dtc_read_read" translatable="false">读取</string>
+    <!--总线通讯-->
+    <string name="text_datastream_title_message" translatable="false">总线监听</string>
+    <string name="text_datastream_title_diagnostician" translatable="false">诊断通讯</string>
+    <string name="text_datastream_title_did_analysis" translatable="false">DID解析</string>
+    <string name="text_datastream_did_configure" translatable="false">选择配置：</string>
+    <string name="text_datastream_did_module" translatable="false">选择模块：</string>
+    <string name="text_datastream_did_screen" translatable="false">筛选DID：</string>
+    <string name="text_datastream_message_export" translatable="false">导 出</string>
+    <string name="text_datastream_message_map" translatable="false">映 射</string>
+    <string name="text_datastream_message_record" translatable="false">软触发</string>
+    <string name="text_select_map_way" translatable="false">选择映射方式</string>
+    <string name="text_datastream_diagnostician_count" translatable="false">计 算</string>
+    <string name="text_datastream_diagnostician_copy" translatable="false">复 制</string>
+    <string name="text_message_missing" translatable="false">请输入完整的报文</string>
+    <string name="text_message_sent" translatable="false">已发送</string>
+    <string name="text_file_overtime" translatable="false">文件加载超时，请检查网络</string>
+    <string name="text_message_num" translatable="false">序号</string>
+    <string name="text_message_time" translatable="false">时间切换</string>
+    <string name="text_vci_lose" translatable="false">未连接到VCI设备</string>
+    <string name="text_jurisdiction_store_none" translatable="false">需要访问手机存储权限</string>
+    <string name="text_connect_vci" translatable="false">正在连接VCI设备...</string>
+    <string name="text_listen_close" translatable="false">监听关闭</string>
+    <string name="text_connect_load" translatable="false">首次加载时间可能较长，请耐心等候</string>
+    <string name="text_map_config" translatable="false">配置</string>
+    <string name="text_message_stop" translatable="false">停止</string>
+    <string name="text_message_start" translatable="false">启动</string>
+    <string name="text_map_map" translatable="false">映射</string>
+    <string name="text_select_map_aisle" translatable="false">选择映射通道</string>
+    <string name="text_map_select_cartype" translatable="false">选择车型</string>
+    <string name="text_map_select_supplier" translatable="false">选择供应商</string>
+    <string name="text_map_temporary" translatable="false">临时映射</string>
+    <string name="text_map_temporary_cancel" translatable="false">取消临时映射</string>
+    <string name="text_map_perpetual" translatable="false">永久映射</string>
+    <string name="text_map_perpetual_cancel" translatable="false">取消永久映射</string>
+    <string name="text_record_setting" translatable="false">配 置</string>
+    <string name="text_record_setting_maximum" translatable="false">可设置最大值为 </string>
+    <string name="text_record_time_nozero" translatable="false">录制时间不可以为0</string>
+    <string name="text_record_setting_full" translatable="false">请将配置参数填写完整</string>
+    <string name="text_instruct_send" translatable="false">发送</string>
+    <string name="text_instruct_time" translatable="false">时间(s)</string>
+    <string name="text_instruct_data" translatable="false">数据场</string>
+    <string name="text_address_mode" translatable="false">寻址方式</string>
+    <string name="text_physical_addressing" translatable="false">物理寻址</string>
+    <string name="text_functional_addressing" translatable="false">功能寻址</string>
+    <string name="text_flow_control_frame" translatable="false">设置：</string>
+    <string name="text_setting" translatable="false">设置</string>
+    <string name="text_message_clean" translatable="false">清空</string>
+    <string name="text_map_successful" translatable="false">映射成功</string>
+    <string name="text_map_fail" translatable="false">映射失败</string>
+
+
+
+    <string name="text_trigger_record" translatable="false">软触发</string>
+    <string name="text_trigger_over" translatable="false">软结束</string>
+    <!--检测 -->
+    <string name="text_detection_ecu_version" translatable="false">ECU版本</string>
+    <string name="text_detection_node_online" translatable="false">节点在线</string>
+    <string name="text_detection_module" translatable="false">模块</string>
+    <string name="text_detection_configure" translatable="false">配置</string>
+    <string name="text_detection_vehicle" translatable="false">车型</string>
+    <string name="text_detection_ecu_did" translatable="false">DID列表</string>
+    <string name="text_detection_ecu_export" translatable="false">导出</string>
+    <string name="text_detection_ecu_search" translatable="false">查询</string>
+    <string name="text_detection_node_detection" translatable="false">检测</string>
+    <!--分享-->
+    <string name="text_sharemain_share" translatable="false">分 享</string>
+    <string name="text_sharemain_query" translatable="false">查 询</string>
+    <string name="text_sharemain_flow" translatable="false">小流程</string>
+    <string name="text_sharemain_assist" translatable="false">远程协助</string>
+
+    <string name="text_sharemain_title_softwar" translatable="false">程序版本变更</string>
+    <string name="text_sharemain_title_ecu" translatable="false">ECU查询</string>
+    <string name="text_sharemain_title_diagnosis" translatable="false">ECU诊断控制</string>
+    <string name="text_sharemain_title_supplier" translatable="false">供应商查询</string>
+    <string name="text_sharemain_title_production" translatable="false">ECU生产线</string>
+
+    <string name="text_sharemain_hint_ecuname" translatable="false">ECU名称</string>
+    <string name="text_sharemain_hint_fullname" translatable="false">ECU全称</string>
+    <string name="text_sharemain_hint_canid" translatable="false">CANID</string>
+    <string name="text_sharemain_hint_code" translatable="false">供应商编号</string>
+    <string name="text_sharemain_hint_supplier" translatable="false">供应商名称</string>
+    <string name="text_sharemain_hint_eolcontent" translatable="false">EOL内容</string>
+
+    <string name="text_sharemain_share_theme" translatable="false">主题：</string>
+    <string name="text_sharemain_share_publishers" translatable="false">作者：</string>
+    <string name="text_sharemain_share_time" translatable="false">时间：</string>
+
+    <string name="text_sharemain_flow_model" translatable="false">选择车型：</string>
+    <string name="text_sharemain_select_flow" translatable="false">选择小流程：</string>
+    <string name="text_sharemain_btn_start" translatable="false">开 始</string>
+    <string name="text_sharemain_btn_stop" translatable="false">停 止</string>
+
+    <string name="text_sharemain_assist_hint_number" translatable="false">请输入连接账号</string>
+    <string name="text_sharemain_assist_hint_password" translatable="false">请设置连接密码</string>
+    <string name="text_sharemain_assist_connect" translatable="false">连 接</string>
+    <!--远程协助-->
+    <string name="text_live_hands" translatable="false">免提</string>
+    <string name="text_live_cancel" translatable="false">取消</string>
+    <string name="text_live_mute" translatable="false">静音</string>
+    <string name="text_live_dropped" translatable="false">拒绝</string>
+    <string name="text_live_receive" translatable="false">接受</string>
+    <string name="text_live_await" translatable="false">正在等待对方接受邀请...</string>
+    <string name="text_live_invite" translatable="false">邀请你进行远程协助...</string>
+    <string name="text_live_instability" translatable="false">网络不稳定</string>
+    <string name="text_live_successfu" translatable="false">连接成功</string>
+    <string name="text_live_in_call" translatable="false">正在通话中</string>
+    <string name="text_live_vreceng" translatable="false">通话结束</string>
+    <string name="text_live_reject_call" translatable="false">对方拒绝通话</string>
+    <string name="text_live_connecting" translatable="false">正在连接中...</string>
+    <string name="text_live_connection_fail" translatable="false">网络连接失败，通话结束</string>
+    <string name="text_live_nonentity" translatable="false">账号不存在</string>
+    <string name="text_live_yourself" translatable="false">不能和自己通话哦</string>
+    <string name="text_live_offline" translatable="false">对方不在线</string>
+    <string name="text_live_opposite_call" translatable="false">对方处于通话中</string>
+    <string name="text_live_you_call" translatable="false">你处于通话中</string>
+    <string name="text_employee_list" translatable="false">员工列表</string>
+    <!--其他-->
+    <string name="text_save" translatable="false">保 存</string>
+    <string name="text_exit" translatable="false">再按一次退出</string>
+    <string name="text_valuecopy" translatable="false">文本已复制</string>
+    <string name="text_unchosen" translatable="false">未选择</string>
+    <string name="text_update_success" translatable="false">更新成功</string>
+    <string name="text_net_state" translatable="false">网络连接不可用</string>
+    <string name="text_force_update" translatable="false">强制更新</string>
+    <string name="text_promptly_update" translatable="false">立即更新</string>
+    <string name="text_update_failure" translatable="false">下载新版本失败</string>
+    <string name="text_download_complete" translatable="false">下载完成</string>
+    <string name="text_newest_version" translatable="false">已是最新版本</string>
+    <!--Toast-->
+    <string name="text_server_error" translatable="false">无法连接到服务器</string>
+    <string name="text_no_data" translatable="false">暂无数据</string>
+    <string name="text_loading" translatable="false">加载中...</string>
+    <string name="text_input_error" translatable="false">输入错误</string>
+    <string name="text_parameter_error" translatable="false">参数异常</string>
+    <string name="text_account_not_exist" translatable="false">该账户不存在</string>
+    <string name="text_password_error" translatable="false">密码输入错误</string>
+    <string name="text_devices_bind" translatable="false">该用户已绑定其他设备</string>
+    <string name="text_account_expired" translatable="false">该账号已过期</string>
+    <string name="text_account_device" translatable="false">该设备已绑定其他用户</string>
+    <string name="text_password_success" translatable="false">密码修改成功</string>
+    <string name="text_password_confirm" translatable="false">新密码与确认密码不一致</string>>
+    <string name="text_password_coincide" translatable="false">新密码和旧密码一致</string>
+    <string name="text_oldPassword_error" translatable="false">旧密码输入错误</string>
+    <string name="text_close_dialog" translatable="false">关 闭</string>
+    <string name="text_detail_info" translatable="false">数据详情</string>
+    <string name="text_network_anomaly" translatable="false">网络异常</string>
+    <string name="text_is_null" translatable="false">为空</string>
+    <string name="text_please_select" translatable="false">请选择</string>
+    <string name="text_only_choose_four" translatable="false">最多只能选择四条</string>
+    <string name="text_transformation" translatable="false">转 换</string>
+    <string name="text_no_algorithm" translatable="false">暂无算法</string>
+    <string name="text_calculate_failure" translatable="false">计算失败</string>
+    <!--新增分享-->
+    <string name="text_notice_theme" translatable="false">主题：</string>
+    <string name="text_notice_author" translatable="false">作者：</string>
+    <string name="text_notice_postdate" translatable="false">时间：</string>
+    <string name="text_about_comment" translatable="false">有关评论：</string>
+    <string name="text_notice_detail" translatable="false">公告详情</string>
+    <string name="text_no_comment_data" translatable="false">暂无评论 ╮(╯▽╰)╭</string>
+    <string name="text_reply_in_all" translatable="false">共 </string>
+    <string name="text_reply_count" translatable="false">条回复  ></string>
+    <string name="text_notice_comment" translatable="false">发 布</string>
+    <string name="text_notice_looking_comment" translatable="false">期待您的评论</string>
+    <string name="text_comment_success" translatable="false">评论成功</string>
+    <string name="text_comments_detail" translatable="false">评论详情</string>
+    <string name="text_deletion_record" translatable="false">删除记录</string>
+    <string name="text_sure_delect" translatable="false">确定要删除该条记录吗?</string>
+    <string name="text_cancel" translatable="false">取消</string>
+    <string name="text_confirm" translatable="false">确定</string>
+    <string name="text_comment_delete" translatable="false">确定要删除该条评论吗？</string>
+    <string name="text_delete_msg" translatable="false">删除提示</string>
+    <string name="text_delete_success" translatable="false">删除成功</string>
+    <string name="text_file_lose" translatable="false">文件可能已经丢失了</string>
+    <string name="text_keyboard" translatable="false">WDA远程协助键盘</string>
+    <!--应用权限-->
+    <string name="text_warning" translatable="false">警告</string>
+    <string name="text_warm_prompt" translatable="false">温馨提示</string>
+    <string name="text_permissions_application" translatable="false">应用权限</string>
+    <string name="text_open" translatable="false">开启</string>
+    <string name="text_permission_device" translatable="false">开启读取设备识别码状态权限\n</string>
+    <string name="text_permissions_storage" translatable="false">开启手机存储权限\n</string>
+    <string name="text_permissions_microphone" translatable="false">开启麦克风权限\n</string>
+    <string name="text_permissions_location" translatable="false">开启定位权限</string>
+    <string name="text_permissions_following" translatable="false">为了给您提供更好的体验，建议您开启以下权限</string>
+
+
+
+</resources>

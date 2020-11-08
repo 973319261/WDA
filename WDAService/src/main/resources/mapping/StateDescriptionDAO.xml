@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.StateDescriptionDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.StateDescription">
+    <id column="state_description_id" jdbcType="INTEGER" property="stateDescriptionId" />
+    <result column="did_type_id" jdbcType="INTEGER" property="didTypeId" />
+    <result column="decimals" jdbcType="VARCHAR" property="decimals" />
+    <result column="hexs" jdbcType="VARCHAR" property="hexs" />
+    <result column="state_description" jdbcType="VARCHAR" property="stateDescription" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    state_description_id, did_type_id, decimals, hexs, state_description
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from state_description
+    where state_description_id = #{stateDescriptionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from state_description
+    where state_description_id = #{stateDescriptionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.StateDescription">
+    insert into state_description (state_description_id, did_type_id, decimals, 
+      hexs, state_description)
+    values (#{stateDescriptionId,jdbcType=INTEGER}, #{didTypeId,jdbcType=INTEGER}, #{decimals,jdbcType=VARCHAR}, 
+      #{hexs,jdbcType=VARCHAR}, #{stateDescription,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.StateDescription">
+    insert into state_description
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="stateDescriptionId != null">
+        state_description_id,
+      </if>
+      <if test="didTypeId != null">
+        did_type_id,
+      </if>
+      <if test="decimals != null">
+        decimals,
+      </if>
+      <if test="hexs != null">
+        hexs,
+      </if>
+      <if test="stateDescription != null">
+        state_description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="stateDescriptionId != null">
+        #{stateDescriptionId,jdbcType=INTEGER},
+      </if>
+      <if test="didTypeId != null">
+        #{didTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="decimals != null">
+        #{decimals,jdbcType=VARCHAR},
+      </if>
+      <if test="hexs != null">
+        #{hexs,jdbcType=VARCHAR},
+      </if>
+      <if test="stateDescription != null">
+        #{stateDescription,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.StateDescription">
+    update state_description
+    <set>
+      <if test="didTypeId != null">
+        did_type_id = #{didTypeId,jdbcType=INTEGER},
+      </if>
+      <if test="decimals != null">
+        decimals = #{decimals,jdbcType=VARCHAR},
+      </if>
+      <if test="hexs != null">
+        hexs = #{hexs,jdbcType=VARCHAR},
+      </if>
+      <if test="stateDescription != null">
+        state_description = #{stateDescription,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where state_description_id = #{stateDescriptionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.StateDescription">
+    update state_description
+    set did_type_id = #{didTypeId,jdbcType=INTEGER},
+      decimals = #{decimals,jdbcType=VARCHAR},
+      hexs = #{hexs,jdbcType=VARCHAR},
+      state_description = #{stateDescription,jdbcType=VARCHAR}
+    where state_description_id = #{stateDescriptionId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 批量新增状态描述信息 -->
+  <insert id="insertStateDescriptionByBatch" >
+    insert into state_description (did_type_id, decimals, hexs,state_description) values 
+    <foreach collection="stateInfoList" separator=","  item="item">
+      (#{item.didTypeId,jdbcType=INTEGER}, #{item.decimals,jdbcType=VARCHAR}, 
+      #{item.hexs,jdbcType=VARCHAR}, #{item.stateDescription,jdbcType=VARCHAR})
+    </foreach>
+  </insert>
+  
+  <!-- 删除状态描述信息 -->
+  <delete id="deleteStateDescriptionInfo" parameterType="java.lang.Integer">
+  	delete from state_description where did_type_id = #{didTypeId,jdbcType=INTEGER}
+  </delete>
+  
+  <!-- 通过DID类型ID查询状态描述信息 -->
+  <select id="selectStateDescribeInfoById" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" /> 
+  	from state_description 
+  	where did_type_id = #{didTypeId,jdbcType=INTEGER}
+  </select>
+</mapper>

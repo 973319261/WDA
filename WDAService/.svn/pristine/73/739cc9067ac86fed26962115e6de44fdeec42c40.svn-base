@@ -1,0 +1,353 @@
+package com.gx.service;
+
+import java.util.List;
+
+import com.gx.po.Did;
+import com.gx.po.DidType;
+import com.gx.po.HarnessConfiguration;
+import com.gx.po.Module;
+import com.gx.po.ReVehicleSupplier;
+import com.gx.po.StateDescription;
+import com.gx.vo.AppendOptionVo;
+import com.gx.vo.DidVo;
+import com.gx.vo.JsonReturn;
+import com.gx.vo.NodeVo;
+
+public interface IDataManageService {
+	/**
+	 * 查询CAN信息（绑定下拉框）
+	 * 
+	 * @return
+	 */
+	public List<AppendOptionVo> selectCanBoxInfo();
+
+	/**
+	 * 查询节点信息
+	 * 
+	 * @param vehicleId
+	 *            车型ID
+	 * @param configurationLevelId
+	 *            配置等级ID
+	 * @param startIndex
+	 * @param pageSize
+	 * @return
+	 */
+	public List<NodeVo> selectNodeInfo(Integer vehicleId, Integer configurationLevelId, Integer startIndex,
+			Integer pageSize);
+
+	/**
+	 * 查询节点信息(数据总条数)
+	 * 
+	 * @param vehicleId
+	 *            车型ID
+	 * @param configurationLevelId
+	 *            配置等级ID
+	 * @return
+	 */
+	public int selectNodeInfoRows(Integer vehicleId, Integer configurationLevelId);
+
+	/**
+	 * 查询线束段配置信息
+	 * 
+	 * @param vehicleId
+	 *            车型ID
+	 * @param configurationLevelId
+	 *            配置等级ID
+	 * @param startIndex
+	 * @param pageSize
+	 * @return
+	 */
+	public List<NodeVo> selectWiringHarnessInfo(Integer vehicleId, Integer configurationLevelId, Integer startIndex,
+			Integer pageSize);
+
+	/**
+	 * 查询线束段配置信息(数据总条数)
+	 * 
+	 * @param vehicleId
+	 *            车型ID
+	 * @param configurationLevelId
+	 *            配置等级ID
+	 * @return
+	 */
+	public int selectWiringHarnessInfoRows(Integer vehicleId, Integer configurationLevelId);
+
+	/**
+	 * 新增线束段配置信息
+	 * 
+	 * @param harnessConfiguration
+	 *            线束段配置信息实体类
+	 * @return
+	 */
+	public JsonReturn insertWiringHarnessInfo(HarnessConfiguration harnessConfiguration);
+
+	/**
+	 * 修改线束段配置信息
+	 * 
+	 * @param harnessConfiguration
+	 *            线束段配置信息实体类
+	 * @return
+	 */
+	public JsonReturn updateWiringHarnessInfo(HarnessConfiguration harnessConfiguration);
+
+	/**
+	 * 删除线束段配置信息
+	 * 
+	 * @param harnessConfigurationId
+	 *            线束段配置id
+	 * @return
+	 */
+	public JsonReturn deleteWiringHarnessInfo(Integer harnessConfigurationId);
+
+	/**
+	 * 绑定CAN通道下拉框
+	 * 
+	 * @param vehicleId
+	 *            车型id
+	 * @param configurationId
+	 *            配置id
+	 * @return
+	 */
+	public List<AppendOptionVo> selectCanPassageBoxInfo(Integer vehicleId, Integer configurationId);
+
+	/**
+	 * 绑定线束段下拉框
+	 * 
+	 * @param vehicleId
+	 *            车型id
+	 * @param configurationId
+	 *            配置id
+	 * @return
+	 */
+	public List<AppendOptionVo> selectHarnessBoxInfo(Integer vehicleId, Integer configurationId);
+
+	/**
+	 * 新增节点配置信息
+	 * 
+	 * @param listNode
+	 *            节点集合（用于获取session数据集合）
+	 * @return
+	 */
+	public JsonReturn insertNodeInfo(List<NodeVo> listNode);
+
+	/**
+	 * 通过ID查询关联的主键ID
+	 * 
+	 * @param vehicleId
+	 *            车型id
+	 * @param configurationLevelId
+	 *            配置id
+	 * @param moduleId
+	 *            模块id
+	 * @param supplierId
+	 *            供应商id
+	 * @return
+	 */
+	public ReVehicleSupplier selectPrimaryKeyById(Integer vehicleId, Integer configurationLevelId, Integer moduleId,
+			Integer supplierId);
+
+	/**
+	 * 通过ID查询线束段的主键ID
+	 * 
+	 * @param vehicleId
+	 *            车型id
+	 * @param configurationLevelId
+	 *            配置id
+	 * @param canConfigurationId
+	 *            CAN通道id
+	 * @param harness
+	 *            线束段
+	 * @return
+	 */
+	public HarnessConfiguration selectNodePrimaryKeyById(Integer vehicleId, Integer configurationLevelId,
+			Integer canConfigurationId, String harness);
+
+	/**
+	 * 通过id查询节点信息
+	 * 
+	 * @param canConfigurationId
+	 *            CAN通道id
+	 * @param moduleId
+	 *            模块id
+	 * @param configurationLevelId
+	 *            配置id
+	 * @return
+	 */
+	public List<NodeVo> selectNodeInfoById(Integer canConfigurationId, Integer moduleId, Integer configurationLevelId);
+
+	/**
+	 * 删除节点信息
+	 * 
+	 * @param nodeId
+	 *            节点id
+	 * @return
+	 */
+	public JsonReturn deleteNodeInfo(Integer nodeId);
+
+	/**
+	 * 查询节点详情信息
+	 * 
+	 * @param vehicleId
+	 *            车型id
+	 * @param startIndex
+	 * @param pageSize
+	 * @return
+	 */
+	public List<NodeVo> selectNodeDetailInfo(Integer vehicleId, Integer startIndex, Integer pageSize);
+
+	/**
+	 * 查询节点详情信息(数据总条数)
+	 * 
+	 * @param vehicleId
+	 *            车型id
+	 * @return
+	 */
+	public int selectNodeDetailInfoRows(Integer vehicleId);
+
+	/**
+	 * 修改节点信息
+	 * 
+	 * @param nodeVo
+	 *            节点vo
+	 * @return
+	 */
+	public JsonReturn updateNodeInfo(NodeVo nodeVo);
+
+	/**
+	 * 通过ID查询名称
+	 * 
+	 * @param canConfigurationId
+	 *            CAN通道ID
+	 * @param moduleId
+	 *            模块ID
+	 * @param configurationLevelId
+	 *            配置ID
+	 * @return
+	 */
+	public NodeVo selectNameInfoById(Integer canConfigurationId, Integer moduleId, Integer configurationLevelId);
+
+	/**
+	 * 查询拓扑图信息
+	 * 
+	 * @param vehicleId
+	 *            车型id
+	 * @return
+	 */
+	public NodeVo selectNodeDetialList(Integer vehicleId);
+
+	/**
+	 * 新增DID类型信息
+	 * 
+	 * @param vehicleSupplier
+	 *            模块供应商实体类
+	 * @param didInfo
+	 *            DID信息
+	 * @param listDid
+	 *            配置信息
+	 * @param stateTwo
+	 *            状态描述信息
+	 * @return
+	 */
+	public JsonReturn insertAllocationInfo(ReVehicleSupplier vehicleSupplier, Did didInfo, List<DidType> listDid,
+			List<StateDescription> stateTwo);
+
+	/**
+	 * 通过车型ID查询模块信息
+	 * 
+	 * @param vehicleId
+	 *            车型ID
+	 * @return
+	 */
+	public List<AppendOptionVo> selectModuleByVehicleId(Integer vehicleId);
+
+	/**
+	 * 查询快照信息
+	 * 
+	 * @param vehicleId
+	 *            车型ID
+	 * @param moduleId
+	 *            模块ID
+	 * @param startIndex
+	 * @param pageSize
+	 * @return
+	 */
+	public List<DidVo> selectSnapshotInfo(Integer vehicleId, Integer moduleId, Integer startIndex, Integer pageSize);
+
+	/**
+	 * 查询快照信息(数据总条数)
+	 * 
+	 * @param vehicleId
+	 *            车型ID
+	 * @param moduleId
+	 *            模块ID
+	 * @return
+	 */
+	public int selectSnapshotInfoRows(Integer vehicleId, Integer moduleId);
+
+	/**
+	 * 批量删除节点明细信息
+	 * 
+	 * @param testId
+	 *            合并的节点id
+	 * @return
+	 */
+	public JsonReturn deleteNodeDetailInfo(String testId);
+
+	/**
+	 * 新增快照信息
+	 * 
+	 * @param listSnapshot
+	 * @return
+	 */
+	public JsonReturn insertSnapshotInfo(List<DidVo> listSnapshot, ReVehicleSupplier supplier);
+
+	/**
+	 * 修改快照配置信息
+	 * 
+	 * @param didInfo
+	 * @param stateInfo
+	 * @return
+	 */
+	public JsonReturn updateDidTypeInfoById(DidType didInfo, List<StateDescription> stateInfo);
+
+	/**
+	 * 通过DID类型ID查询状态描述信息
+	 * 
+	 * @param didTypeId
+	 *            DID类型ID
+	 * @return
+	 */
+	public List<StateDescription> selectStateDescribeInfoById(Integer didTypeId);
+
+	/**
+	 * 修改快照信息
+	 * 
+	 * @param supplier
+	 * @param did
+	 * @return
+	 */
+	public JsonReturn updateSnapshotInfo(ReVehicleSupplier supplier, Did did);
+
+	/**
+	 * 删除快照信息
+	 * 
+	 * @param didTypeIds
+	 *            主键ID(多个)
+	 * @return
+	 */
+	public JsonReturn deleteSnapshotInfo(String didTypeIds);
+
+	/**
+	 * 查询与DID关联的模块信息
+	 * 
+	 * @param startIndex
+	 * @param pageSize
+	 * @return
+	 */
+	public List<Module> selectModuleDataList(Integer startIndex, Integer pageSize);
+	
+	/**
+	 * 查询与DID关联的模块信息(数据总条数)
+	 * @return
+	 */
+	public int selectModuleDataListRows();
+}

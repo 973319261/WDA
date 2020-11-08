@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.NoticeInformDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.NoticeInform">
+    <id column="notice_inform_id" jdbcType="INTEGER" property="noticeInformId" />
+    <result column="notice_id" jdbcType="INTEGER" property="noticeId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="is_read" jdbcType="BIT" property="isRead" />
+  </resultMap>
+   <resultMap id="InformResultMap" type="com.gx.vo.InformVo">
+     <id column="notice_id" jdbcType="INTEGER" property="informId" />
+    <result column="notice_name" jdbcType="VARCHAR" property="informTitle" />
+    <result column="notice_describe" jdbcType="VARCHAR" property="informContent" />
+    <result column="release_time" jdbcType="TIMESTAMP" property="creationTime" />
+    <result column="is_read" jdbcType="BIT" property="isRead" />
+    <result column="type_id" jdbcType="INTEGER" property="typeId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    notice_inform_id, notice_id, user_id, is_read
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from notice_inform
+    where notice_inform_id = #{noticeInformId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from notice_inform
+    where notice_inform_id = #{noticeInformId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.NoticeInform">
+    insert into notice_inform (notice_inform_id, notice_id, user_id, 
+      is_read)
+    values (#{noticeInformId,jdbcType=INTEGER}, #{noticeId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{isRead,jdbcType=BIT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.NoticeInform">
+    insert into notice_inform
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="noticeInformId != null">
+        notice_inform_id,
+      </if>
+      <if test="noticeId != null">
+        notice_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="isRead != null">
+        is_read,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="noticeInformId != null">
+        #{noticeInformId,jdbcType=INTEGER},
+      </if>
+      <if test="noticeId != null">
+        #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isRead != null">
+        #{isRead,jdbcType=BIT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.NoticeInform">
+    update notice_inform
+    <set>
+      <if test="noticeId != null">
+        notice_id = #{noticeId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isRead != null">
+        is_read = #{isRead,jdbcType=BIT},
+      </if>
+    </set>
+    where notice_inform_id = #{noticeInformId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.NoticeInform">
+    update notice_inform
+    set notice_id = #{noticeId,jdbcType=INTEGER},
+      user_id = #{userId,jdbcType=INTEGER},
+      is_read = #{isRead,jdbcType=BIT}
+    where notice_inform_id = #{noticeInformId,jdbcType=INTEGER}
+  </update>
+   <!-- 批量新增 -->
+  <insert id="insertNoticeInformByBatch">
+  	insert into notice_inform (notice_id, user_id, 
+      is_read) values 
+  	<foreach collection="list" separator=","  item="item">
+     (#{item.noticeId,jdbcType=INTEGER}, #{item.userId,jdbcType=INTEGER}, 
+      #{item.isRead,jdbcType=BIT})
+    </foreach>
+  </insert>
+   <!-- 查询是否有未读文件通知消息-->
+  <select id="selectIsReadState" resultType="int">
+   SELECT COUNT(*) FROM notice_inform WHERE user_id=#{userId} AND is_read=0
+  </select>
+     <!-- 通过用户ID查询公告通知 -->
+  <select id="selectNoticeInformByUserId"  resultMap="InformResultMap">
+    SELECT *,1 as type_id FROM notice ,notice_inform n WHERE n.notice_id=notice.notice_id AND n.user_id=#{userId} ORDER BY release_time DESC 
+  </select>
+  <!-- 修改公告为已读状态 -->
+  <update id="updateInformState">
+  UPDATE notice_inform SET is_read=TRUE WHERE user_id=#{userId} AND notice_id=#{noticeId}
+  </update>
+</mapper>

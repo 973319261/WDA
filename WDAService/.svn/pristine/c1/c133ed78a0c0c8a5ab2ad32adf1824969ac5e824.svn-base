@@ -1,0 +1,21 @@
+package com.gx.mapper;
+
+import com.gx.po.ResponseOrder;
+import com.gx.vo.AppendOptionVo;
+
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+/**
+ * ResponseOrderDAO继承基类
+ */
+@Repository
+public interface ResponseOrderDAO extends MyBatisBaseDao<ResponseOrder, Integer> {
+	/**
+	 * 查询响应指令数据(绑定下拉框)
+	 * @return
+	 */
+	public List<AppendOptionVo> selectAllResponseOrder();
+	
+}

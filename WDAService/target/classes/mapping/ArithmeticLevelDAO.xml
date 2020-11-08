@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.ArithmeticLevelDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.ArithmeticLevel">
+    <id column="arithmetic_level_id" jdbcType="INTEGER" property="arithmeticLevelId" />
+    <result column="arithmetic_level_name" jdbcType="VARCHAR" property="arithmeticLevelName" />
+  </resultMap>
+   <!-- 选项返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+    <id column="arithmetic_level_id" jdbcType="INTEGER" property="id" />
+    <result column="arithmetic_level_name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    arithmetic_level_id, arithmetic_level_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from arithmetic_level
+    where arithmetic_level_id = #{arithmeticLevelId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from arithmetic_level
+    where arithmetic_level_id = #{arithmeticLevelId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.ArithmeticLevel">
+    insert into arithmetic_level (arithmetic_level_id, arithmetic_level_name
+      )
+    values (#{arithmeticLevelId,jdbcType=INTEGER}, #{arithmeticLevelName,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.ArithmeticLevel">
+    insert into arithmetic_level
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="arithmeticLevelId != null">
+        arithmetic_level_id,
+      </if>
+      <if test="arithmeticLevelName != null">
+        arithmetic_level_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="arithmeticLevelId != null">
+        #{arithmeticLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="arithmeticLevelName != null">
+        #{arithmeticLevelName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.ArithmeticLevel">
+    update arithmetic_level
+    <set>
+      <if test="arithmeticLevelName != null">
+        arithmetic_level_name = #{arithmeticLevelName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where arithmetic_level_id = #{arithmeticLevelId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.ArithmeticLevel">
+    update arithmetic_level
+    set arithmetic_level_name = #{arithmeticLevelName,jdbcType=VARCHAR}
+    where arithmetic_level_id = #{arithmeticLevelId,jdbcType=INTEGER}
+  </update>
+  <!-- 通过供应商ID获取算法等级 -->
+  <select id="selectLevelRelateSeedToKey" resultMap="OptionResultMap">
+   SELECT DISTINCT l.*  FROM arithmetic a,re_vehicle_supplier re,re_arithmetic_supplier rea,arithmetic_level l WHERE a.arithmetic_id=rea.arithmetic_id 
+   AND re.relevance_id=rea.relevance_id AND a.algorithm_level_id=l.arithmetic_level_id AND 
+   re.vehicle_id=#{vehicleId} AND 
+   <if test="configurationLevelId !=null and configurationLevelId > 0">
+    re.configuration_level_id=#{configurationLevelId} AND 
+   </if>
+   re.module_id=#{moudleId} AND re.supplier_id=#{supplierId}
+  </select>
+  
+  <!-- 查询算法级别信息(绑定下拉框) -->
+  <select id="selectArithmeticLevelInfo" resultMap="OptionResultMap">
+  	select arithmetic_level_id, arithmetic_level_name
+  	from arithmetic_level
+  </select>
+</mapper>

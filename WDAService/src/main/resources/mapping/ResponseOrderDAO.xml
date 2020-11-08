@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.ResponseOrderDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.ResponseOrder">
+    <id column="response_order_id" jdbcType="INTEGER" property="responseOrderId" />
+    <result column="response_instructions" jdbcType="VARCHAR" property="responseInstructions" />
+    <result column="particulars" jdbcType="VARCHAR" property="particulars" />
+  </resultMap>
+  
+  <!-- 选项返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+    <id column="response_order_id" jdbcType="INTEGER" property="id" />
+    <result column="response_instructions" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    response_order_id, response_instructions, particulars
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from response_order
+    where response_order_id = #{responseOrderId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from response_order
+    where response_order_id = #{responseOrderId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.ResponseOrder">
+    insert into response_order (response_order_id, response_instructions, 
+      particulars)
+    values (#{responseOrderId,jdbcType=INTEGER}, #{responseInstructions,jdbcType=VARCHAR}, 
+      #{particulars,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.ResponseOrder">
+    insert into response_order
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="responseOrderId != null">
+        response_order_id,
+      </if>
+      <if test="responseInstructions != null">
+        response_instructions,
+      </if>
+      <if test="particulars != null">
+        particulars,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="responseOrderId != null">
+        #{responseOrderId,jdbcType=INTEGER},
+      </if>
+      <if test="responseInstructions != null">
+        #{responseInstructions,jdbcType=VARCHAR},
+      </if>
+      <if test="particulars != null">
+        #{particulars,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.ResponseOrder">
+    update response_order
+    <set>
+      <if test="responseInstructions != null">
+        response_instructions = #{responseInstructions,jdbcType=VARCHAR},
+      </if>
+      <if test="particulars != null">
+        particulars = #{particulars,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where response_order_id = #{responseOrderId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.ResponseOrder">
+    update response_order
+    set response_instructions = #{responseInstructions,jdbcType=VARCHAR},
+      particulars = #{particulars,jdbcType=VARCHAR}
+    where response_order_id = #{responseOrderId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询响应指令数据(绑定下拉框) -->
+  <select id="selectAllResponseOrder" resultMap="OptionResultMap">
+  	select response_order_id, response_instructions 
+  	from response_order
+  </select>
+  
+  <!-- 查询响应指令信息 -->
+  <select id="selectResponseOrderInfo" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from response_order
+    order by response_order_id DESC
+    limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询响应指令信息(数据总条数) -->
+  <select id="selectResponseOrderInfoRows" resultType="java.lang.Integer">
+  	select count(response_order_id)
+  	from response_order
+  </select>
+  
+  <!-- 查询响应指令是否存在 -->
+  <select id="selectResponseOrderWhetherExist" resultType="java.lang.Integer">
+  	select count(response_order_id)
+  	from response_order 
+  	where response_instructions = #{responseInstructions,jdbcType=VARCHAR}
+  	<if test="responseOrderId !=null and responseOrderId >0">
+  		and response_order_id != #{responseOrderId,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 批量删除响应指令信息 -->
+  <delete id="deleteResponseOrderInfo" parameterType="java.lang.Integer">
+  	DELETE FROM response_order WHERE response_order_id IN 
+	<foreach collection="list" open="(" separator="," close=")" item="responseOrdernfoIds">
+    		#{responseOrdernfoIds}
+   	</foreach>
+  </delete>
+</mapper>

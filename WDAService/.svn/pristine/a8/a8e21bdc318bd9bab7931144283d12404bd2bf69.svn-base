@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.FlowDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Flow">
+    <id column="flow_id" jdbcType="INTEGER" property="flowId" />
+    <result column="flow_name" jdbcType="VARCHAR" property="flowName" />
+    <result column="relevance_id" jdbcType="INTEGER" property="relevanceId" />
+  </resultMap>
+  
+  <!-- 自定义Vo -->
+  <resultMap type="com.gx.vo.FlowVo" id="FlowVoResultMap" extends="BaseResultMap">
+  	<result column="flow_detail_id" jdbcType="INTEGER" property="flowDetailId" />
+    <result column="operation_name" jdbcType="VARCHAR" property="operationName" />
+    <result column="send_order" jdbcType="VARCHAR" property="sendOrder" />
+    <result column="response_order" jdbcType="VARCHAR" property="responseOrder" />
+    <result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+    <result column="configuration_level_id" jdbcType="INTEGER" property="configurationLevelId" />
+    <result column="module_id" jdbcType="INTEGER" property="moduleId" />
+    <result column="supplier_id" jdbcType="INTEGER" property="supplierId" />
+    <result column="vehicle_name" jdbcType="VARCHAR" property="vehicleName" />
+    <result column="configuration_level_name" jdbcType="VARCHAR" property="configurationLevelName" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="supplier_name" jdbcType="VARCHAR" property="supplierName" />
+  </resultMap>
+  
+  <!-- 选项返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+	<id column="flow_id" jdbcType="INTEGER" property="id" />
+	<result column="flow_name" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    flow_id, flow_name, relevance_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from flow
+    where flow_id = #{flowId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from flow
+    where flow_id = #{flowId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Flow">
+    insert into flow (flow_id, flow_name, relevance_id
+      )
+    values (#{flowId,jdbcType=INTEGER}, #{flowName,jdbcType=VARCHAR}, #{relevanceId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Flow">
+    insert into flow
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="flowId != null">
+        flow_id,
+      </if>
+      <if test="flowName != null">
+        flow_name,
+      </if>
+      <if test="relevanceId != null">
+        relevance_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="flowId != null">
+        #{flowId,jdbcType=INTEGER},
+      </if>
+      <if test="flowName != null">
+        #{flowName,jdbcType=VARCHAR},
+      </if>
+      <if test="relevanceId != null">
+        #{relevanceId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Flow">
+    update flow
+    <set>
+      <if test="flowName != null">
+        flow_name = #{flowName,jdbcType=VARCHAR},
+      </if>
+      <if test="relevanceId != null">
+        relevance_id = #{relevanceId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where flow_id = #{flowId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Flow">
+    update flow
+    set flow_name = #{flowName,jdbcType=VARCHAR},
+      relevance_id = #{relevanceId,jdbcType=INTEGER}
+    where flow_id = #{flowId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询小流程信息 -->
+  <select id="selectFlowInfo" resultMap="FlowVoResultMap">
+  	select flow.flow_id, flow.flow_name, flow.relevance_id, vehicle.vehicle_id, configuration_level.configuration_level_id,
+  		   module.module_id, supplier.supplier_id, vehicle.vehicle_name, configuration_level.configuration_level_name,
+  		   module.module_name, supplier.supplier_name
+  	from flow
+  	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=flow.relevance_id
+  	inner join vehicle on re_vehicle_supplier.vehicle_id=vehicle.vehicle_id
+    inner join configuration_level on re_vehicle_supplier.configuration_level_id=configuration_level.configuration_level_id
+    inner join module on re_vehicle_supplier.module_id=module.module_id
+    inner join supplier on re_vehicle_supplier.supplier_id=supplier.supplier_id 
+    where flow.flow_id !=0
+    <if test="flowId !=null and flowId >0">
+    	and flow.flow_id =#{flowId,jdbcType=INTEGER}
+    </if>
+    <if test="vehicleId !=null and vehicleId">
+    	and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+    </if>
+    order by flow.flow_id DESC
+    limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询小流程信息(数据总条数) -->
+  <select id="selectFlowInfoRows" resultType="java.lang.Integer">
+  	select count(flow.flow_id)
+  	from flow
+  	inner join re_vehicle_supplier on re_vehicle_supplier.relevance_id=flow.relevance_id
+  	inner join vehicle on re_vehicle_supplier.vehicle_id=vehicle.vehicle_id
+    inner join configuration_level on re_vehicle_supplier.configuration_level_id=configuration_level.configuration_level_id
+    inner join module on re_vehicle_supplier.module_id=module.module_id
+    inner join supplier on re_vehicle_supplier.supplier_id=supplier.supplier_id 
+    where flow.flow_id !=0
+    <if test="flowId !=null and flowId >0">
+    	and flow.flow_id =#{flowId,jdbcType=INTEGER}
+    </if>
+    <if test="vehicleId !=null and vehicleId">
+    	and re_vehicle_supplier.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  <!-- 查询小流程信息（绑定下拉框） -->
+  <select id="selectFlowInfoToDownBox" resultMap="OptionResultMap">
+  	select * from flow
+  </select>
+</mapper>

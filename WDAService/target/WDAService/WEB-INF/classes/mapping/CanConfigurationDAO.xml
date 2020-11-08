@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.CanConfigurationDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.CanConfiguration">
+    <id column="can_configuration_id" jdbcType="INTEGER" property="canConfigurationId" />
+    <result column="can_passage" jdbcType="VARCHAR" property="canPassage" />
+    <result column="can_value" jdbcType="VARCHAR" property="canValue" />
+    <result column="can_description" jdbcType="VARCHAR" property="canDescription" />
+    <result column="did_name" jdbcType="VARCHAR" property="didName" />
+    <result column="map_type_id" jdbcType="INTEGER" property="mapTypeId" />
+  </resultMap>
+  
+  <!-- 下拉框返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+    <id column="can_configuration_id" jdbcType="INTEGER" property="id" />
+    <result column="can_passage" jdbcType="VARCHAR" property="name" />
+    <result column="can_value" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+
+  
+  <sql id="Base_Column_List">
+    can_configuration_id, can_passage, can_value, can_description, did_name, map_type_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from can_configuration
+    where can_configuration_id = #{canConfigurationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from can_configuration
+    where can_configuration_id = #{canConfigurationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.CanConfiguration">
+    insert into can_configuration (can_configuration_id, can_passage, can_value, 
+      can_description, did_name, map_type_id
+      )
+    values (#{canConfigurationId,jdbcType=INTEGER}, #{canPassage,jdbcType=VARCHAR}, #{canValue,jdbcType=VARCHAR}, 
+      #{canDescription,jdbcType=VARCHAR}, #{didName,jdbcType=VARCHAR}, #{mapTypeId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.CanConfiguration">
+    insert into can_configuration
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="canConfigurationId != null">
+        can_configuration_id,
+      </if>
+      <if test="canPassage != null">
+        can_passage,
+      </if>
+      <if test="canValue != null">
+        can_value,
+      </if>
+      <if test="canDescription != null">
+        can_description,
+      </if>
+      <if test="didName != null">
+        did_name,
+      </if>
+      <if test="mapTypeId != null">
+        map_type_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="canConfigurationId != null">
+        #{canConfigurationId,jdbcType=INTEGER},
+      </if>
+      <if test="canPassage != null">
+        #{canPassage,jdbcType=VARCHAR},
+      </if>
+      <if test="canValue != null">
+        #{canValue,jdbcType=VARCHAR},
+      </if>
+      <if test="canDescription != null">
+        #{canDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="didName != null">
+        #{didName,jdbcType=VARCHAR},
+      </if>
+      <if test="mapTypeId != null">
+        #{mapTypeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.CanConfiguration">
+    update can_configuration
+    <set>
+      <if test="canPassage != null">
+        can_passage = #{canPassage,jdbcType=VARCHAR},
+      </if>
+      <if test="canValue != null">
+        can_value = #{canValue,jdbcType=VARCHAR},
+      </if>
+      <if test="canDescription != null">
+        can_description = #{canDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="didName != null">
+        did_name = #{didName,jdbcType=VARCHAR},
+      </if>
+      <if test="mapTypeId != null">
+        map_type_id = #{mapTypeId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where can_configuration_id = #{canConfigurationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.CanConfiguration">
+    update can_configuration
+    set can_passage = #{canPassage,jdbcType=VARCHAR},
+      can_value = #{canValue,jdbcType=VARCHAR},
+      can_description = #{canDescription,jdbcType=VARCHAR},
+      did_name = #{didName,jdbcType=VARCHAR},
+      map_type_id = #{mapTypeId,jdbcType=INTEGER}
+    where can_configuration_id = #{canConfigurationId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询映射CAN配置管理信息 -->
+  <select id="selectCanInfo" resultMap="BaseResultMap">
+  	select 
+  	<include refid="Base_Column_List" />
+    from can_configuration
+    <where>
+    	<if test="mapTypeId !=null and mapTypeId >0">
+    		 map_type_id = #{mapTypeId,jdbcType=INTEGER}
+    	</if>
+    </where>
+    order by can_configuration_id DESC
+    limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询映射CAN配置管理信息(数据总条数) -->
+  <select id="selectCanInfoRows" resultType="java.lang.Integer">
+  	select count(can_configuration_id)
+    from can_configuration
+    <where>
+    	<if test="mapTypeId !=null and mapTypeId >0">
+    		 map_type_id = #{mapTypeId,jdbcType=INTEGER}
+    	</if>
+    </where>
+  </select>
+  
+  <!-- 查询映射CAN配置管理信息是否已存在 -->
+  <select id="selectCanInfoWhetherExist" resultType="java.lang.Integer">
+  	select count(can_configuration_id)
+  	from can_configuration
+  	where can_passage=#{canPassage,jdbcType=VARCHAR}
+  	<if test="canConfigurationId !=null and canConfigurationId >0">
+  		and can_configuration_id != #{canConfigurationId,jdbcType=INTEGER}
+  	</if>
+  	and map_type_id = #{mapTypeId,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询CAN信息(绑定下拉框) -->
+  <select id="selectCanBoxInfo" resultMap="OptionResultMap">
+ 	 select can_configuration_id,can_passage from can_configuration group by can_passage
+  </select>
+  
+  
+  
+  <!-- APP -->
+  <!-- 根据映射类型查询CAN值 -->
+  <select id="selectCanByType" parameterType="Integer" resultMap="OptionResultMap">
+  	SELECT * FROM can_configuration WHERE map_type_id = #{mapTypeId}
+  </select>
+  
+  <!-- 修改映射CAN配置管理的DID名称 -->
+  <update id="updateDidIInfoOnCan" parameterType="com.gx.po.CanConfiguration">
+  	update can_configuration
+  	set did_name = #{didName,jdbcType=VARCHAR}
+  	where map_type_id = #{mapTypeId,jdbcType=INTEGER}
+  </update>
+</mapper>

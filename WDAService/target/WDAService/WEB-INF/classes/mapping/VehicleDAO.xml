@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.VehicleDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Vehicle">
+    <id column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+    <result column="vehicle_name" jdbcType="VARCHAR" property="vehicleName" />
+    <result column="vehicle_picture" jdbcType="VARCHAR" property="vehiclePicture" />
+  </resultMap>
+   <!-- 选项返回 -->
+  <resultMap id="OptionResultMap" type="com.gx.vo.AppendOptionVo">
+    <id column="vehicle_id" jdbcType="INTEGER" property="id" />
+    <result column="vehicle_name" jdbcType="VARCHAR" property="name" />
+    <result column="module_id" jdbcType="VARCHAR" property="value" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    vehicle_id, vehicle_name, vehicle_picture
+  </sql>
+  <sql id="Vehicle_List">
+	SELECT * FROM fault_code fc,re_supplier_faultcode res,re_vehicle_supplier rev,vehicle v 
+	WHERE  fc.fault_code_id=res.fault_code_id AND res.relevance_id=rev.relevance_id  AND rev.vehicle_id=v.vehicle_id AND BINARY 
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from vehicle
+    where vehicle_id = #{vehicleId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from vehicle
+    where vehicle_id = #{vehicleId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Vehicle">
+    insert into vehicle (vehicle_id, vehicle_name, vehicle_picture
+      )
+    values (#{vehicleId,jdbcType=INTEGER}, #{vehicleName,jdbcType=VARCHAR}, #{vehiclePicture,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Vehicle">
+    insert into vehicle
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="vehicleId != null">
+        vehicle_id,
+      </if>
+      <if test="vehicleName != null">
+        vehicle_name,
+      </if>
+      <if test="vehiclePicture != null">
+        vehicle_picture,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="vehicleId != null">
+        #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleName != null">
+        #{vehicleName,jdbcType=VARCHAR},
+      </if>
+      <if test="vehiclePicture != null">
+        #{vehiclePicture,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Vehicle">
+    update vehicle
+    <set>
+      <if test="vehicleName != null">
+        vehicle_name = #{vehicleName,jdbcType=VARCHAR},
+      </if>
+      <if test="vehiclePicture != null">
+        vehicle_picture = #{vehiclePicture,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where vehicle_id = #{vehicleId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Vehicle">
+    update vehicle
+    set vehicle_name = #{vehicleName,jdbcType=VARCHAR},
+      vehicle_picture = #{vehiclePicture,jdbcType=VARCHAR}
+    where vehicle_id = #{vehicleId,jdbcType=INTEGER}
+  </update>
+    
+  <!-- 查询所有车型列表 -->
+  <select id="selectVehicleAll" resultMap="OptionResultMap">
+ 	 select * from vehicle
+  </select>
+  <!--查询算法与SeedToKey（1）或者SeedPinToKey（4）关联的车型 -->
+  <select id="selectVehicleRelateArithmetic" resultMap="OptionResultMap">
+      <if test="algorithmType == 1">
+	    SELECT DISTINCT v.*,m.module_id FROM arithmetic a,re_vehicle_supplier re,re_arithmetic_supplier rea,vehicle v,module m,module_jurisdiction_detail mj WHERE a.arithmetic_id=rea.arithmetic_id 
+	    AND re.relevance_id=rea.relevance_id AND re.vehicle_id=v.vehicle_id AND m.module_id=re.module_id AND  re.module_id=mj.module_id AND mj.role_id=2 AND mj.is_enable=TRUE AND 
+	   
+	  </if>
+	  <if test="algorithmType == 4">
+	    SELECT DISTINCT v.* FROM arithmetic a,re_vehicle_supplier re,re_arithmetic_supplier rea,vehicle v WHERE a.arithmetic_id=rea.arithmetic_id 
+	    AND re.relevance_id=rea.relevance_id AND re.vehicle_id=v.vehicle_id AND 
+	  </if>
+	   <if test="moduleName !='' and moduleName != null">
+	      m.module_name =#{moduleName} AND 
+	    </if>
+	   a.algorithm_type=#{algorithmType}
+  </select>
+  <!-- 查询算法与VINToPin（2）或者VINToEsk（3）关联的车型 -->
+  <select id="selectVehicleRelateArithmeticVehicle" resultMap="OptionResultMap">
+ 	 SELECT DISTINCT v.* FROM arithmetic c,re_arithmetic_vehicle re,vehicle v WHERE c.arithmetic_id=re.arithmetic_id AND re.vehicle_id=v.vehicle_id AND c.algorithm_type=#{algorithmType}
+  </select>
+  <!-- 查询与DTC关联的车型 -->
+   <select id="selectVehicleRelateDtcByDtc" resultMap="OptionResultMap">
+    <include refid="Vehicle_List" />
+     fc.dtc LIKE CONCAT('%',#{dtc},'%')
+  </select>
+  <!-- 查询车型信息是否已存在 -->
+  <select id="selectVehicleWhetherExist" resultMap="BaseResultMap">
+  	select vehicle.vehicle_id from vehicle
+  	where vehicle.vehicle_name = #{vehicleName,jdbcType=VARCHAR}
+  	<if test="vehicleId !=null and vehicleId >0">
+  		and vehicle_id != #{vehicleId,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 查询车型信息 -->
+  <select id="selectVehicleInfo" resultMap="BaseResultMap">
+  	select vehicle.vehicle_id, vehicle.vehicle_name, vehicle.vehicle_picture 
+  	from vehicle
+  	<if test="vehicleName !=null and vehicleName !=''">
+  		where vehicle.vehicle_name like CONCAT('%',#{vehicleName,jdbcType=VARCHAR},'%')
+  	</if>
+  	order by vehicle.vehicle_id DESC
+    limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 查询车型信息(数据总条数) -->
+  <select id="selectVehicleInfoRows" resultType="java.lang.Integer">
+  	select count(vehicle.vehicle_id)
+  	from vehicle
+  	<if test="vehicleName !=null and vehicleName !=''">
+  		where vehicle.vehicle_name like CONCAT('%',#{vehicleName,jdbcType=VARCHAR},'%')
+  	</if>
+  </select>
+</mapper>

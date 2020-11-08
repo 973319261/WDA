@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.HarnessConfigurationDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.HarnessConfiguration">
+    <id column="harness_configuration_id" jdbcType="INTEGER" property="harnessConfigurationId" />
+    <result column="vehicle_id" jdbcType="INTEGER" property="vehicleId" />
+    <result column="configuration_level_id" jdbcType="INTEGER" property="configurationLevelId" />
+    <result column="can_configuration_id" jdbcType="INTEGER" property="canConfigurationId" />
+    <result column="harness" jdbcType="VARCHAR" property="harness" />
+  </resultMap>
+  
+  <!-- 自定义resultMap -->
+  <resultMap type="com.gx.vo.NodeVo" id="NodeVoResultMap" extends="BaseResultMap">
+  	<result column="vehicle_name" jdbcType="VARCHAR" property="vehicleName" />
+  	<result column="configuration_level_name" jdbcType="VARCHAR" property="configurationLevelName" />
+  	<result column="can_passage" jdbcType="VARCHAR" property="canPassage" />
+  </resultMap>
+  
+  <!-- 选项返回 -->
+  <resultMap id="OptionResultMapOne" type="com.gx.vo.AppendOptionVo">
+    <id column="harness_configuration_id" jdbcType="INTEGER" property="id" />
+    <result column="harness" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  
+  <!-- 选项返回 -->
+  <resultMap id="OptionResultMapTwo" type="com.gx.vo.AppendOptionVo">
+    <id column="can_configuration_id" jdbcType="INTEGER" property="id" />
+    <result column="can_passage" jdbcType="VARCHAR" property="name" />
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+    harness_configuration_id, vehicle_id, configuration_level_id, can_configuration_id, 
+    harness
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from harness_configuration
+    where harness_configuration_id = #{harnessConfigurationId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from harness_configuration
+    where harness_configuration_id = #{harnessConfigurationId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.HarnessConfiguration">
+    insert into harness_configuration (harness_configuration_id, vehicle_id, 
+      configuration_level_id, can_configuration_id, 
+      harness)
+    values (#{harnessConfigurationId,jdbcType=INTEGER}, #{vehicleId,jdbcType=INTEGER}, 
+      #{configurationLevelId,jdbcType=INTEGER}, #{canConfigurationId,jdbcType=INTEGER}, 
+      #{harness,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.HarnessConfiguration">
+    insert into harness_configuration
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="harnessConfigurationId != null">
+        harness_configuration_id,
+      </if>
+      <if test="vehicleId != null">
+        vehicle_id,
+      </if>
+      <if test="configurationLevelId != null">
+        configuration_level_id,
+      </if>
+      <if test="canConfigurationId != null">
+        can_configuration_id,
+      </if>
+      <if test="harness != null">
+        harness,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="harnessConfigurationId != null">
+        #{harnessConfigurationId,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleId != null">
+        #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="configurationLevelId != null">
+        #{configurationLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="canConfigurationId != null">
+        #{canConfigurationId,jdbcType=INTEGER},
+      </if>
+      <if test="harness != null">
+        #{harness,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.HarnessConfiguration">
+    update harness_configuration
+    <set>
+      <if test="vehicleId != null">
+        vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="configurationLevelId != null">
+        configuration_level_id = #{configurationLevelId,jdbcType=INTEGER},
+      </if>
+      <if test="canConfigurationId != null">
+        can_configuration_id = #{canConfigurationId,jdbcType=INTEGER},
+      </if>
+      <if test="harness != null">
+        harness = #{harness,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where harness_configuration_id = #{harnessConfigurationId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.HarnessConfiguration">
+    update harness_configuration
+    set vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      configuration_level_id = #{configurationLevelId,jdbcType=INTEGER},
+      can_configuration_id = #{canConfigurationId,jdbcType=INTEGER},
+      harness = #{harness,jdbcType=VARCHAR}
+    where harness_configuration_id = #{harnessConfigurationId,jdbcType=INTEGER}
+  </update>
+  
+  
+  <!-- 查询线束段配置信息 -->
+  <select id="selectWiringHarnessInfo" resultMap="NodeVoResultMap">
+  	select harness_configuration.harness_configuration_id, harness_configuration.vehicle_id, 
+  		harness_configuration.configuration_level_id, harness_configuration.can_configuration_id, 
+    	harness_configuration.harness, vehicle.vehicle_name, 
+    	configuration_level.configuration_level_name, can_configuration.can_passage
+	from harness_configuration
+	inner join can_configuration on can_configuration.can_configuration_id=harness_configuration.can_configuration_id
+	inner join vehicle on vehicle.vehicle_id=harness_configuration.vehicle_id
+	inner join configuration_level on configuration_level.configuration_level_id=harness_configuration.configuration_level_id
+  	where 1=1
+	<if test="vehicleId !=null and vehicleId >0">
+		and harness_configuration.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and harness_configuration.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>
+  	order by harness_configuration.harness_configuration_id DESC
+  	<if test="pageSize !=null and pageSize >0">
+  		limit #{startIndex,jdbcType=INTEGER},#{pageSize,jdbcType=INTEGER}
+  	</if>
+  </select>
+  
+  <!-- 查询线束段配置信息 (数据总条数) -->
+  <select id="selectWiringHarnessInfoRows" resultType="java.lang.Integer">
+  	select count(harness_configuration.harness_configuration_id)
+	from harness_configuration
+	inner join can_configuration on can_configuration.can_configuration_id=harness_configuration.can_configuration_id
+	inner join vehicle on vehicle.vehicle_id=harness_configuration.vehicle_id
+	inner join configuration_level on configuration_level.configuration_level_id=harness_configuration.configuration_level_id
+  	where 1=1
+	<if test="vehicleId !=null and vehicleId >0">
+		and harness_configuration.vehicle_id=#{vehicleId,jdbcType=INTEGER}
+	</if>
+	<if test="configurationLevelId !=null and configurationLevelId >0">
+		and harness_configuration.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+	</if>
+  </select>
+  
+  
+  <!-- 查询线束段组合信息，用于新增 -->
+  <select id="selectWiringHarnessGroup" resultType="java.lang.Integer">
+  	select count(harness_configuration.harness_configuration_id)
+    from harness_configuration    
+    where 1=1
+    <if test="vehicleId !=null and vehicleId >0">
+    	and harness_configuration.vehicle_id =#{vehicleId,jdbcType=INTEGER}
+    </if>
+    <if test="configurationLevelId !=null and configurationLevelId >0">
+    	and harness_configuration.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+    </if>
+    <if test="canConfigurationId !=null and canConfigurationId >0">
+    	and harness_configuration.can_configuration_id=#{canConfigurationId,jdbcType=INTEGER}
+    </if>
+    <if test="harness !=null and harness !=''">
+    	and harness_configuration.harness like CONCAT('%',#{harness,jdbcType=VARCHAR},'%') 
+    </if>
+    <if test="harnessConfigurationId !=null and harnessConfigurationId >0">
+    	and harness_configuration.harness_configuration_id!=#{harnessConfigurationId,jdbcType=INTEGER}
+    </if>
+  </select>
+  
+  
+  <!-- 查询线束段信息(绑定下拉框) -->
+  <select id="selectHarnessBoxInfo" resultMap="OptionResultMapOne">	
+    select * from harness_configuration
+	where 1=1
+	<if test="vehicleId !=null and vehicleId >0">
+    	and harness_configuration.vehicle_id =#{vehicleId,jdbcType=INTEGER}
+    </if>
+    <if test="configurationId !=null and configurationId >0">
+    	and harness_configuration.configuration_level_id=#{configurationId,jdbcType=INTEGER}
+    </if>
+	group by harness
+  </select>
+  
+  <!-- 查询CAN通道信息(绑定下拉框) -->
+  <select id="selectCanPassageBoxInfo" resultMap="OptionResultMapTwo">
+ 	select * from harness_configuration 
+ 	inner join can_configuration on can_configuration.can_configuration_id=harness_configuration.can_configuration_id
+ 	where 1=1
+ 	<if test="vehicleId !=null and vehicleId >0">
+    	and harness_configuration.vehicle_id =#{vehicleId,jdbcType=INTEGER}
+    </if>
+    <if test="configurationId !=null and configurationId >0">
+    	and harness_configuration.configuration_level_id=#{configurationId,jdbcType=INTEGER}
+    </if>
+    group by can_configuration.can_passage
+  </select>
+  
+  <!-- 通过ID查询线束段主键ID -->
+  <select id="selectPrimaryKeyById" resultMap="BaseResultMap">
+  	select harness_configuration_id from harness_configuration
+  	where harness_configuration.vehicle_id =#{vehicleId,jdbcType=INTEGER}
+  	and harness_configuration.configuration_level_id=#{configurationLevelId,jdbcType=INTEGER}
+  	and harness_configuration.can_configuration_id=#{canConfigurationId,jdbcType=INTEGER}
+  	and harness_configuration.harness=#{harness,jdbcType=VARCHAR}
+  </select>
+  
+</mapper>

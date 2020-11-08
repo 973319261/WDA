@@ -1,0 +1,847 @@
+package com.gx.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.gx.mapper.CanConfigurationDAO;
+import com.gx.mapper.ConfigurationLevelDAO;
+import com.gx.mapper.DidDAO;
+import com.gx.mapper.DidTypeDAO;
+import com.gx.mapper.FlowDAO;
+import com.gx.mapper.FlowStepDAO;
+import com.gx.mapper.HarnessConfigurationDAO;
+import com.gx.mapper.ModuleDAO;
+import com.gx.mapper.NodeDAO;
+import com.gx.mapper.ReVehicleSupplierDAO;
+import com.gx.mapper.ResponseOrderDAO;
+import com.gx.mapper.StateDescriptionDAO;
+import com.gx.po.CanConfiguration;
+import com.gx.po.ConfigurationLevel;
+import com.gx.po.Did;
+import com.gx.po.DidType;
+import com.gx.po.FlowStep;
+import com.gx.po.HarnessConfiguration;
+import com.gx.po.Module;
+import com.gx.po.Node;
+import com.gx.po.ReVehicleSupplier;
+import com.gx.po.ResponseOrder;
+import com.gx.po.StateDescription;
+import com.gx.service.IDataManageService;
+import com.gx.vo.AppendOptionVo;
+import com.gx.vo.DidVo;
+import com.gx.vo.FlowVo;
+import com.gx.vo.JsonReturn;
+import com.gx.vo.NodeVo;
+
+@Transactional
+@Service("iDataManageService")
+public class DataManageServiceImpl implements IDataManageService {
+
+	// 注入DAO层
+	@Autowired
+	CanConfigurationDAO canConfigurationDAO;
+	@Autowired
+	NodeDAO nodeDAO;
+	@Autowired
+	HarnessConfigurationDAO harnessConfigurationDAO;
+	@Autowired
+	ReVehicleSupplierDAO reVehicleSupplierDAO;
+	@Autowired
+	ModuleDAO moduleDAO;
+	@Autowired
+	ConfigurationLevelDAO configurationLevelDAO;
+	@Autowired
+	DidDAO didDAO;
+	@Autowired
+	DidTypeDAO didTypeDAO;
+	@Autowired
+	StateDescriptionDAO stateDescriptionDAO;
+	@Autowired
+	FlowDAO flowDAO;
+	@Autowired
+	ResponseOrderDAO responseOrderDAO;
+	@Autowired
+	FlowStepDAO flowStepDAO;
+
+	@Override
+	public List<AppendOptionVo> selectCanBoxInfo() {
+		return canConfigurationDAO.selectCanBoxInfo();
+	}
+
+	@Override
+	public List<NodeVo> selectNodeInfo(Integer vehicleId, Integer configurationLevelId, Integer startIndex,
+			Integer pageSize) {
+		return nodeDAO.selectNodeInfo(vehicleId, configurationLevelId, startIndex, pageSize);
+	}
+
+	@Override
+	public int selectNodeInfoRows(Integer vehicleId, Integer configurationLevelId) {
+		return nodeDAO.selectNodeInfoRows(vehicleId, configurationLevelId);
+	}
+
+	@Override
+	public List<NodeVo> selectWiringHarnessInfo(Integer vehicleId, Integer configurationLevelId, Integer startIndex,
+			Integer pageSize) {
+		return harnessConfigurationDAO.selectWiringHarnessInfo(vehicleId, configurationLevelId, startIndex, pageSize);
+	}
+
+	@Override
+	public int selectWiringHarnessInfoRows(Integer vehicleId, Integer configurationLevelId) {
+		return harnessConfigurationDAO.selectWiringHarnessInfoRows(vehicleId, configurationLevelId);
+	}
+
+	@Override
+	public JsonReturn insertWiringHarnessInfo(HarnessConfiguration harnessConfiguration) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("提交失败");
+		int num = harnessConfigurationDAO.selectWiringHarnessGroup(harnessConfiguration.getVehicleId(),
+				harnessConfiguration.getConfigurationLevelId(), harnessConfiguration.getCanConfigurationId(),
+				harnessConfiguration.getHarness(), 0);
+		if (num > 0) {
+			jsonReturn.setText("该组合已存在，请重新选择");
+		} else {
+			int intR = harnessConfigurationDAO.insertSelective(harnessConfiguration);
+			if (intR == 1) {
+				jsonReturn.setText("success");
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public JsonReturn updateWiringHarnessInfo(HarnessConfiguration harnessConfiguration) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("提交失败");
+		int num = harnessConfigurationDAO.selectWiringHarnessGroup(harnessConfiguration.getVehicleId(),
+				harnessConfiguration.getConfigurationLevelId(), harnessConfiguration.getCanConfigurationId(),
+				harnessConfiguration.getHarness(), harnessConfiguration.getHarnessConfigurationId());
+		if (num > 0) {
+			jsonReturn.setText("该组合已存在，请重新选择");
+		} else {
+			int intR = harnessConfigurationDAO.updateByPrimaryKeySelective(harnessConfiguration);
+			if (intR == 1) {
+				jsonReturn.setText("success");
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public JsonReturn deleteWiringHarnessInfo(Integer harnessConfigurationId) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("删除失败");
+		int intR = harnessConfigurationDAO.deleteByPrimaryKey(harnessConfigurationId);
+		if (intR == 1) {
+			jsonReturn.setText("success");
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public List<AppendOptionVo> selectCanPassageBoxInfo(Integer vehicleId, Integer configurationId) {
+		return harnessConfigurationDAO.selectCanPassageBoxInfo(vehicleId, configurationId);
+	}
+
+	@Override
+	public List<AppendOptionVo> selectHarnessBoxInfo(Integer vehicleId, Integer configurationId) {
+		return harnessConfigurationDAO.selectHarnessBoxInfo(vehicleId, configurationId);
+	}
+
+	@Override
+	public JsonReturn insertNodeInfo(List<NodeVo> listNode) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setCode(500);
+		jsonReturn.setText("新增失败");
+		if (listNode != null) {
+			Node nodeList = null;// 实例化
+			int count = 0;// 记录新增的总条数
+			for (int i = 0; i < listNode.size(); i++) {
+				// 获取模块供应商的关联ID
+				ReVehicleSupplier listOne = reVehicleSupplierDAO.selectPrimaryKeyById(listNode.get(i).getVehicleId(),
+						listNode.get(i).getConfigurationLevelId(), listNode.get(i).getModuleId(),
+						listNode.get(i).getSupplierId());
+				// 获取线束段主键ID
+				HarnessConfiguration listTwo = harnessConfigurationDAO.selectPrimaryKeyById(
+						listNode.get(i).getVehicleId(), listNode.get(i).getConfigurationLevelId(),
+						listNode.get(i).getCanConfigurationId(), listNode.get(i).getHarness());
+				if (listOne != null && listTwo != null) {
+					// 判断节点信息是否已经存在
+					int num = nodeDAO.selectNodeWhetherExist(listOne.getRelevanceId(),
+							listTwo.getHarnessConfigurationId(), listNode.get(i).getTxId(), listNode.get(i).getRxId(),
+							0);
+
+					if (num == 0) {// 等于0说明没有存在
+						nodeList = new Node();
+						nodeList.setRelevanceId(listOne.getRelevanceId());// 赋值
+						nodeList.setHarnessConfigurationId(listTwo.getHarnessConfigurationId());// 赋值
+						nodeList.setTxId(listNode.get(i).getTxId());// 赋值
+						nodeList.setRxId(listNode.get(i).getRxId());// 赋值
+
+						int Rows = nodeDAO.insertSelective(nodeList);
+						if (Rows > 0) {
+							count++;
+						}
+					}
+				}
+			}
+			// 判断新增成功情况
+			if (count == listNode.size()) {
+				jsonReturn.setCode(200);
+				jsonReturn.setText("保存成功");
+			} else if (count > 0 && count < listNode.size()) {
+				jsonReturn.setCode(200);
+				int nums = listNode.size() - count;
+				jsonReturn.setText(count + "条数据保存成功，" + nums + "条数数据保存失败，失败原因：可能存在有相同的数据!");
+			} else if (count == 0) {
+				jsonReturn.setCode(201);
+				jsonReturn.setText("保存失败,可能存在有相同的数据");
+			}
+		} else {
+			jsonReturn.setText("暂无需要保存的数据，或者数据出现异常");
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public ReVehicleSupplier selectPrimaryKeyById(Integer vehicleId, Integer configurationLevelId, Integer moduleId,
+			Integer supplierId) {
+		/// 获取模块供应商的关联ID
+		ReVehicleSupplier relevance = reVehicleSupplierDAO.selectPrimaryKeyById(vehicleId, configurationLevelId,
+				moduleId, supplierId);
+		return relevance;
+	}
+
+	@Override
+	public HarnessConfiguration selectNodePrimaryKeyById(Integer vehicleId, Integer configurationLevelId,
+			Integer canConfigurationId, String harness) {
+		// 获取线束段主键ID
+		HarnessConfiguration Id = harnessConfigurationDAO.selectPrimaryKeyById(vehicleId, configurationLevelId,
+				canConfigurationId, harness);
+		return Id;
+	}
+
+	@Override
+	public List<NodeVo> selectNodeInfoById(Integer canConfigurationId, Integer moduleId, Integer configurationLevelId) {
+		return nodeDAO.selectNodeInfoById(canConfigurationId, moduleId, configurationLevelId);
+	}
+
+	@Override
+	public JsonReturn deleteNodeInfo(Integer nodeId) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("删除失败");
+
+		if (nodeId > 0) {
+			int num = nodeDAO.deleteByPrimaryKey(nodeId);
+			if (num > 0) {
+				jsonReturn.setText("success");
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public List<NodeVo> selectNodeDetailInfo(Integer vehicleId, Integer startIndex, Integer pageSize) {
+		return nodeDAO.selectNodeDetailInfo(vehicleId, startIndex, pageSize);
+	}
+
+	@Override
+	public int selectNodeDetailInfoRows(Integer vehicleId) {
+		return nodeDAO.selectNodeDetailInfoRows(vehicleId);
+	}
+
+	@Override
+	public JsonReturn updateNodeInfo(NodeVo nodeVo) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("修改失败");
+		if (nodeVo != null) {
+			Node nodeList = null;// 实例化
+			// 获取模块供应商的关联ID
+			ReVehicleSupplier listOne = reVehicleSupplierDAO.selectPrimaryKeyById(nodeVo.getVehicleId(),
+					nodeVo.getConfigurationLevelId(), nodeVo.getModuleId(), nodeVo.getSupplierId());
+			// 获取线束段主键ID
+			HarnessConfiguration listTwo = harnessConfigurationDAO.selectPrimaryKeyById(nodeVo.getVehicleId(),
+					nodeVo.getConfigurationLevelId(), nodeVo.getCanConfigurationId(), nodeVo.getHarness());
+			if (listOne != null && listTwo != null) {
+				// 判断节点信息是否已经存在
+				int num = nodeDAO.selectNodeWhetherExist(listOne.getRelevanceId(), listTwo.getHarnessConfigurationId(),
+						nodeVo.getTxId(), nodeVo.getRxId(), nodeVo.getNodeId());
+
+				if (num == 0) {// 等于0说明没有存在
+					nodeList = new Node();
+					nodeList.setRelevanceId(listOne.getRelevanceId());// 赋值
+					nodeList.setHarnessConfigurationId(listTwo.getHarnessConfigurationId());// 赋值
+					nodeList.setTxId(nodeVo.getTxId());// 赋值
+					nodeList.setRxId(nodeVo.getRxId());// 赋值
+					nodeList.setNodeId(nodeVo.getNodeId());// 赋值
+					int Rows = nodeDAO.updateByPrimaryKeySelective(nodeList);
+					if (Rows > 0) {
+						jsonReturn.setCode(200);
+						jsonReturn.setText("修改成功");
+					}
+				} else {
+					jsonReturn.setCode(500);
+					jsonReturn.setText("修改失败,可能存在有相同的数据");
+				}
+			} else {
+				jsonReturn.setCode(400);
+				jsonReturn.setText("您选择的车型、配置、通道和线束段不存在相关联信息，如需更改，请先去“添加配置”中新增，再重新选择！");
+			}
+		} else {
+			jsonReturn.setCode(501);
+			jsonReturn.setText("暂无需要修改的数据");
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public NodeVo selectNameInfoById(Integer canConfigurationId, Integer moduleId, Integer configurationLevelId) {
+		// 查询CAN通道
+		CanConfiguration can = canConfigurationDAO.selectByPrimaryKey(canConfigurationId);
+		// 查询模块名称
+		Module module = moduleDAO.selectByPrimaryKey(moduleId);
+		// 查询配置名称
+		ConfigurationLevel con = configurationLevelDAO.selectByPrimaryKey(configurationLevelId);
+		NodeVo nodeInfo = new NodeVo();
+		nodeInfo.setCanPassage(can.getCanPassage());
+		nodeInfo.setModuleName(module.getModuleName());
+		nodeInfo.setConfigurationLevelName(con.getConfigurationLevelName());
+		return nodeInfo;
+	}
+
+	@Override
+	public NodeVo selectNodeDetialList(Integer vehicleId) {
+		NodeVo node = new NodeVo();// 接收所有的临时List，并用于返回
+		List<NodeVo> nodeInfo = nodeDAO.selectNodeDetailInfo(vehicleId, 0, 0);
+		List<NodeVo> nodeOne = new ArrayList<NodeVo>();// 临时List
+		List<NodeVo> nodeTwo = new ArrayList<NodeVo>();// 临时List
+		List<NodeVo> nodeThree = new ArrayList<NodeVo>();// 临时List
+		List<NodeVo> nodeFour = new ArrayList<NodeVo>();// 临时List
+		// 第一层
+		for (int i = 0; i < nodeInfo.size(); i++) {
+			if (i == 0) {// 第一条直接添加
+				nodeOne.add(nodeInfo.get(i));
+			} else {
+				int num = 1;// 第三方变量，用于区分add添加
+				for (int j = 0; j < nodeOne.size(); j++) {
+					// 判断1：判断是否相等，相等则跳出for循环，不添加当前条
+					if (nodeOne.get(j).getCanPassage().equals(nodeInfo.get(i).getCanPassage())) {
+						num = 0;
+						break;
+					}
+				}
+				// 判断2：如果进来该判断，说明当前条数据不与上一条相等，即没有进去判断1
+				if (num == 1) {
+					nodeOne.add(nodeInfo.get(i));
+				}
+			}
+		}
+		// 第二层
+		for (int i = 0; i < nodeInfo.size(); i++) {
+			if (i == 0) {
+				nodeTwo.add(nodeInfo.get(i));
+			} else {
+				int num = 1;
+				for (int j = 0; j < nodeTwo.size(); j++) {
+					if (nodeTwo.get(j).getHarness().equals(nodeInfo.get(i).getHarness())
+							&& nodeTwo.get(j).getCanPassage().equals(nodeInfo.get(i).getCanPassage())) {
+						num = 0;
+						break;
+					}
+				}
+				if (num == 1) {
+					nodeTwo.add(nodeInfo.get(i));
+				}
+			}
+		}
+
+		// 第三层
+		for (int i = 0; i < nodeInfo.size(); i++) {
+			if (i == 0) {
+				nodeThree.add(nodeInfo.get(i));
+			} else {
+				int num = 1;
+				for (int j = 0; j < nodeThree.size(); j++) {
+					if (nodeThree.get(j).getHarness().equals(nodeInfo.get(i).getHarness())
+							&& nodeThree.get(j).getCanPassage().equals(nodeInfo.get(i).getCanPassage())
+							&& nodeThree.get(j).getModuleName().equals(nodeInfo.get(i).getModuleName())) {
+						num = 0;
+						break;
+					}
+				}
+				if (num == 1) {
+					nodeThree.add(nodeInfo.get(i));
+				}
+			}
+		}
+
+		// 第四层
+		for (int i = 0; i < nodeInfo.size(); i++) {
+			if (i == 0) {
+				nodeFour.add(nodeInfo.get(i));
+			} else {
+				int num = 1;
+				for (int j = 0; j < nodeFour.size(); j++) {
+					if (nodeFour.get(j).getHarness().equals(nodeInfo.get(i).getHarness())
+							&& nodeFour.get(j).getCanPassage().equals(nodeInfo.get(i).getCanPassage())
+							&& nodeFour.get(j).getModuleName().equals(nodeInfo.get(i).getModuleName())
+							&& nodeFour.get(j).getSupplierName().equals(nodeInfo.get(i).getSupplierName())) {
+						num = 0;
+						break;
+					}
+				}
+				if (num == 1) {
+					nodeFour.add(nodeInfo.get(i));
+				}
+			}
+		}
+
+		node.setNodeListOne(nodeOne);
+		node.setNodeListTwo(nodeTwo);
+		node.setNodeListThree(nodeThree);
+		node.setNodeListFour(nodeFour);
+
+		return node;
+	}
+
+	@Override
+	public JsonReturn insertAllocationInfo(ReVehicleSupplier vehicleSupplier, Did didInfo, List<DidType> listDid,
+			List<StateDescription> stateTwo) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("保存失败");
+		if (vehicleSupplier != null && didInfo != null && listDid != null) {
+			// 查询模块供应商关联ID
+			ReVehicleSupplier relevance = reVehicleSupplierDAO.selectPrimaryKeyById(vehicleSupplier.getVehicleId(),
+					vehicleSupplier.getConfigurationLevelId(), vehicleSupplier.getModuleId(),
+					vehicleSupplier.getSupplierId());
+			if (listDid.size() > 0) {
+				int didId = didInfo.getDidId();
+				didInfo.setRelevanceId(relevance.getRelevanceId());
+				didInfo.setTypeId(1);
+				// 获取DID类型信息主键ID
+				int didTypeIds = 0;
+				// 新增DID信息
+				didInfo.setDidId(null);
+				int one = 0;
+				Did did = didDAO.selectDidInfoByDidName(didInfo.getDidName(), 1);
+				if (did != null) {
+					didInfo.setDidId(did.getDidId());
+					one = 1;
+				} else {
+					one = didDAO.insertSelective(didInfo);
+				}
+				if (one > 0) {
+					DidType didType = null;
+					for (int i = 0; i < listDid.size(); i++) {
+						if (didId == listDid.get(i).getDidId()) {
+							didType = new DidType();
+							didType = listDid.get(i);
+							didTypeIds = didType.getDidTypeId();
+							didType.setDidTypeId(null);
+							didType.setDidId(didInfo.getDidId());
+							// 新增DID类型信息
+							int two = didTypeDAO.insertSelective(listDid.get(i));
+							int typeId = listDid.get(i).getSignalTypeId();
+							if (two > 0 && typeId != 2) {
+								jsonReturn.setText("success");
+							} else {
+								List<StateDescription> stateThree = new ArrayList<StateDescription>();
+								StateDescription stateInfo = null;
+								for (int j = 0; j < stateTwo.size(); j++) {
+									int aa = listDid.get(i).getDidTypeId();
+									int bb = stateTwo.get(j).getDidTypeId();
+									if (stateTwo.get(j).getDidTypeId().equals(didTypeIds)) {
+										stateInfo = new StateDescription();
+										stateInfo = stateTwo.get(j);
+										stateInfo.setStateDescriptionId(null);
+										stateInfo.setDidTypeId(didType.getDidTypeId());
+										stateThree.add(stateInfo);
+									}
+								}
+								// 新增状态描述信息
+								int three = stateDescriptionDAO.insertStateDescriptionByBatch(stateThree);
+								if (three > 0) {
+									jsonReturn.setText("success");
+								}
+							}
+						}
+					}
+
+				}
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public List<AppendOptionVo> selectModuleByVehicleId(Integer vehicleId) {
+		// TODO Auto-generated method stub
+		return reVehicleSupplierDAO.selectModuleByVehicleId(vehicleId);
+	}
+
+	@Override
+	public List<DidVo> selectSnapshotInfo(Integer vehicleId, Integer moduleId, Integer startIndex, Integer pageSize) {
+		// TODO Auto-generated method stub
+		return didDAO.selectSnapshotInfo(vehicleId, moduleId, startIndex, pageSize);
+	}
+
+	@Override
+	public int selectSnapshotInfoRows(Integer vehicleId, Integer moduleId) {
+		// TODO Auto-generated method stub
+		return didDAO.selectSnapshotInfoRows(vehicleId, moduleId);
+	}
+
+	@Override
+	public JsonReturn deleteNodeDetailInfo(String testId) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("删除失败");
+
+		if (testId != null) {
+			String[] list = testId.split(",");
+			List<Integer> listId = new ArrayList<>();
+
+			for (String id : list) {
+				listId.add(Integer.parseInt(id));
+			}
+			int num = nodeDAO.deleteNodeDetailInfo(listId);
+			if (num > 0) {
+				jsonReturn.setText("success");
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public JsonReturn insertSnapshotInfo(List<DidVo> listSnapshot, ReVehicleSupplier supplier) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setCode(500);
+		jsonReturn.setText("保存失败");
+		if (listSnapshot != null) {
+			// 查询模块供应商关联ID
+			ReVehicleSupplier relevance = reVehicleSupplierDAO.selectPrimaryKeyById(supplier.getVehicleId(),
+					supplier.getConfigurationLevelId(), supplier.getModuleId(), supplier.getSupplierId());
+			if (listSnapshot.size() > 0 && relevance != null) {
+				Did did = null;
+				int count = 0;
+				for (int i = 0; i < listSnapshot.size(); i++) {
+					// 查询快照名称是否重复
+					int num = didDAO.selectDidNameWhetherExist(listSnapshot.get(i).getDidName(), 2, 0);
+					if (num == 0) {
+						did = new Did();
+						did.setDidName(listSnapshot.get(i).getDidName());
+						did.setRelevanceId(relevance.getRelevanceId());
+						did.setTypeId(2);
+						// 新增快照信息
+						int intR = didDAO.insertSelective(did);
+						if (intR > 0) {
+							DidType didType = new DidType();
+							didType.setDidId(did.getDidId());
+							didType.setSignalTypeId(listSnapshot.get(i).getSignalTypeId());
+							didType.setMin(listSnapshot.get(i).getMin());
+							didType.setMax(listSnapshot.get(i).getMax());
+							didType.setUnit(listSnapshot.get(i).getUnit());
+							// 新增快照明细信息
+							int two = didTypeDAO.insertSelective(didType);
+							if (two > 0) {
+								count++;
+							}
+						}
+					}
+				}
+				if (listSnapshot.size() == count) {
+					jsonReturn.setCode(200);
+					jsonReturn.setText("保存成功");
+				} else {
+					jsonReturn.setCode(501);
+					jsonReturn
+							.setText(count + "条数据保存成功，" + (listSnapshot.size() - count) + "条数据保存失败，" + "可能存在有相同的快照名称");
+				}
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public JsonReturn updateDidTypeInfoById(DidType didInfo, List<StateDescription> stateInfo) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("保存失败");
+		if (didInfo != null) {
+			// 删除状态描述信息
+			if (didInfo.getSignalTypeId() != 2) {
+				stateDescriptionDAO.deleteStateDescriptionInfo(didInfo.getDidTypeId());
+			}
+			// 修改配置信息(快照)
+			int two = didTypeDAO.updateByPrimaryKeySelective(didInfo);
+			if (two > 0 && !didInfo.getSignalTypeId().equals(2)) {
+				jsonReturn.setText("success");
+			} else if (two > 0 && didInfo.getSignalTypeId().equals(2)) {
+				// 查询状态描述信息
+				List<StateDescription> state = stateDescriptionDAO.selectStateDescribeInfoById(didInfo.getDidTypeId());
+				if (state.size() > 0) {
+					for (int i = 0; i < state.size(); i++) {
+						int num = 0;
+						for (int j = 0; j < stateInfo.size(); j++) {
+							if (state.get(i).getStateDescriptionId().equals(stateInfo.get(j).getStateDescriptionId())) {
+								num++;
+								// 修改状态描述信息
+								stateDescriptionDAO.updateByPrimaryKeySelective(stateInfo.get(j));
+								stateInfo.remove(j);
+								break;
+							}
+							// stateInfo.get(j).setDidTypeId(didInfo.getDidTypeId());
+						}
+						// 删除状态描述信息
+						if (num == 0) {
+							stateDescriptionDAO.deleteStateDescriptionInfo(state.get(i).getDidTypeId());
+						}
+					}
+
+					// 新增状态描述信息
+					if (stateInfo.size() > 0) {
+						stateDescriptionDAO.insertStateDescriptionByBatch(stateInfo);
+					}
+					jsonReturn.setText("success");
+				} else {
+					// 新增状态描述信息
+					if (stateInfo.size() > 0) {
+						int count = stateDescriptionDAO.insertStateDescriptionByBatch(stateInfo);
+						if (count > 0) {
+							jsonReturn.setText("success");
+						}
+					}
+				}
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public List<StateDescription> selectStateDescribeInfoById(Integer didTypeId) {
+		// TODO Auto-generated method stub
+		return stateDescriptionDAO.selectStateDescribeInfoById(didTypeId);
+	}
+
+	@Override
+	public JsonReturn updateSnapshotInfo(ReVehicleSupplier supplier, Did did) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("修改失败");
+		if (supplier != null && did != null) {
+			// 查询模块供应商关联ID
+			ReVehicleSupplier relevance = reVehicleSupplierDAO.selectPrimaryKeyById(supplier.getVehicleId(),
+					supplier.getConfigurationLevelId(), supplier.getModuleId(), supplier.getSupplierId());
+			// 查询快照名称是否重复
+			int num = didDAO.selectDidNameWhetherExist(did.getDidName(), 2, did.getDidId());
+			if (num == 0) {
+				did.setRelevanceId(relevance.getRelevanceId());
+				int intR = didDAO.updateByPrimaryKeySelective(did);
+				if (intR > 0) {
+					jsonReturn.setText("success");
+				}
+			} else {
+				jsonReturn.setText("存在有相同的快照名称，请重新填写");
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public JsonReturn deleteSnapshotInfo(String didTypeIds) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("删除失败");
+		if (didTypeIds != null) {
+			String[] ids = didTypeIds.split(",");
+			int num = 0;
+			for (int i = 0; i < ids.length; i++) {
+				// 删除快照信息
+				int intR = didTypeDAO.deleteSnapshotInfo(Integer.parseInt(ids[i]));
+				if (intR > 0) {
+					num++;
+				}
+			}
+
+			if (num == ids.length) {
+				jsonReturn.setText("success");
+			} else {
+				jsonReturn.setText(num + "条数据删除成功，" + (ids.length - num) + "条数据删除失败，" + "可能数据出现异常");
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public List<Module> selectModuleDataList(Integer startIndex, Integer pageSize) {
+		// TODO Auto-generated method stub
+		return moduleDAO.selectModuleDataList(startIndex, pageSize);
+	}
+
+	@Override
+	public int selectModuleDataListRows() {
+		// TODO Auto-generated method stub
+		return moduleDAO.selectModuleDataListRows();
+	}
+
+	@Override
+	public List<FlowVo> selectFlowInfo(Integer vehicleId, Integer flowId, Integer startIndex, Integer pageSize) {
+		// TODO Auto-generated method stub
+		return flowDAO.selectFlowInfo(vehicleId, flowId, startIndex, pageSize);
+	}
+
+	@Override
+	public int selectFlowInfoRows(Integer vehicleId, Integer flowId) {
+		// TODO Auto-generated method stub
+		return flowDAO.selectFlowInfoRows(vehicleId, flowId);
+	}
+
+	@Override
+	public List<AppendOptionVo> selectFlowInfoToDownBox() {
+		// TODO Auto-generated method stub
+		return flowDAO.selectFlowInfoToDownBox();
+	}
+
+	@Override
+	public List<AppendOptionVo> selectSupplierById(Integer moduleId, Integer vehicleId) {
+		// TODO Auto-generated method stub
+		return reVehicleSupplierDAO.selectSupplierById(moduleId, vehicleId);
+	}
+
+	@Override
+	public List<AppendOptionVo> selectAllResponseOrder() {
+		// TODO Auto-generated method stub
+		return responseOrderDAO.selectAllResponseOrder();
+	}
+
+	@Override
+	public List<FlowStep> selectSmallFlowStepInfo(Integer startIndex, Integer pageSize) {
+		// TODO Auto-generated method stub
+		return flowStepDAO.selectSmallFlowStepInfo(startIndex, pageSize);
+	}
+
+	@Override
+	public int selectSmallFlowStepInfoRows() {
+		// TODO Auto-generated method stub
+		return flowStepDAO.selectSmallFlowStepInfoRows();
+	}
+
+	@Override
+	public JsonReturn saveSmallFlowStepInfo(FlowStep flowStep) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("新增失败");
+		if (flowStep != null) {
+			//装换为大写
+			flowStep.setSendOrders(flowStep.getSendOrders().toUpperCase());
+			flowStep.setResponseOrders(flowStep.getResponseOrders().toUpperCase());
+			if (flowStep.getFlowStepId() == null) {
+				// 新增小流程步骤信息
+				int num = flowStepDAO.selectDataWhetherExist(flowStep);
+				if (num == 0) {
+					int intR = flowStepDAO.insertSelective(flowStep);
+					if (intR > 0) {
+						jsonReturn.setText("success");
+					}
+				} else {
+					jsonReturn.setText("存在有相同的数据，请重新输入");
+				}
+			} else {
+				// 修改小流程步骤信息
+				int num = flowStepDAO.selectDataWhetherExist(flowStep);
+				if (num == 0) {
+					int intR = flowStepDAO.updateByPrimaryKeySelective(flowStep);
+					if (intR > 0) {
+						jsonReturn.setText("success");
+					}
+				} else {
+					jsonReturn.setText("存在有相同的数据，请重新输入");
+				}
+			}
+
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public JsonReturn deleteSmallFlowStepInfo(String flowStepIds) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("删除失败");
+		if (flowStepIds != null) {
+			String[] list = flowStepIds.split(",");
+			List<Integer> listId = new ArrayList<>();
+			for (String id : list) {
+				listId.add(Integer.parseInt(id));
+			}
+			int intR = flowStepDAO.deleteSmallFlowStepInfo(listId);
+			if (intR > 0) {
+				jsonReturn.setText("success");
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public List<ResponseOrder> selectResponseOrderInfo(Integer startIndex, Integer pageSize) {
+		// TODO Auto-generated method stub
+		return responseOrderDAO.selectResponseOrderInfo(startIndex, pageSize);
+	}
+
+	@Override
+	public int selectResponseOrderInfoRows() {
+		// TODO Auto-generated method stub
+		return responseOrderDAO.selectResponseOrderInfoRows();
+	}
+
+	@Override
+	public JsonReturn saveResponseOrderInfo(ResponseOrder responseOrder) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("新增失败");
+		if (responseOrder != null) {
+			//装换为大写
+			responseOrder.setResponseInstructions(responseOrder.getResponseInstructions().toUpperCase());
+			if (responseOrder.getResponseOrderId() == null) {
+				// 新增响应指令信息
+				int num = responseOrderDAO.selectResponseOrderWhetherExist(responseOrder.getResponseInstructions(),0);
+				if (num == 0) {
+					int intR = responseOrderDAO.insertSelective(responseOrder);
+					if (intR > 0) {
+						jsonReturn.setText("success");
+					}
+				} else {
+					jsonReturn.setText("存在有相同的响应指令，请重新输入");
+				}
+			} else {
+				// 修改响应指令信息
+				int num = responseOrderDAO.selectResponseOrderWhetherExist(responseOrder.getResponseInstructions(),
+						responseOrder.getResponseOrderId());
+				if (num == 0) {
+					int intR = responseOrderDAO.updateByPrimaryKeySelective(responseOrder);
+					if (intR > 0) {
+						jsonReturn.setText("success");
+					}
+				} else {
+					jsonReturn.setText("存在有相同的响应指令，请重新输入");
+				}
+			}
+		}
+		return jsonReturn;
+	}
+
+	@Override
+	public JsonReturn deleteResponseOrderInfo(String responseOrdernfoIds) {
+		JsonReturn jsonReturn = new JsonReturn();
+		jsonReturn.setText("删除失败");
+		if(responseOrdernfoIds!=null) {
+			String[] list = responseOrdernfoIds.split(",");
+			List<Integer> listId = new ArrayList<>();
+			for (String id : list) {
+				listId.add(Integer.parseInt(id));
+			}
+			int intR=responseOrderDAO.deleteResponseOrderInfo(listId);
+			if(intR>0) {
+				jsonReturn.setText("success");
+			}
+		}
+		return jsonReturn;
+	}
+
+}

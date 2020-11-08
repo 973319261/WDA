@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gx.mapper.JurisdictionDAO">
+  <resultMap id="BaseResultMap" type="com.gx.po.Jurisdiction">
+    <id column="jurisdiction_id" jdbcType="INTEGER" property="jurisdictionId" />
+    <result column="jurisdiction_name" jdbcType="VARCHAR" property="jurisdictionName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    jurisdiction_id, jurisdiction_name
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from jurisdiction
+    where jurisdiction_id = #{jurisdictionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from jurisdiction
+    where jurisdiction_id = #{jurisdictionId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.gx.po.Jurisdiction">
+    insert into jurisdiction (jurisdiction_id, jurisdiction_name)
+    values (#{jurisdictionId,jdbcType=INTEGER}, #{jurisdictionName,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.gx.po.Jurisdiction">
+    insert into jurisdiction
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="jurisdictionId != null">
+        jurisdiction_id,
+      </if>
+      <if test="jurisdictionName != null">
+        jurisdiction_name,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="jurisdictionId != null">
+        #{jurisdictionId,jdbcType=INTEGER},
+      </if>
+      <if test="jurisdictionName != null">
+        #{jurisdictionName,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.gx.po.Jurisdiction">
+    update jurisdiction
+    <set>
+      <if test="jurisdictionName != null">
+        jurisdiction_name = #{jurisdictionName,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where jurisdiction_id = #{jurisdictionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.gx.po.Jurisdiction">
+    update jurisdiction
+    set jurisdiction_name = #{jurisdictionName,jdbcType=VARCHAR}
+    where jurisdiction_id = #{jurisdictionId,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 查询用户模块信息 -->
+  <select id="selectJurisdictionInfo" resultMap="BaseResultMap">
+  	select jurisdiction.jurisdiction_id ,jurisdiction.jurisdiction_name from jurisdiction
+  </select>
+</mapper>

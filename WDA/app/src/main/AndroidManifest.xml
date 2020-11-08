@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.gx.wda">
+    <!--权限-->
+    <!--网络请求-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--接收网络变化的广播接收器-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"></uses-permission>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+    <!-- * 允许程序设置内置sd卡的写权限-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--允许程序获取网络状态-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!--允许程序访问WiFi网络信息-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!--允许程序读写手机状态和身份-->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <!-- uses-permission android:name="android.permission.READ_LOGS" /-->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-feature android:name="android.hardware.Camera"/>
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <!--扩音权限-->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
+    <!-- 弹出页面-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <!-- 亮屏的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.USES_POLICY_FORCE_LOCK" />
+    <!--振动的权限-->
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!--模拟点击-->
+    <uses-permission android:name="android.permission.INJECT_EVENTS"/>
+    <!--位置信息-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!--如果是安卓10.0，需要后台获取连接的wifi名称则添加进程获取位置信息权限 -->
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+    <!--android 10.0使用wifi api新添加的权限-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_logo"
+        android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
+        tools:ignore="LockedOrientationActivity"
+        android:theme="@style/AppTheme">
+        <!--开屏页面-->
+        <activity android:name=".ui.OpeningActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--登录页面-->
+        <activity android:name=".ui.LoginActivity" android:screenOrientation="portrait"/>
+        <!--主页面-->
+        <activity android:name=".ui.MainActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            ><!--主页--><!--输入文本禁止顶起顶部导航栏-->
+        </activity>
+        <activity android:name=".ui.LiveActivity" android:screenOrientation="portrait"/>
+        <!--TF卡录制与配置-->
+        <activity android:name=".ui.main.TFCardActivity" android:screenOrientation="portrait"/>
+        <!--连接VCI-->
+        <activity android:name=".ui.main.LinkVciActivity" android:screenOrientation="portrait"/>
+        <!--导出VCI数据-->
+        <activity android:name=".ui.main.ExportMessageActivity" android:screenOrientation="portrait"/>
+        <!--设置录制配置-->
+        <activity android:name=".ui.dataStream.SettingRecordActivity" android:screenOrientation="portrait"/>
+        <!--修改密码-->
+        <activity android:name=".ui.main.UpdatePasswordActivity" android:screenOrientation="portrait"/>
+        <!--切换语言-->
+        <activity android:name=".ui.main.LanguageActivity" android:screenOrientation="portrait"/>
+        <!--关于-->
+        <activity android:name=".ui.main.AboutActivity" android:screenOrientation="portrait"/>
+        <!--功能介绍-->
+        <activity android:name=".ui.main.FunctionIntroductionActivity" android:screenOrientation="portrait"/>
+        <!--功能明细-->
+        <activity android:name=".ui.main.IntroductionDetailActivity" android:screenOrientation="portrait"/>
+        <!--通知页面-->
+        <activity android:name=".ui.main.InformActivity" android:screenOrientation="portrait"/>
+        <!--通知明细-->
+        <activity android:name=".ui.main.InformDetailActivity" android:screenOrientation="portrait"/>
+        <!--Seed转Key-->
+        <activity android:name=".ui.security.SeedKeyActivity" android:screenOrientation="portrait"/>
+        <!--Vin转Pin-->
+        <activity android:name=".ui.security.VinPinActivity" android:screenOrientation="portrait"/>
+        <!--Vin转Esk-->
+        <activity android:name=".ui.security.VinEskActivity" android:screenOrientation="portrait"/>
+        <!--Seed&Pin转Key-->
+        <activity android:name=".ui.security.SeedPinKeyActivity" android:screenOrientation="portrait"/>
+        <!--程序版本变更页面-->
+        <activity android:name=".ui.share.TransformDidActivity" android:screenOrientation="portrait"/>
+        <!--公告信息详情页面-->
+        <activity android:name=".ui.share.NoticeDetailActivity" android:screenOrientation="portrait"/>
+        <!--评论详情页-->
+        <activity android:name=".ui.share.CommentsDetailActivity" android:screenOrientation="portrait"/>
+        <!--直播页面-->
+        <activity
+            android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
+            android:theme="@android:style/Theme.Translucent"/>
+        <!--TBS-->
+        <activity android:name=".ui.share.TbsActivity" android:screenOrientation="portrait"/>
+        <!--TBS视频-->
+        <activity
+            android:name="com.tencent.smtt.sdk.VideoActivity"
+            android:alwaysRetainTaskState="true"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <action android:name="com.tencent.smtt.tbs.video.PLAY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <!--数据流  修改映射配置-->
+        <activity android:name=".ui.dataStream.MapConfigActivity" android:screenOrientation="portrait"/>
+        <!--数据流  软触发导出-->
+        <activity android:name=".ui.dataStream.ExportTriggerActicity" android:screenOrientation="portrait"/>
+        <!--数据流  流控帧设置-->
+        <activity android:name=".ui.dataStream.FlowControlActvity" android:screenOrientation="portrait"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.gx.wda.install"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+    </application>
+</manifest>
