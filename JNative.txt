@@ -1,0 +1,2 @@
+32位的dll只能在32位的JDK运行；
+JNative.jar   放在tomcat lib目录下；
